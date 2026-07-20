@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trilok Infotech Private Limited | Software, Cybersecurity & Digital Trust</title>
+    <meta name="description" content="Trilok Infotech Private Limited delivers innovative software solutions, cybersecurity services, networking, cloud solutions, and digital transformation services.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- TOP NAVIGATION BAR -->
+    <header class="navbar" id="navbar">
+        <div class="container nav-container">
+            <!-- LOGO PLACEHOLDER (Replace SVG/Img below with your logo image anytime) -->
+            <a href="#home" class="logo-brand">
+                <div class="logo-box">
+                    <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 2L24.5 13.5H36L26.5 20.5L30 32L20 25L10 32L13.5 20.5L4 13.5H15.5L20 2Z" fill="url(#logo_grad)" stroke="#00f2fe" stroke-width="1.5"/>
+                        <circle cx="20" cy="20" r="4" fill="#00f2fe"/>
+                        <defs>
+                            <linearGradient id="logo_grad" x1="4" y1="2" x2="36" y2="32" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#0052D4"/>
+                                <stop offset="0.5" stop-color="#4364F7"/>
+                                <stop offset="1" stop-color="#6FB1FC"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <span class="brand-title">TRILOK</span>
+                    <span class="brand-sub">INFOTECH PVT. LTD.</span>
+                </div>
+            </a>
+
+            <!-- DESKTOP NAV LINKS -->
+            <nav class="nav-menu" id="nav-menu">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#about" class="nav-link">About Us</a>
+                <a href="#services" class="nav-link">Services</a>
+                <a href="#products" class="nav-link">Products</a>
+                <a href="#industries" class="nav-link">Industries</a>
+                <a href="#careers" class="nav-link">Careers</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </nav>
+
+            <!-- ACTION BUTTON -->
+            <div class="nav-actions">
+                <button class="btn btn-primary open-modal-btn" data-subject="Get in Touch Inquiry">
+                    Get in Touch <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle Navigation Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MOBILE DRAWER NAV -->
+    <div class="mobile-drawer" id="mobile-drawer">
+        <div class="drawer-header">
+            <div class="logo-text">
+                <span class="brand-title">TRILOK</span>
+                <span class="brand-sub">INFOTECH</span>
+            </div>
+            <button class="drawer-close" id="drawer-close"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="drawer-links">
+            <a href="#home" class="drawer-link">Home</a>
+            <a href="#about" class="drawer-link">About Us</a>
+            <a href="#services" class="drawer-link">Services</a>
+            <a href="#products" class="drawer-link">Products</a>
+            <a href="#industries" class="drawer-link">Industries</a>
+            <a href="#careers" class="drawer-link">Careers</a>
+            <a href="#contact" class="drawer-link">Contact</a>
+        </div>
+        <div class="drawer-footer">
+            <button class="btn btn-primary open-modal-btn full-width" data-subject="Mobile Direct Inquiry">
+                Get in Touch <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT WRAPPER -->
+    <main>
+        <!-- HERO SECTION -->
+        <section id="home" class="hero-section">
+            <canvas id="hero-canvas"></canvas>
+            <div class="hero-overlay"></div>
+            
+            <div class="container hero-container">
+                <div class="hero-content fade-in-up">
+                    <div class="badge-tag">
+                        <span class="pulse-dot"></span> TRILOK INFOTECH PRIVATE LIMITED
+                    </div>
+                    
+                    <h1 class="hero-title">
+                        Building the Future of <br>
+                        <span class="gradient-text">Software, Cybersecurity</span> <br>
+                        <span class="gradient-text-alt">& Digital Trust</span>
+                    </h1>
+                    
+                    <p class="hero-description">
+                        Trilok Infotech Private Limited delivers innovative software solutions, cybersecurity services, networking solutions and digital transformation services to help businesses grow securely and sustainably.
+                    </p>
+                    
+                    <div class="hero-buttons">
+                        <a href="#services" class="btn btn-glow">
+                            Explore Services <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                        <a href="#products" class="btn btn-outline">
+                            Our Products <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- HERO FLOATING TECH CARDS VISUAL -->
+                <div class="hero-visual">
+                    <div class="globe-center-graphic">
+                        <div class="ring ring-1"></div>
+                        <div class="ring ring-2"></div>
+                        <div class="ring ring-3"></div>
+                        <div class="center-core">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                    </div>
+
+                    <!-- FLOATING CARDS MATCHING DESIGN -->
+                    <div class="floating-badge badge-top-right float-anim-1">
+                        <div class="badge-icon icon-blue"><i class="fa-solid fa-code"></i></div>
+                        <div class="badge-info">
+                            <h4>Software Development</h4>
+                        </div>
+                    </div>
+
+                    <div class="floating-badge badge-mid-right float-anim-2">
+                        <div class="badge-icon icon-teal"><i class="fa-solid fa-user-shield"></i></div>
+                        <div class="badge-info">
+                            <h4>Cybersecurity Solutions</h4>
+                        </div>
+                    </div>
+
+                    <div class="floating-badge badge-mid-left float-anim-3">
+                        <div class="badge-icon icon-cyan"><i class="fa-solid fa-robot"></i></div>
+                        <div class="badge-info">
+                            <h4>AI & Automation</h4>
+                        </div>
+                    </div>
+
+                    <div class="floating-badge badge-bottom-right float-anim-4">
+                        <div class="badge-icon icon-purple"><i class="fa-solid fa-network-wired"></i></div>
+                        <div class="badge-info">
+                            <h4>Network Solutions</h4>
+                        </div>
+                    </div>
+
+                    <div class="floating-badge badge-bottom-center float-anim-5 featured-card">
+                        <div class="badge-icon icon-gradient"><i class="fa-solid fa-file-contract"></i></div>
+                        <div class="badge-info">
+                            <span class="flagship-mini-tag">OUR FLAGSHIP PRODUCT</span>
+                            <h4>eSaleAgreement</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT US SECTION -->
+        <section id="about" class="section about-section light-bg">
+            <div class="container">
+                <div class="section-header text-center scroll-reveal">
+                    <span class="sub-heading">ABOUT US</span>
+                    <h2 class="main-title">Technology That Drives Businesses Forward</h2>
+                    <p class="section-desc max-800">
+                        Trilok Infotech Private Limited is a technology and security solutions company committed to delivering excellence through innovation, integrity and expertise. We empower businesses with robust, scalable and secure solutions that help them thrive in the digital era.
+                    </p>
+                </div>
+
+                <!-- STATS COUNTER GRID -->
+                <div class="stats-grid">
+                    <div class="stat-card scroll-reveal" data-delay="100">
+                        <div class="stat-icon-wrap">
+                            <i class="fa-solid fa-users-gear"></i>
+                        </div>
+                        <div class="stat-number-wrap">
+                            <span class="counter-number typing-num" data-target="50" data-suffix="+">0</span>
+                        </div>
+                        <h3 class="stat-label">Projects Delivered</h3>
+                    </div>
+
+                    <div class="stat-card scroll-reveal" data-delay="200">
+                        <div class="stat-icon-wrap">
+                            <i class="fa-solid fa-shield-heart"></i>
+                        </div>
+                        <div class="stat-number-wrap">
+                            <span class="counter-number typing-num" data-target="100" data-suffix="%">0</span>
+                        </div>
+                        <h3 class="stat-label">Client Satisfaction</h3>
+                    </div>
+
+                    <div class="stat-card scroll-reveal" data-delay="300">
+                        <div class="stat-icon-wrap">
+                            <i class="fa-solid fa-globe"></i>
+                        </div>
+                        <div class="stat-number-wrap">
+                            <span class="counter-text typing-text" data-text="Enterprise">--</span>
+                        </div>
+                        <h3 class="stat-label">Grade Security</h3>
+                    </div>
+
+                    <div class="stat-card scroll-reveal" data-delay="400">
+                        <div class="stat-icon-wrap">
+                            <i class="fa-solid fa-map-location-dot"></i>
+                        </div>
+                        <div class="stat-number-wrap">
+                            <span class="counter-text typing-text" data-text="Pan India">--</span>
+                        </div>
+                        <h3 class="stat-label">Service Coverage</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SERVICES SECTION -->
+        <section id="services" class="section services-section">
+            <div class="container">
+                <div class="section-header text-center scroll-reveal">
+                    <span class="sub-heading">OUR SERVICES</span>
+                    <h2 class="main-title">Comprehensive IT Solutions for Every Need</h2>
+                </div>
+
+                <div class="services-grid">
+                    <!-- Service 1 -->
+                    <div class="service-card scroll-reveal" data-delay="100">
+                        <div class="service-icon-box icon-blue-bg">
+                            <i class="fa-solid fa-code"></i>
+                        </div>
+                        <h3 class="service-title">Software Development</h3>
+                        <p class="service-text">Custom Web Applications, Mobile Apps, Enterprise Solutions & SaaS Platforms.</p>
+                        <div class="service-footer">
+                            <button class="service-arrow open-modal-btn" data-subject="Software Development Inquiry" aria-label="Learn more about Software Development">
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Service 2 -->
+                    <div class="service-card scroll-reveal" data-delay="200">
+                        <div class="service-icon-box icon-green-bg">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <h3 class="service-title">Cybersecurity Services</h3>
+                        <p class="service-text">Security Audits, VAPT, SIEM, SOC Consulting, Cloud Security & Compliance.</p>
+                        <div class="service-footer">
+                            <button class="service-arrow open-modal-btn" data-subject="Cybersecurity Services Inquiry" aria-label="Learn more about Cybersecurity Services">
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Service 3 -->
+                    <div class="service-card scroll-reveal" data-delay="300">
+                        <div class="service-icon-box icon-purple-bg">
+                            <i class="fa-solid fa-network-wired"></i>
+                        </div>
+                        <h3 class="service-title">Network Infrastructure</h3>
+                        <p class="service-text">Enterprise Networking, Data Centers, Wi-Fi Solutions, VPN, Firewalls & more.</p>
+                        <div class="service-footer">
+                            <button class="service-arrow open-modal-btn" data-subject="Network Infrastructure Inquiry" aria-label="Learn more about Network Infrastructure">
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Service 4 -->
+                    <div class="service-card scroll-reveal" data-delay="400">
+                        <div class="service-icon-box icon-orange-bg">
+                            <i class="fa-solid fa-cloud"></i>
+                        </div>
+                        <h3 class="service-title">Cloud Solutions</h3>
+                        <p class="service-text">AWS, Azure, Google Cloud, Hybrid Cloud, Migration & Infrastructure Management.</p>
+                        <div class="service-footer">
+                            <button class="service-arrow open-modal-btn" data-subject="Cloud Solutions Inquiry" aria-label="Learn more about Cloud Solutions">
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Service 5 -->
+                    <div class="service-card scroll-reveal" data-delay="500">
+                        <div class="service-icon-box icon-teal-bg">
+                            <i class="fa-solid fa-robot"></i>
+                        </div>
+                        <h3 class="service-title">AI & Automation</h3>
+                        <p class="service-text">Business Automation, AI Chatbots, Intelligent Workflows & Analytics Solutions.</p>
+                        <div class="service-footer">
+                            <button class="service-arrow open-modal-btn" data-subject="AI & Automation Inquiry" aria-label="Learn more about AI & Automation">
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FLAGSHIP PRODUCT SECTION -->
+        <section id="products" class="section product-section dark-card-section">
+            <div class="container">
+                <div class="product-banner-card scroll-reveal">
+                    <div class="product-content">
+                        <span class="product-badge-tag">OUR FLAGSHIP PRODUCT</span>
+                        <h2 class="product-title">eSaleAgreement</h2>
+                        <h3 class="product-subtitle">India's Trusted Digital Agreement Platform</h3>
+                        <p class="product-desc">
+                            Create secure, legally valid and tamper-proof sale agreements in minutes with advanced verification and audit capabilities.
+                        </p>
+
+                        <!-- FEATURE PILLS -->
+                        <div class="product-features-grid">
+                            <div class="feature-pill">
+                                <div class="pill-icon"><i class="fa-solid fa-id-card"></i></div>
+                                <span>Aadhaar eKYC</span>
+                            </div>
+                            <div class="feature-pill">
+                                <div class="pill-icon"><i class="fa-solid fa-signature"></i></div>
+                                <span>Aadhaar eSign</span>
+                            </div>
+                            <div class="feature-pill">
+                                <div class="pill-icon"><i class="fa-solid fa-mobile-screen-button"></i></div>
+                                <span>OTP Verification</span>
+                            </div>
+                            <div class="feature-pill">
+                                <div class="pill-icon"><i class="fa-solid fa-qrcode"></i></div>
+                                <span>QR Verification</span>
+                            </div>
+                            <div class="feature-pill">
+                                <div class="pill-icon"><i class="fa-solid fa-box-archive"></i></div>
+                                <span>Audit Trails</span>
+                            </div>
+                            <div class="feature-pill">
+                                <div class="pill-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                                <span>Cloud Storage</span>
+                            </div>
+                        </div>
+
+                        <div class="product-cta">
+                            <button class="btn btn-teal open-modal-btn" data-subject="eSaleAgreement Inquiry">
+                                Visit eSaleAgreement <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- MOCKUP DISPLAY -->
+                    <div class="product-mockup-wrapper">
+                        <div class="mobile-mockup phone-1">
+                            <div class="phone-screen">
+                                <div class="phone-header">
+                                    <i class="fa-solid fa-file-contract logo-mini"></i>
+                                    <span>eSaleAgreement</span>
+                                </div>
+                                <div class="phone-card active-card">
+                                    <div class="step-line"><i class="fa-solid fa-circle-check text-green"></i> Aadhaar eKYC <span class="verified">Verified</span></div>
+                                    <div class="step-line"><i class="fa-solid fa-circle-check text-green"></i> Aadhaar eSign <span class="completed">Completed</span></div>
+                                    <div class="step-line"><i class="fa-solid fa-circle-check text-green"></i> OTP Verification <span class="verified">Verified</span></div>
+                                    <div class="step-line"><i class="fa-solid fa-circle-check text-green"></i> QR Verification <span class="completed">Completed</span></div>
+                                </div>
+                                <div class="phone-btn">Generate Agreement</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- WHY CHOOSE US SECTION -->
+        <section class="section why-us-section light-bg">
+            <div class="container">
+                <div class="section-header text-center scroll-reveal">
+                    <span class="sub-heading">WHY CHOOSE TRILOK INFOTECH?</span>
+                    <h2 class="main-title">Your Trusted Technology Partner</h2>
+                </div>
+
+                <div class="features-flex-grid">
+                    <div class="feature-box scroll-reveal" data-delay="100">
+                        <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                        <h4>Enterprise-grade Security</h4>
+                    </div>
+
+                    <div class="feature-box scroll-reveal" data-delay="200">
+                        <div class="feature-icon"><i class="fa-solid fa-lightbulb"></i></div>
+                        <h4>Innovative Solutions</h4>
+                    </div>
+
+                    <div class="feature-box scroll-reveal" data-delay="300">
+                        <div class="feature-icon"><i class="fa-solid fa-server"></i></div>
+                        <h4>Scalable Infrastructure</h4>
+                    </div>
+
+                    <div class="feature-box scroll-reveal" data-delay="400">
+                        <div class="feature-icon"><i class="fa-solid fa-chart-line"></i></div>
+                        <h4>Digital Transformation Experts</h4>
+                    </div>
+
+                    <div class="feature-box scroll-reveal" data-delay="500">
+                        <div class="feature-icon"><i class="fa-solid fa-headset"></i></div>
+                        <h4>24x7 Technical Support</h4>
+                    </div>
+
+                    <div class="feature-box scroll-reveal" data-delay="600">
+                        <div class="feature-icon"><i class="fa-solid fa-handshake-angle"></i></div>
+                        <h4>Customer Centric Approach</h4>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- INDUSTRIES WE SERVE & TECH STACK SECTION -->
+        <section id="industries" class="section split-section">
+            <div class="container">
+                <div class="split-grid">
+                    <!-- INDUSTRIES WE SERVE -->
+                    <div class="split-column scroll-reveal">
+                        <span class="sub-heading">INDUSTRIES WE SERVE</span>
+                        <div class="chips-grid">
+                            <div class="industry-chip"><i class="fa-solid fa-notes-medical"></i> Healthcare</div>
+                            <div class="industry-chip"><i class="fa-solid fa-landmark"></i> Finance</div>
+                            <div class="industry-chip"><i class="fa-solid fa-cart-shopping"></i> Retail</div>
+                            <div class="industry-chip"><i class="fa-solid fa-industry"></i> Manufacturing</div>
+                            <div class="industry-chip"><i class="fa-solid fa-graduation-cap"></i> Education</div>
+                            <div class="industry-chip"><i class="fa-solid fa-building-columns"></i> Government</div>
+                            <div class="industry-chip"><i class="fa-solid fa-rocket"></i> Startups</div>
+                        </div>
+                    </div>
+
+                    <!-- TECHNOLOGIES WE WORK WITH -->
+                    <div class="split-column scroll-reveal" data-delay="200">
+                        <span class="sub-heading">TECHNOLOGIES WE WORK WITH</span>
+                        <div class="tech-grid">
+                            <div class="tech-badge"><i class="fa-brands fa-java text-orange"></i> Java</div>
+                            <div class="tech-badge"><i class="fa-brands fa-python text-blue"></i> Python</div>
+                            <div class="tech-badge"><i class="fa-brands fa-react text-cyan"></i> React</div>
+                            <div class="tech-badge"><i class="fa-brands fa-node-js text-green"></i> Node.js</div>
+                            <div class="tech-badge"><i class="fa-solid fa-mobile-screen text-blue"></i> Flutter</div>
+                            <div class="tech-badge"><i class="fa-brands fa-aws text-orange"></i> AWS</div>
+                            <div class="tech-badge"><i class="fa-brands fa-microsoft text-blue"></i> Azure</div>
+                            <div class="tech-badge"><i class="fa-brands fa-docker text-blue"></i> Docker</div>
+                            <div class="tech-badge"><i class="fa-solid fa-dharmachakra text-cyan"></i> Kubernetes</div>
+                            <div class="tech-badge"><i class="fa-solid fa-database text-red"></i> Oracle</div>
+                            <div class="tech-badge"><i class="fa-solid fa-database text-blue"></i> PostgreSQL</div>
+                            <div class="tech-badge"><i class="fa-solid fa-leaf text-green"></i> MongoDB</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- OUR PROCESS SECTION -->
+        <section class="section process-section light-bg">
+            <div class="container">
+                <div class="section-header text-center scroll-reveal">
+                    <span class="sub-heading">OUR PROCESS</span>
+                    <h2 class="main-title">From Idea to Implementation</h2>
+                </div>
+
+                <div class="timeline-wrapper">
+                    <div class="timeline-line"></div>
+                    <div class="timeline-grid">
+                        <div class="timeline-step scroll-reveal" data-delay="100">
+                            <div class="step-circle circle-blue"><i class="fa-solid fa-magnifying-glass"></i></div>
+                            <h4>Discover</h4>
+                            <p>Understanding your business needs</p>
+                        </div>
+
+                        <div class="timeline-step scroll-reveal" data-delay="200">
+                            <div class="step-circle circle-teal"><i class="fa-solid fa-pencil"></i></div>
+                            <h4>Design</h4>
+                            <p>Planning the right solution</p>
+                        </div>
+
+                        <div class="timeline-step scroll-reveal" data-delay="300">
+                            <div class="step-circle circle-cyan"><i class="fa-solid fa-code"></i></div>
+                            <h4>Develop</h4>
+                            <p>Building scalable & secure solutions</p>
+                        </div>
+
+                        <div class="timeline-step scroll-reveal" data-delay="400">
+                            <div class="step-circle circle-blue"><i class="fa-solid fa-rocket"></i></div>
+                            <h4>Deploy</h4>
+                            <p>Smooth deployment & integration</p>
+                        </div>
+
+                        <div class="timeline-step scroll-reveal" data-delay="500">
+                            <div class="step-circle circle-green"><i class="fa-solid fa-headset"></i></div>
+                            <h4>Support</h4>
+                            <p>Ongoing support & maintenance</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CAREERS SECTION -->
+        <section id="careers" class="section careers-section">
+            <div class="container">
+                <div class="section-header text-center scroll-reveal">
+                    <span class="sub-heading">CAREERS</span>
+                    <h2 class="main-title">Join Our Innovative Team</h2>
+                    <p class="section-desc max-800">We are always looking for passionate engineers, cybersecurity specialists, and tech visionaries to shape the future together.</p>
+                </div>
+
+                <div class="careers-grid">
+                    <div class="career-card scroll-reveal" data-delay="100">
+                        <div class="career-badge">Full Time</div>
+                        <h3>Senior Full Stack Developer</h3>
+                        <p class="career-loc"><i class="fa-solid fa-location-dot"></i> Hyderabad, India (Hybrid)</p>
+                        <p class="career-desc">Experience in React, Node.js, Cloud Architectures, and scalable microservices.</p>
+                        <button class="btn btn-outline-sm open-modal-btn" data-subject="Career Application: Full Stack Developer">Apply Now</button>
+                    </div>
+
+                    <div class="career-card scroll-reveal" data-delay="200">
+                        <div class="career-badge">Full Time</div>
+                        <h3>Cybersecurity Specialist / VAPT Specialist</h3>
+                        <p class="career-loc"><i class="fa-solid fa-location-dot"></i> Hyderabad, India (On-site)</p>
+                        <p class="career-desc">Hands-on experience in vulnerability assessment, penetration testing, and SOC compliance.</p>
+                        <button class="btn btn-outline-sm open-modal-btn" data-subject="Career Application: Cybersecurity Specialist">Apply Now</button>
+                    </div>
+
+                    <div class="career-card scroll-reveal" data-delay="300">
+                        <div class="career-badge">Full Time</div>
+                        <h3>AI & Machine Learning Engineer</h3>
+                        <p class="career-loc"><i class="fa-solid fa-location-dot"></i> Remote / Hyderabad</p>
+                        <p class="career-desc">Build intelligent automation workflows, LLM agents, and data analytics engines.</p>
+                        <button class="btn btn-outline-sm open-modal-btn" data-subject="Career Application: AI Engineer">Apply Now</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA BANNER -->
+        <section class="cta-banner-section">
+            <div class="container">
+                <div class="cta-banner-box scroll-reveal">
+                    <div class="cta-text">
+                        <h2>Ready to Transform Your Business?</h2>
+                        <p>Let's build secure, scalable and innovative digital solutions together.</p>
+                    </div>
+                    <div class="cta-buttons">
+                        <button class="btn btn-white open-modal-btn" data-subject="Contact Us Request">
+                            Contact Us <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                        <button class="btn btn-dark-outline open-modal-btn" data-subject="Schedule Consultation">
+                            Schedule Consultation <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer id="contact" class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <!-- Col 1: Brand -->
+                <div class="footer-col brand-col">
+                    <a href="#home" class="logo-brand">
+                        <div class="logo-box">
+                            <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 2L24.5 13.5H36L26.5 20.5L30 32L20 25L10 32L13.5 20.5L4 13.5H15.5L20 2Z" fill="#00f2fe"/>
+                            </svg>
+                        </div>
+                        <div class="logo-text">
+                            <span class="brand-title text-white">TRILOK</span>
+                            <span class="brand-sub text-teal">INFOTECH PVT. LTD.</span>
+                        </div>
+                    </a>
+                    <p class="footer-tagline">
+                        Software. Cybersecurity. Networking. Cloud. AI. Building Digital Trust.
+                    </p>
+                    <div class="social-links">
+                        <a href="https://linkedin.com" target="_blank" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="https://x.com" target="_blank" aria-label="Twitter/X"><i class="fa-brands fa-x-twitter"></i></a>
+                        <a href="https://facebook.com" target="_blank" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="https://instagram.com" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    </div>
+                </div>
+
+                <!-- Col 2: Quick Links -->
+                <div class="footer-col">
+                    <h4 class="footer-heading">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#products">Products</a></li>
+                        <li><a href="#careers">Careers</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Services -->
+                <div class="footer-col">
+                    <h4 class="footer-heading">Our Services</h4>
+                    <ul class="footer-links">
+                        <li><a href="#services">Software Development</a></li>
+                        <li><a href="#services">Cybersecurity</a></li>
+                        <li><a href="#services">Network Infrastructure</a></li>
+                        <li><a href="#services">Cloud Solutions</a></li>
+                        <li><a href="#services">AI & Automation</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Our Product -->
+                <div class="footer-col">
+                    <h4 class="footer-heading">Our Product</h4>
+                    <div class="footer-product-mini">
+                        <h5 class="text-teal">eSaleAgreement</h5>
+                        <p>India's Trusted Digital Agreement Platform</p>
+                        <button class="btn btn-xs open-modal-btn" data-subject="eSaleAgreement Footer Inquiry">
+                            Visit Product <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Col 5: Contact Info -->
+                <div class="footer-col">
+                    <h4 class="footer-heading">Contact Us</h4>
+                    <ul class="contact-info-list">
+                        <li><i class="fa-solid fa-location-dot"></i> Hyderabad, Telangana, India</li>
+                        <li><i class="fa-solid fa-phone"></i> +91 8639833447</li>
+                        <li><i class="fa-solid fa-envelope"></i> info@trilokinfotech.com</li>
+                        <li><i class="fa-solid fa-globe"></i> www.trilokinfotech.com</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 Trilok Infotech Private Limited. All Rights Reserved.</p>
+                <div class="footer-legal">
+                    <a href="#">Privacy Policy</a>
+                    <span>|</span>
+                    <a href="#">Terms & Conditions</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- CUSTOMER DETAILS / GET IN TOUCH MODAL FORM -->
+    <div class="modal-backdrop" id="contact-modal">
+        <div class="modal-content">
+            <button class="modal-close" id="modal-close"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-header">
+                <span class="sub-heading">GET IN TOUCH</span>
+                <h3 id="modal-title">Fill Customer Details</h3>
+                <p>Submit your inquiry and connect directly with our expert team via WhatsApp (+91 8639833447).</p>
+            </div>
+            
+            <form id="customer-inquiry-form" class="modal-form">
+                <input type="hidden" id="form-subject" value="General Inquiry">
+                
+                <div class="form-group">
+                    <label for="cust-name">Full Name <span class="req">*</span></label>
+                    <input type="text" id="cust-name" class="form-input" placeholder="e.g. Rahul Sharma" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cust-phone">Phone / WhatsApp Number <span class="req">*</span></label>
+                        <input type="tel" id="cust-phone" class="form-input" placeholder="e.g. 9876543210" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cust-email">Email Address <span class="req">*</span></label>
+                        <input type="email" id="cust-email" class="form-input" placeholder="e.g. rahul@example.com" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="cust-service">Service or Product Interested In</label>
+                    <select id="cust-service" class="form-input">
+                        <option value="Software Development">Software Development</option>
+                        <option value="Cybersecurity Services">Cybersecurity Services</option>
+                        <option value="eSaleAgreement Platform">eSaleAgreement Flagship Product</option>
+                        <option value="Network Infrastructure">Network Infrastructure</option>
+                        <option value="Cloud Solutions">Cloud Solutions</option>
+                        <option value="AI & Automation">AI & Automation</option>
+                        <option value="Other Business Inquiry">Other Business Inquiry</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="cust-company">Company / Location</label>
+                    <input type="text" id="cust-company" class="form-input" placeholder="e.g. Acme Corp / Hyderabad">
+                </div>
+
+                <div class="form-group">
+                    <label for="cust-message">Requirement Details <span class="req">*</span></label>
+                    <textarea id="cust-message" class="form-input textarea" rows="3" placeholder="Tell us briefly about your project or service requirement..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">
+                    Submit & Send to WhatsApp (8639833447) <i class="fa-brands fa-whatsapp"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script src="app.js"></script>
+</body>
+</html>

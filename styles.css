@@ -51,6 +51,12 @@
     padding: 0;
 }
 
+html, body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
 html {
     scroll-behavior: smooth;
     font-size: 16px;
@@ -61,7 +67,6 @@ body {
     background-color: var(--bg-white);
     color: var(--text-main);
     line-height: 1.6;
-    overflow-x: hidden;
 }
 
 a {
@@ -133,6 +138,7 @@ button, input, select, textarea {
     border: none;
     cursor: pointer;
     transition: var(--transition);
+    white-space: nowrap;
 }
 
 .btn-primary {
@@ -244,7 +250,7 @@ button, input, select, textarea {
     z-index: 1000;
     padding: 20px 0;
     transition: var(--transition);
-    background: rgba(7, 11, 22, 0.85);
+    background: rgba(7, 11, 22, 0.88);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
@@ -260,11 +266,17 @@ button, input, select, textarea {
     justify-content: space-between;
 }
 
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
 /* LOGO */
 .logo-brand {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
 }
 
 .logo-box {
@@ -273,6 +285,7 @@ button, input, select, textarea {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
 }
 
 .logo-icon {
@@ -338,7 +351,7 @@ button, input, select, textarea {
     background: transparent;
     border: none;
     color: var(--text-white);
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     cursor: pointer;
     padding: 4px 8px;
 }
@@ -348,15 +361,15 @@ button, input, select, textarea {
     position: fixed;
     top: 0;
     right: -100%;
-    width: 300px;
+    width: 280px;
     height: 100vh;
     background: #0b1120;
     z-index: 2000;
-    padding: 24px;
+    padding: 24px 20px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    transition: right 0.4s ease;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
     border-left: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -369,7 +382,7 @@ button, input, select, textarea {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-bottom: 20px;
+    padding-bottom: 16px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -384,19 +397,23 @@ button, input, select, textarea {
 .drawer-links {
     display: flex;
     flex-direction: column;
-    gap: 18px;
-    margin-top: 30px;
+    gap: 16px;
+    margin-top: 24px;
 }
 
 .drawer-link {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     font-weight: 500;
     color: rgba(255, 255, 255, 0.85);
-    padding: 8px 0;
+    padding: 6px 0;
 }
 
 .drawer-link:hover {
     color: var(--primary-cyan);
+}
+
+.drawer-footer {
+    padding-top: 16px;
 }
 
 /* ==========================================================================
@@ -528,7 +545,6 @@ button, input, select, textarea {
 .ring {
     position: absolute;
     border-radius: 50%;
-    border: 1px stroke rgba(0, 242, 254, 0.2);
 }
 
 .ring-1 {
@@ -895,6 +911,7 @@ button, input, select, textarea {
     padding: 12px;
     border: 4px solid #1e293b;
     box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    max-width: 100%;
 }
 
 .phone-screen {
@@ -1305,6 +1322,8 @@ button, input, select, textarea {
     box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
     transform: translateY(20px);
     transition: transform 0.3s ease;
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 .modal-backdrop.open .modal-content {
@@ -1391,7 +1410,7 @@ button, input, select, textarea {
 }
 
 /* ==========================================================================
-   RESPONSIVE MEDIA QUERIES
+   RESPONSIVE MEDIA QUERIES (MOBILE OPTIMIZATION)
    ========================================================================== */
 @media (max-width: 1024px) {
     .stats-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1402,19 +1421,325 @@ button, input, select, textarea {
 }
 
 @media (max-width: 768px) {
+    .container {
+        padding: 0 16px;
+    }
+
+    /* NAVBAR MOBILE FIT */
+    .navbar {
+        padding: 12px 0;
+    }
+
     .nav-menu { display: none; }
     .mobile-toggle { display: block; }
-    .hero-container { grid-template-columns: 1fr; text-align: center; }
-    .hero-buttons { justify-content: center; }
-    .hero-title { font-size: 2.2rem; }
-    .hero-visual { height: 380px; }
-    .floating-badge { display: none; }
-    .split-grid { grid-template-columns: 1fr; }
-    .timeline-grid { grid-template-columns: 1fr; gap: 30px; }
-    .careers-grid { grid-template-columns: 1fr; }
-    .cta-banner-box { flex-direction: column; text-align: center; gap: 24px; }
-    .form-row { grid-template-columns: 1fr; }
-    .features-flex-grid { grid-template-columns: repeat(2, 1fr); }
-    .tech-grid { grid-template-columns: repeat(2, 1fr); }
-    .footer-grid { grid-template-columns: 1fr; }
+
+    .brand-title {
+        font-size: 1.1rem;
+        letter-spacing: 1px;
+    }
+
+    .brand-sub {
+        font-size: 0.58rem;
+    }
+
+    .logo-box {
+        width: 32px;
+        height: 32px;
+    }
+
+    .logo-icon {
+        width: 30px;
+        height: 30px;
+    }
+
+    /* COMPACT GET IN TOUCH BUTTON IN MOBILE HEADER */
+    .navbar .btn-primary {
+        padding: 7px 14px;
+        font-size: 0.78rem;
+        gap: 6px;
+        box-shadow: 0 4px 12px rgba(67, 100, 247, 0.3);
+    }
+
+    .navbar .btn-primary i {
+        font-size: 0.75rem;
+    }
+
+    /* HERO MOBILE FIT */
+    .hero-section {
+        padding-top: 110px;
+        padding-bottom: 50px;
+        min-height: auto;
+    }
+
+    .hero-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 24px;
+    }
+
+    .hero-content {
+        max-width: 100%;
+    }
+
+    .badge-tag {
+        font-size: 0.68rem;
+        padding: 5px 12px;
+        margin-bottom: 16px;
+    }
+
+    .hero-title {
+        font-size: 2rem;
+        line-height: 1.25;
+        margin-bottom: 16px;
+    }
+
+    .hero-description {
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 24px;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+        width: 100%;
+        gap: 12px;
+    }
+
+    .hero-buttons .btn {
+        width: 100%;
+    }
+
+    .hero-visual {
+        height: 300px;
+        margin-top: 16px;
+    }
+
+    .globe-center-graphic {
+        transform: scale(0.85);
+    }
+
+    .floating-badge {
+        display: none; /* Hide cluttered floats on small screens for clean viewport */
+    }
+
+    /* SECTIONS MOBILE FIT */
+    .section {
+        padding: 60px 0;
+    }
+
+    .section-header {
+        margin-bottom: 32px;
+    }
+
+    .main-title {
+        font-size: 1.75rem;
+        line-height: 1.3;
+    }
+
+    .section-desc {
+        font-size: 0.95rem;
+    }
+
+    /* ABOUT STATS */
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .stat-card {
+        padding: 20px 12px;
+    }
+
+    .stat-number-wrap {
+        font-size: 1.75rem;
+        min-height: 32px;
+    }
+
+    .stat-label {
+        font-size: 0.8rem;
+    }
+
+    /* SERVICES */
+    .services-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .service-card {
+        padding: 24px 20px;
+    }
+
+    /* FLAGSHIP PRODUCT */
+    .product-banner-card {
+        padding: 28px 18px;
+        border-radius: 20px;
+        gap: 28px;
+        text-align: center;
+    }
+
+    .product-title {
+        font-size: 2.2rem;
+    }
+
+    .product-subtitle {
+        font-size: 1rem;
+    }
+
+    .product-features-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        text-align: left;
+    }
+
+    .feature-pill {
+        padding: 8px 10px;
+        font-size: 0.78rem;
+    }
+
+    .mobile-mockup {
+        width: 220px;
+        height: 400px;
+        padding: 8px;
+        border-radius: 28px;
+    }
+
+    .phone-screen {
+        padding: 14px 10px;
+    }
+
+    /* WHY CHOOSE US */
+    .features-flex-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .feature-box {
+        padding: 18px 12px;
+    }
+
+    .feature-box h4 {
+        font-size: 0.8rem;
+    }
+
+    /* INDUSTRIES & TECH */
+    .split-grid {
+        grid-template-columns: 1fr;
+        gap: 36px;
+    }
+
+    .chips-grid {
+        justify-content: center;
+    }
+
+    .industry-chip {
+        font-size: 0.82rem;
+        padding: 8px 14px;
+    }
+
+    .tech-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .tech-badge {
+        padding: 10px;
+        font-size: 0.8rem;
+        justify-content: center;
+    }
+
+    /* PROCESS */
+    .timeline-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .timeline-step p {
+        font-size: 0.8rem;
+    }
+
+    /* CAREERS */
+    .careers-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .career-card {
+        padding: 24px 18px;
+    }
+
+    /* CTA BANNER */
+    .cta-banner-box {
+        padding: 32px 20px;
+        border-radius: 20px;
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+    }
+
+    .cta-text h2 {
+        font-size: 1.65rem;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        width: 100%;
+        gap: 12px;
+    }
+
+    .cta-buttons .btn {
+        width: 100%;
+    }
+
+    /* FOOTER */
+    .site-footer {
+        padding: 50px 0 24px 0;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        text-align: center;
+    }
+
+    .social-links {
+        justify-content: center;
+    }
+
+    .contact-info-list li {
+        justify-content: center;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+
+    /* MODAL MOBILE FIT */
+    .modal-backdrop {
+        padding: 12px;
+    }
+
+    .modal-content {
+        padding: 24px 18px;
+        border-radius: 18px;
+    }
+
+    .modal-header h3 {
+        font-size: 1.4rem;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+}
+
+@media (max-width: 400px) {
+    .brand-title { font-size: 0.95rem; }
+    .brand-sub { display: none; }
+    .navbar .btn-primary { padding: 6px 10px; font-size: 0.72rem; }
+    .hero-title { font-size: 1.7rem; }
+    .stats-grid { grid-template-columns: 1fr; }
+    .product-features-grid { grid-template-columns: 1fr; }
 }

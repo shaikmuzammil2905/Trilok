@@ -411,22 +411,36 @@ function initSmoothNavigation() {
    ========================================================================== */
 function initModalSystem() {
     const modal = document.getElementById('contact-modal');
+    const serviceModal = document.getElementById('service-details-modal');
     const closeBtn = document.getElementById('modal-close');
     const openBtns = document.querySelectorAll('.open-modal-btn');
     const formSubjectInput = document.getElementById('form-subject');
     const modalTitle = document.getElementById('modal-title');
     const serviceSelect = document.getElementById('cust-service');
+    const messageInput = document.getElementById('cust-message');
 
     if (!modal) return;
 
     openBtns.forEach((btn) => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
+            e.stopPropagation();
+
             const subject = btn.getAttribute('data-subject') || 'General Inquiry';
-            
+
+            // Automatically close the option details modal if open
+            if (serviceModal && serviceModal.classList.contains('open')) {
+                serviceModal.classList.remove('open');
+            }
+
             if (formSubjectInput) formSubjectInput.value = subject;
             if (modalTitle) {
-                modalTitle.textContent = subject.includes('Career') ? 'Submit Application Details' : 'Fill Customer Details';
+                modalTitle.textContent = subject.includes('Career') ? 'Submit Application Details' : `Inquire: ${subject}`;
+            }
+
+            // Auto pre-fill message requirement with specific option details
+            if (messageInput) {
+                messageInput.value = `Hello Trilok Infotech Team,\nI am interested in ${subject}. Please provide more details and consultation.`;
             }
 
             // Auto select matching service if applicable

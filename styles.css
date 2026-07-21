@@ -424,10 +424,17 @@ button, input, select, textarea {
     min-height: 100vh;
     padding-top: 140px;
     padding-bottom: 80px;
-    background: radial-gradient(circle at 50% 50%, rgba(7, 11, 22, 0.45) 0%, rgba(7, 11, 22, 0.92) 100%), url('image copy 10.png') center/cover no-repeat;
+    background: radial-gradient(circle at 50% 50%, rgba(7, 11, 22, 0.4) 0%, rgba(7, 11, 22, 0.92) 100%), url('image copy 10.png') center/cover no-repeat;
     overflow: hidden;
     display: flex;
     align-items: center;
+    animation: heroBgPulse 22s ease-in-out infinite alternate;
+}
+
+@keyframes heroBgPulse {
+    0% { background-position: center center; background-size: 100% 100%; }
+    50% { background-position: center top; background-size: 108% 108%; }
+    100% { background-position: center bottom; background-size: 104% 104%; }
 }
 
 #hero-canvas {
@@ -445,6 +452,17 @@ button, input, select, textarea {
     inset: 0;
     background: radial-gradient(circle at 75% 35%, rgba(0, 242, 254, 0.15) 0%, transparent 65%);
     z-index: 2;
+}
+
+/* SMOOTH TRANSITION BRIDGE BETWEEN HERO & ABOUT US SECTION */
+.hero-about-bridge {
+    position: relative;
+    width: 100%;
+    height: 60px;
+    margin-top: -30px;
+    z-index: 5;
+    background: linear-gradient(to bottom, transparent 0%, var(--bg-light) 100%);
+    pointer-events: none;
 }
 
 /* E-SALE AGREEMENT OFFICIAL LOGO IMAGE STYLING */
@@ -2134,29 +2152,55 @@ button, input, select, textarea {
         padding: 24px 14px;
         border-radius: 20px;
         gap: 20px;
-        text-align: center;
+        text-align: center !important;
         overflow: hidden;
         box-sizing: border-box;
     }
 
-    .product-title-wrap {
-        justify-content: center;
-        flex-wrap: wrap;
+    .product-content {
+        text-align: center !important;
+        display: flex;
+        flex-direction: column;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .product-header-top {
+        text-align: center !important;
+        margin: 0 auto 16px auto !important;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center !important;
+    }
+
+    .esa-official-logo-box {
+        margin: 12px auto !important;
+        justify-content: center !important;
+        display: flex !important;
+        width: 100%;
     }
 
     .product-title {
         font-size: clamp(1.6rem, 5vw, 2.2rem);
         word-break: break-word;
+        text-align: center !important;
+        margin: 8px auto !important;
     }
 
     .product-subtitle {
         font-size: 0.95rem;
         word-break: break-word;
+        text-align: center !important;
+        margin: 4px auto 12px auto !important;
     }
 
     .product-desc {
         font-size: 0.88rem;
         word-break: break-word;
+        text-align: center !important;
+        margin: 0 auto 20px auto !important;
+        max-width: 95%;
     }
 
     .product-features-grid {

@@ -424,7 +424,7 @@ button, input, select, textarea {
     min-height: 100vh;
     padding-top: 140px;
     padding-bottom: 80px;
-    background: var(--gradient-hero);
+    background: radial-gradient(circle at 50% 50%, rgba(7, 11, 22, 0.45) 0%, rgba(7, 11, 22, 0.92) 100%), url('image copy 10.png') center/cover no-repeat;
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -443,8 +443,60 @@ button, input, select, textarea {
 .hero-overlay {
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at 75% 35%, rgba(0, 242, 254, 0.12) 0%, transparent 60%);
+    background: radial-gradient(circle at 75% 35%, rgba(0, 242, 254, 0.15) 0%, transparent 65%);
     z-index: 2;
+}
+
+/* E-SALE AGREEMENT OFFICIAL LOGO IMAGE STYLING */
+.esa-logo-img {
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 10px rgba(0, 242, 254, 0.6));
+}
+
+.esa-logo-img-large {
+    width: 68px;
+    height: 68px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.7));
+}
+
+.esa-hd-badge {
+    width: auto !important;
+    height: auto !important;
+    padding: 8px 14px !important;
+    background: #ffffff !important;
+    border-radius: 18px !important;
+    box-shadow: 0 0 30px rgba(0, 242, 254, 0.5) !important;
+}
+
+.esa-logo-img-micro {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+}
+
+.esa-app-icon {
+    background: #ffffff !important;
+    padding: 3px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.esa-logo-img-sm {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+.footer-esa-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
 }
 
 .hero-container {

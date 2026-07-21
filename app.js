@@ -732,30 +732,10 @@ function initServiceModalSystem() {
                 el.querySelector('h4')?.textContent.trim() ||
                 el.textContent.trim();
 
-            const data = serviceData[titleKey] || {
-                icon: 'fa-solid fa-layer-group',
-                category: 'TRILOK INFOTECH CAPABILITY',
-                desc: `Trilok Infotech Private Limited delivers specialized ${titleKey} solutions customized to meet your enterprise goals with high efficiency, security, and scalability.`,
-                features: [
-                    `Tailored ${titleKey} Strategy & Implementation`,
-                    `Enterprise Security, Quality Assurance & 24/7 Monitoring`,
-                    `Dedicated Expert Team & SLA Guarantees`
-                ]
-            };
-
-            if (titleEl) titleEl.textContent = titleKey;
-            if (descEl) descEl.textContent = data.desc;
-            if (categoryEl) categoryEl.textContent = data.category;
-            if (iconEl) iconEl.innerHTML = `<i class="${data.icon}"></i>`;
-            if (inquireBtn) inquireBtn.setAttribute('data-subject', `${titleKey} Inquiry`);
-
-            if (featuresList) {
-                featuresList.innerHTML = data.features
-                    .map((f) => `<li><i class="fa-solid fa-circle-check text-green"></i> ${f}</li>`)
-                    .join('');
+            if (titleKey) {
+                // REDIRECT DIRECTLY TO DEDICATED DETAIL EXPLANATION PAGE IN A NEW TAB
+                window.open(`detail.html?title=${encodeURIComponent(titleKey)}`, '_blank');
             }
-
-            if (serviceModal) serviceModal.classList.add('open');
         });
     });
 

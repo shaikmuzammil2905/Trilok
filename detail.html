@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Option Detail | Trilok Infotech Private Limited</title>
+    <meta name="description" content="In-depth technical breakdown and enterprise solutions by Trilok Infotech Private Limited.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .detail-page {
+            background-color: var(--bg-dark);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .detail-header {
+            padding: 20px 0;
+            background: rgba(7, 11, 22, 0.95);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .detail-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary-cyan);
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            background: rgba(0, 242, 254, 0.1);
+            border: 1px solid rgba(0, 242, 254, 0.25);
+            transition: var(--transition);
+        }
+
+        .back-link:hover {
+            background: rgba(0, 242, 254, 0.25);
+            transform: translateX(-4px);
+        }
+
+        .detail-hero {
+            position: relative;
+            padding: 80px 0 60px 0;
+            background: radial-gradient(circle at 50% 30%, rgba(0, 242, 254, 0.15) 0%, transparent 70%), linear-gradient(135deg, #070b16 0%, #0c142c 100%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .detail-hero-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px auto;
+            border-radius: 24px;
+            background: linear-gradient(135deg, #0052D4, #00f2fe);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: #ffffff;
+            box-shadow: 0 0 35px rgba(0, 242, 254, 0.4);
+        }
+
+        .detail-category {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: var(--primary-cyan);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .detail-title {
+            font-family: var(--font-heading);
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .detail-summary {
+            font-size: 1.15rem;
+            color: rgba(255, 255, 255, 0.85);
+            max-width: 840px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .detail-content-section {
+            padding: 70px 0;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .detail-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-md);
+            padding: 30px 24px;
+            transition: var(--transition);
+        }
+
+        .detail-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-cyan);
+            box-shadow: 0 15px 30px rgba(0, 242, 254, 0.15);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .detail-card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(0, 242, 254, 0.1);
+            color: var(--primary-cyan);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            margin-bottom: 16px;
+        }
+
+        .detail-card h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .detail-card p {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.75);
+            line-height: 1.6;
+        }
+
+        .tech-chips-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 24px;
+        }
+
+        .tech-chip-item {
+            padding: 10px 18px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-full);
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .detail-cta-box {
+            background: linear-gradient(135deg, #091530 0%, #0f234a 100%);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            border-radius: var(--radius-lg);
+            padding: 50px 40px;
+            text-align: center;
+            margin-top: 60px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .detail-cta-box h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 14px;
+        }
+
+        .detail-cta-box p {
+            font-size: 1.05rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 28px;
+        }
+
+        @media (max-width: 900px) {
+            .detail-grid { grid-template-columns: 1fr; }
+            .detail-title { font-size: 2.2rem; }
+        }
+    </style>
+</head>
+<body class="detail-page">
+
+    <!-- HEADER NAV -->
+    <header class="detail-header">
+        <div class="container detail-nav">
+            <a href="index.html" class="logo-brand">
+                <div class="logo-box">
+                    <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 2L24.5 13.5H36L26.5 20.5L30 32L20 25L10 32L13.5 20.5L4 13.5H15.5L20 2Z" fill="#00f2fe"/>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <span class="brand-title text-white">TRILOK</span>
+                    <span class="brand-sub text-teal">INFOTECH PVT. LTD.</span>
+                </div>
+            </a>
+            
+            <a href="index.html" class="back-link">
+                <i class="fa-solid fa-arrow-left"></i> Back to Official Website
+            </a>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="detail-hero">
+        <div class="container">
+            <div class="detail-hero-icon" id="detail-icon">
+                <i class="fa-solid fa-layer-group"></i>
+            </div>
+            <span class="detail-category" id="detail-category">ENTERPRISE CAPABILITY</span>
+            <h1 class="detail-title" id="detail-title">Option Breakdown</h1>
+            <p class="detail-summary" id="detail-summary">
+                Comprehensive explanation of technical architectures, business value, and engineering capabilities delivered by Trilok Infotech Private Limited.
+            </p>
+        </div>
+    </section>
+
+    <!-- MAIN CONTENT -->
+    <section class="detail-content-section">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="sub-heading">CAPABILITY BREAKDOWN</span>
+                <h2 class="main-title text-white">Core Pillars & Technical Specifications</h2>
+            </div>
+
+            <div class="detail-grid" id="detail-cards-container">
+                <!-- Dynamically Populated Cards -->
+            </div>
+
+            <!-- TECH STACK INTEGRATIONS -->
+            <div class="section-header text-center" style="margin-top: 70px;">
+                <span class="sub-heading">TECHNOLOGY INTEGRATION</span>
+                <h2 class="main-title text-white">Powered By Modern Stack & Standards</h2>
+                <div class="tech-chips-wrap" id="detail-tech-stack">
+                    <div class="tech-chip-item"><i class="fa-brands fa-react text-cyan"></i> React & Next.js</div>
+                    <div class="tech-chip-item"><i class="fa-brands fa-node-js text-green"></i> Node.js Microservices</div>
+                    <div class="tech-chip-item"><i class="fa-brands fa-aws text-orange"></i> AWS & Azure Cloud</div>
+                    <div class="tech-chip-item"><i class="fa-solid fa-shield-halved text-teal"></i> Zero-Trust Security</div>
+                    <div class="tech-chip-item"><i class="fa-solid fa-database text-blue"></i> PostgreSQL & MongoDB</div>
+                </div>
+            </div>
+
+            <!-- CALL TO ACTION -->
+            <div class="detail-cta-box">
+                <h2>Need Custom Implementation for Your Business?</h2>
+                <p>Connect directly with our engineering team to discuss your project requirements, technical architecture, and timelines.</p>
+                <button class="btn btn-primary" onclick="openWhatsAppInquiry()">
+                    Inquire via WhatsApp (+91 8639833447) <i class="fa-brands fa-whatsapp"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="container text-center">
+            <p>&copy; 2025 Trilok Infotech Private Limited. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // DYNAMIC CONTENT ENGINE FOR DETAIL PAGE
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const title = params.get('title') || 'Enterprise IT Solutions';
+
+            const titleEl = document.getElementById('detail-title');
+            const categoryEl = document.getElementById('detail-category');
+            const summaryEl = document.getElementById('detail-summary');
+            const iconEl = document.getElementById('detail-icon');
+            const cardsContainer = document.getElementById('detail-cards-container');
+
+            document.title = `${title} | Trilok Infotech`;
+
+            const database = {
+                'Software Development': {
+                    icon: 'fa-solid fa-code',
+                    category: 'CUSTOM SOFTWARE & SAAS PLATFORMS',
+                    summary: 'Trilok Infotech Private Limited engineers custom enterprise software, cross-platform mobile apps, and cloud-native SaaS platforms designed for high scalability, zero latency, and bank-grade security.',
+                    cards: [
+                        { icon: 'fa-solid fa-cubes', title: 'Full-Stack Web & Mobile Apps', desc: 'Custom responsive web applications using React, Next.js, and Flutter mobile apps tailored for iOS & Android.' },
+                        { icon: 'fa-solid fa-server', title: 'Cloud Microservices', desc: 'Containerized microservices built with Node.js, Python, and Docker for resilient performance under peak loads.' },
+                        { icon: 'fa-solid fa-lock', title: 'Security & Compliance', desc: 'End-to-end data encryption, OWASP vulnerability compliance, and secure API gateways.' }
+                    ]
+                },
+                'Cybersecurity Services': {
+                    icon: 'fa-solid fa-shield-halved',
+                    category: 'CYBER DEFENSE & VAPT CONSULTING',
+                    summary: 'Protecting corporate networks and cloud infrastructure with Vulnerability Assessment, Penetration Testing (VAPT), SOC monitoring, and regulatory compliance.',
+                    cards: [
+                        { icon: 'fa-solid fa-user-shield', title: 'VAPT & Security Audits', desc: 'In-depth security audits of web apps, APIs, networks, and cloud environments to eliminate vulnerabilities.' },
+                        { icon: 'fa-solid fa-eye', title: '24/7 SOC & SIEM Monitoring', desc: 'Real-time threat detection, log analysis, incident response, and threat hunting by certified security experts.' },
+                        { icon: 'fa-solid fa-certificate', title: 'ISO 27001 & SOC2 Compliance', desc: 'Guiding organizations through regulatory compliance, data privacy laws, and security governance.' }
+                    ]
+                },
+                'eSaleAgreement Platform': {
+                    icon: 'fa-solid fa-file-contract',
+                    category: 'FLAGSHIP DIGITAL AGREEMENT PLATFORM',
+                    summary: 'India\'s trusted digital agreement platform enabling tamper-proof sale agreements in minutes with Aadhaar eKYC, eSign, OTP verification, and legally valid audit trails.',
+                    cards: [
+                        { icon: 'fa-solid fa-id-card', title: 'Aadhaar eKYC & eSign', desc: 'Legally binding digital signature execution powered by Aadhaar biometric & OTP authentication.' },
+                        { icon: 'fa-solid fa-qrcode', title: 'QR & Audit Trail Verification', desc: 'Instant QR verification with tamper-proof cryptographic timestamping for every agreement.' },
+                        { icon: 'fa-solid fa-cloud-arrow-up', title: 'Encrypted Cloud Storage', desc: 'Bank-grade 256-bit AES encrypted cloud repository for instant contract retrieval.' }
+                    ]
+                },
+                'Enterprise-grade Security': {
+                    icon: 'fa-solid fa-shield-halved',
+                    category: 'CORE CAPABILITY',
+                    summary: 'Zero-trust architecture embedded into every software layer to ensure complete data integrity, access authorization, and protection against cyber attacks.',
+                    cards: [
+                        { icon: 'fa-solid fa-key', title: 'Zero-Trust Architecture', desc: 'Strict identity verification for every user and device attempting access.' },
+                        { icon: 'fa-solid fa-database', title: 'AES 256-bit Encryption', desc: 'Data encrypted both at rest and in transit across all database and storage nodes.' },
+                        { icon: 'fa-solid fa-user-check', title: 'Role-Based Access Control', desc: 'Granular permissions and identity management for enterprise workforce security.' }
+                    ]
+                },
+                'Healthcare': {
+                    icon: 'fa-solid fa-notes-medical',
+                    category: 'INDUSTRY SOLUTION',
+                    summary: 'HIPAA-compliant healthcare platforms, electronic health record (EHR) systems, telemedicine apps, and AI diagnostics for hospitals and clinics.',
+                    cards: [
+                        { icon: 'fa-solid fa-hospital-user', title: 'Telemedicine Platforms', desc: 'Secure video consultations, digital prescription management, and online appointment booking.' },
+                        { icon: 'fa-solid fa-file-medical', title: 'EHR & Health Analytics', desc: 'Interoperable health record storage with automated AI patient diagnostics.' },
+                        { icon: 'fa-solid fa-shield-cat', title: 'HIPAA Security Compliance', desc: 'Strict patient data confidentiality, encryption, and audit tracking.' }
+                    ]
+                },
+                'Finance': {
+                    icon: 'fa-solid fa-landmark',
+                    category: 'INDUSTRY SOLUTION',
+                    summary: 'High-frequency fintech applications, payment gateway integrations, fraud detection systems, and automated KYC processing.',
+                    cards: [
+                        { icon: 'fa-solid fa-credit-card', title: 'Payment Processing', desc: 'Seamless integration with international and domestic payment gateways.' },
+                        { icon: 'fa-solid fa-robot', title: 'AI Fraud Detection', desc: 'Machine learning algorithms detecting anomalous transaction behavior in real time.' },
+                        { icon: 'fa-solid fa-building-columns', title: 'Core Banking APIs', desc: 'Secure open-banking REST APIs connecting financial services smoothly.' }
+                    ]
+                }
+            };
+
+            const data = database[title] || {
+                icon: 'fa-solid fa-microchip',
+                category: 'TRILOK INFOTECH ENTERPRISE CAPABILITY',
+                summary: `Comprehensive technical breakdown and enterprise deployment model for ${title}. Delivered with 99.99% reliability, high performance, and SLA-backed support.`,
+                cards: [
+                    { icon: 'fa-solid fa-gears', title: `Custom ${title} Strategy`, desc: 'Tailored technical roadmap, scope architecture, and enterprise implementation guidelines.' },
+                    { icon: 'fa-solid fa-shield-halved', title: 'Security & Quality Assurance', desc: 'Rigorous security testing, automated quality checks, and performance optimization.' },
+                    { icon: 'fa-solid fa-headset', title: '24/7 SLA Engineering Support', desc: 'Round-the-clock monitoring, continuous optimization, and rapid technical assistance.' }
+                ]
+            };
+
+            if (titleEl) titleEl.textContent = title;
+            if (categoryEl) categoryEl.textContent = data.category;
+            if (summaryEl) summaryEl.textContent = data.summary;
+            if (iconEl) iconEl.innerHTML = `<i class="${data.icon}"></i>`;
+
+            if (cardsContainer) {
+                cardsContainer.innerHTML = data.cards.map(c => `
+                    <div class="detail-card">
+                        <div class="detail-card-icon"><i class="${c.icon}"></i></div>
+                        <h3>${c.title}</h3>
+                        <p>${c.desc}</p>
+                    </div>
+                `).join('');
+            }
+        });
+
+        function openWhatsAppInquiry() {
+            const params = new URLSearchParams(window.location.search);
+            const title = params.get('title') || 'Enterprise Option';
+            const msg = `Hello Trilok Infotech Team,\nI reviewed the ${title} details page and would like to request a consultation.`;
+            window.open(`https://wa.me/918639833447?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+    </script>
+</body>
+</html>

@@ -733,8 +733,8 @@ function initServiceModalSystem() {
                 el.textContent.trim();
 
             if (titleKey) {
-                // REDIRECT DIRECTLY TO DEDICATED DETAIL EXPLANATION PAGE IN A NEW TAB
-                window.open(`detail.html?title=${encodeURIComponent(titleKey)}`, '_blank');
+                // NAVIGATE DIRECTLY IN THE SAME WEBSITE WINDOW
+                window.location.href = `detail.html?title=${encodeURIComponent(titleKey)}`;
             }
         });
     });

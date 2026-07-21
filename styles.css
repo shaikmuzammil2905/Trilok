@@ -2006,11 +2006,12 @@ button, input, select, textarea {
         font-size: 0.75rem;
     }
 
-    /* HERO MOBILE FIT */
+    /* HERO MOBILE FIT MATCHING IMAGE COPY 12 */
     .hero-section {
         padding-top: 110px;
         padding-bottom: 50px;
         min-height: auto;
+        background: radial-gradient(circle at 50% 40%, rgba(7, 11, 22, 0.45) 0%, rgba(7, 11, 22, 0.92) 100%), url('image copy 12.png') center/cover no-repeat !important;
     }
 
     .hero-container {

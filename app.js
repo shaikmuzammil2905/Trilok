@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initSmoothNavigation();
     initModalSystem();
     initWhatsAppForm();
+    initPhoneMockupTabs();
 });
 
 /* ==========================================================================
@@ -390,5 +391,18 @@ _Sent from Trilok Infotech Official Portal_`;
 
         // Redirect to WhatsApp
         window.open(whatsappUrl, '_blank');
+    });
+}
+
+/* ==========================================================================
+   9. INTERACTIVE PHONE MOCKUP TABS
+   ========================================================================== */
+function initPhoneMockupTabs() {
+    const tabItems = document.querySelectorAll('.phone-tabs .tab-item');
+    tabItems.forEach((tab) => {
+        tab.addEventListener('click', () => {
+            tabItems.forEach((t) => t.classList.remove('active'));
+            tab.classList.add('active');
+        });
     });
 }

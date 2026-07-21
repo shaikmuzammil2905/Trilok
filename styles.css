@@ -920,15 +920,15 @@ button, input, select, textarea {
 }
 
 /* ==========================================================================
-   FLAGSHIP PRODUCT SECTION
+   FLAGSHIP PRODUCT SECTION (UPDATED TO MATCH IMAGE COPY 19)
    ========================================================================== */
 .product-banner-card {
-    background: radial-gradient(circle at 80% 20%, rgba(0, 242, 254, 0.15) 0%, transparent 50%), linear-gradient(135deg, #060d21 0%, #0d1b3e 100%);
+    background: radial-gradient(circle at 90% 20%, rgba(0, 242, 254, 0.12) 0%, transparent 60%), linear-gradient(135deg, #050b1a 0%, #0a142e 100%);
     border-radius: var(--radius-lg);
-    padding: 60px;
+    padding: 50px 48px;
     color: var(--text-white);
     display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
+    grid-template-columns: 1fr 1fr;
     gap: 40px;
     align-items: center;
     border: 1px solid rgba(0, 242, 254, 0.2);
@@ -937,144 +937,150 @@ button, input, select, textarea {
     overflow: hidden;
 }
 
+.product-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+}
+
 .product-header-top {
-    margin-bottom: 16px;
-    text-align: center;
-}
-
-.esa-official-logo-box {
-    margin: 12px auto;
-    display: flex;
-    justify-content: center;
-}
-
-.esa-icon-badge {
-    position: relative;
-    width: 58px;
-    height: 58px;
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #ffffff;
-    font-size: 1.8rem;
-    box-shadow: 0 0 25px rgba(16, 185, 129, 0.6);
-}
-
-.esa-label {
-    position: absolute;
-    bottom: 3px;
-    right: 4px;
-    font-size: 0.68rem;
-    font-weight: 900;
-    color: #ffffff;
-    background: #064e3b;
-    padding: 1px 4px;
-    border-radius: 4px;
-    line-height: 1;
-}
-
-.interactive-option {
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.interactive-option:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 10px 25px rgba(0, 242, 254, 0.25);
-    border-color: var(--primary-cyan) !important;
-}
-
-.anim-step-btn {
-    animation: stepPulse 3s infinite ease-in-out;
-}
-
-@keyframes stepPulse {
-    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 242, 254, 0.4); }
-    50% { transform: scale(1.08); box-shadow: 0 0 0 12px rgba(0, 242, 254, 0); }
-    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 242, 254, 0); }
+    margin-bottom: 20px;
+    text-align: left;
+    width: 100%;
 }
 
 .product-badge-tag {
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 1.5px;
-    color: var(--primary-cyan);
+    color: #00f2fe;
     text-transform: uppercase;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.esa-official-logo-box {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 12px;
+}
+
+.esa-header-logo-png {
+    height: 48px;
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 12px rgba(0, 242, 254, 0.3));
 }
 
 .product-title {
     font-family: var(--font-heading);
-    font-size: 3rem;
+    font-size: 2.8rem;
     font-weight: 800;
     margin: 0;
-    background: var(--gradient-text);
+    line-height: 1.1;
+    display: inline-flex;
+    align-items: center;
+}
+
+.title-esale {
+    background: linear-gradient(90deg, #00f2fe 0%, #38ef7d 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
+.title-agreement {
+    color: #ffffff;
+}
+
 .product-subtitle {
-    font-size: 1.2rem;
+    font-size: 1.15rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.9);
-    margin-bottom: 16px;
+    color: rgba(255, 255, 255, 0.95);
+    margin-top: 10px;
+    margin-bottom: 14px;
 }
 
 .product-desc {
-    font-size: 1rem;
+    font-size: 0.95rem;
     color: rgba(255, 255, 255, 0.75);
+    line-height: 1.6;
     margin-bottom: 28px;
+    max-width: 520px;
 }
 
 .product-features-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
     margin-bottom: 32px;
+    width: 100%;
 }
 
-.feature-pill {
+.feature-pill-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 12px 6px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    text-align: center;
+    transition: var(--transition);
+}
+
+.feature-pill-box:hover {
+    background: rgba(0, 242, 254, 0.12);
+    border-color: rgba(0, 242, 254, 0.4);
+    transform: translateY(-3px);
+}
+
+.feature-pill-box .pill-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: rgba(0, 82, 212, 0.3);
+    color: #00f2fe;
     display: flex;
     align-items: center;
-    gap: 8px;
-    background: rgba(255, 255, 255, 0.06);
-    padding: 10px 14px;
-    border-radius: var(--radius-sm);
-    font-size: 0.85rem;
-    font-weight: 500;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    justify-content: center;
+    font-size: 1.05rem;
 }
 
-.pill-icon {
-    color: var(--primary-cyan);
-}
-
-.btn-teal {
-    background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+.btn-gradient-product {
+    background: linear-gradient(90deg, #0066ff 0%, #00d2ff 50%, #38ef7d 100%);
     color: #ffffff;
-    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+    font-weight: 700;
+    padding: 14px 32px;
+    border-radius: var(--radius-full);
+    box-shadow: 0 8px 25px rgba(0, 102, 255, 0.4);
+    transition: var(--transition);
 }
 
-.btn-teal:hover {
-    box-shadow: 0 12px 25px rgba(16, 185, 129, 0.5);
+.btn-gradient-product:hover {
     transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(0, 210, 255, 0.6);
 }
 
-/* DUAL MOBILE MOCKUPS & ANIMATED HANDSHAKE */
+/* MOBILE MOCKUP PHONES WITH WHITE SCREENS */
 .product-mockup-wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
-    perspective: 1000px;
     position: relative;
     padding: 20px 0;
 }
 
 .phones-container {
     position: relative;
-    width: 320px;
-    height: 520px;
+    width: 380px;
+    height: 540px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1082,177 +1088,171 @@ button, input, select, textarea {
 
 .mobile-mockup {
     position: absolute;
-    width: 250px;
-    height: 490px;
-    background: #030712;
-    border-radius: 38px;
+    width: 235px;
+    height: 485px;
+    background: #0f172a;
+    border-radius: 36px;
     padding: 10px;
-    border: 3px solid #1e293b;
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 242, 254, 0.15);
-    transition: transform 0.5s ease;
+    border: 4px solid #1e293b;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(0, 242, 254, 0.15);
+    transition: transform 0.4s ease, z-index 0.4s ease;
 }
 
-.phone-speaker {
+.phone-notch {
     width: 60px;
     height: 4px;
     background: #334155;
     border-radius: 4px;
-    margin: 4px auto 8px auto;
+    margin: 2px auto 8px auto;
 }
 
-.phone-screen {
+.phone-screen-white {
     width: 100%;
-    height: calc(100% - 16px);
-    background: #070e20;
-    border-radius: 28px;
-    padding: 14px 12px;
+    height: calc(100% - 14px);
+    background: #ffffff !important;
+    border-radius: 26px;
+    padding: 12px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     overflow: hidden;
-    position: relative;
+    color: #0f172a;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
 }
 
-/* PHONE BACK (LEFT PERSPECTIVE) */
-.phone-back {
-    transform: rotate(-12deg) translateX(-45px) translateY(15px) scale(0.92);
-    z-index: 1;
-    opacity: 0.85;
-    filter: brightness(0.9);
-}
-
-.phone-back:hover {
-    transform: rotate(-8deg) translateX(-35px) translateY(5px) scale(0.95);
-    opacity: 1;
-    z-index: 3;
-}
-
-.phone-top-bar {
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--primary-cyan);
-    padding-bottom: 8px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.phone-form-preview {
-    background: rgba(255, 255, 255, 0.04);
-    border-radius: 12px;
-    padding: 12px;
-    margin-top: 10px;
-}
-
-.form-preview-label {
-    font-size: 0.7rem;
-    color: var(--text-light);
-    margin-bottom: 8px;
-    font-weight: 600;
-}
-
-.form-preview-row {
-    font-size: 0.72rem;
-    color: #ffffff;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-bottom: 8px;
-}
-
-.p-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #64748b;
-}
-
-.p-dot.active {
-    background: #10b981;
-    box-shadow: 0 0 6px #10b981;
-}
-
-.form-preview-stamp {
-    margin-top: 16px;
-    padding: 8px;
-    background: rgba(16, 185, 129, 0.15);
-    border: 1px dashed #10b981;
-    border-radius: 8px;
-    color: #38ef7d;
-    font-size: 0.68rem;
-    text-align: center;
-    font-weight: 700;
-}
-
-/* PHONE FRONT (MAIN RIGHT PERSPECTIVE) */
-.phone-front {
-    transform: rotate(6deg) translateX(30px) translateY(-5px) scale(1);
+/* PHONE 1: FRONT WHITE SCREEN */
+.phone-front-white {
+    transform: translateX(-45px) translateY(0px) rotate(-3deg);
     z-index: 2;
-    border-color: rgba(0, 242, 254, 0.4);
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), 0 0 35px rgba(0, 242, 254, 0.25);
-    animation: phoneFloat 6s ease-in-out infinite alternate;
+    border-color: #3b82f6;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 25px rgba(59, 130, 246, 0.3);
 }
 
-@keyframes phoneFloat {
-    0% { transform: rotate(6deg) translateX(30px) translateY(-5px) scale(1); }
-    100% { transform: rotate(4deg) translateX(25px) translateY(-15px) scale(1.02); }
+.phone-front-white:hover {
+    transform: translateX(-40px) translateY(-5px) rotate(0deg);
+    z-index: 4;
 }
 
-.app-header {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    padding-bottom: 8px;
-}
-
-.app-brand {
+.app-header-white {
     display: flex;
     align-items: center;
     gap: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e2e8f0;
 }
 
-.app-icon {
-    width: 26px;
-    height: 26px;
-    background: linear-gradient(135deg, #10b981, #059669);
-    border-radius: 6px;
+.app-header-white .back-arrow {
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+.app-brand-white {
     display: flex;
     align-items: center;
-    justify-content: center;
-    color: #ffffff;
-    font-size: 0.8rem;
+    gap: 6px;
 }
 
-.app-name strong {
+.esa-logo-img-micro {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+}
+
+.app-name-white strong {
     display: block;
-    font-size: 0.78rem;
-    color: #ffffff;
+    font-size: 0.72rem;
+    color: #0f172a;
     line-height: 1.1;
 }
 
-.app-name small {
+.app-name-white small {
     display: block;
-    font-size: 0.58rem;
-    color: var(--primary-cyan);
+    font-size: 0.55rem;
+    color: #0284c7;
+    font-weight: 600;
 }
 
-.phone-tabs {
+.handshake-card-white {
+    flex: 1;
     display: flex;
-    background: rgba(255, 255, 255, 0.06);
+    align-items: center;
+    justify-content: center;
+    margin: 6px 0;
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.handshake-img-graphic {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
     border-radius: 8px;
-    padding: 2px;
+}
+
+/* PHONE 2: BACK WHITE SCREEN */
+.phone-back-white {
+    transform: translateX(45px) translateY(15px) rotate(4deg);
+    z-index: 1;
+    border-color: #0284c7;
+}
+
+.phone-back-white:hover {
+    transform: translateX(35px) translateY(5px) rotate(0deg);
+    z-index: 4;
+}
+
+.phone-top-bar-white {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #0f172a;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.phone-tabs-white {
+    display: flex;
+    background: #f1f5f9;
+    border-radius: 8px;
+    padding: 3px;
     margin: 8px 0;
 }
 
-.tab-item {
+.tab-item-white {
     flex: 1;
     text-align: center;
-    font-size: 0.65rem;
+    font-size: 0.62rem;
     font-weight: 600;
-    padding: 4px 0;
-    color: var(--text-light);
+    padding: 5px 0;
+    color: #64748b;
     border-radius: 6px;
-    cursor: pointer;
 }
 
-.tab-item.active {
-    background: var(--primary-blue);
+.tab-item-white.active {
+    background: #0066ff;
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 102, 255, 0.3);
+}
+
+.phone-steps-list-white {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 6px 0;
+}
+
+.step-item-white {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 6px 8px;
+    font-size: 0.65rem;
     color: #ffffff;
 }
 
@@ -2171,11 +2171,12 @@ button, input, select, textarea {
         padding: 24px 20px;
     }
 
-    /* FLAGSHIP PRODUCT - DESKTOP-LIKE BOX VIEW ON MOBILE (MATCHING IMAGE COPY 4) */
+    /* FLAGSHIP PRODUCT - DESKTOP-LIKE BOX VIEW ON MOBILE (MATCHING IMAGE COPY 4 & 19) */
     .product-banner-card {
+        grid-template-columns: 1fr;
         padding: 24px 14px;
         border-radius: 20px;
-        gap: 20px;
+        gap: 24px;
         text-align: center !important;
         overflow: hidden;
         box-sizing: border-box;
@@ -2228,15 +2229,21 @@ button, input, select, textarea {
     }
 
     .product-features-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
-        text-align: left;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+        text-align: center;
     }
 
-    .feature-pill {
-        padding: 8px;
-        font-size: 0.74rem;
+    .feature-pill-box {
+        padding: 8px 4px;
+        font-size: 0.68rem;
         word-break: break-word;
+    }
+
+    .feature-pill-box .pill-icon {
+        width: 28px;
+        height: 28px;
+        font-size: 0.85rem;
     }
 
     .store-buttons-wrap {
@@ -2257,7 +2264,7 @@ button, input, select, textarea {
 
     .phones-container {
         width: 100%;
-        max-width: 290px;
+        max-width: 320px;
         height: 480px;
         margin: 0 auto;
         display: flex;
@@ -2266,26 +2273,18 @@ button, input, select, textarea {
     }
 
     .mobile-mockup {
-        width: 230px;
-        height: 465px;
+        width: 210px;
+        height: 450px;
         padding: 8px;
-        border-radius: 32px;
+        border-radius: 30px;
     }
 
-    .phone-back {
-        transform: rotate(-10deg) translateX(-30px) translateY(10px) scale(0.88);
-        opacity: 0.8;
+    .phone-front-white {
+        transform: translateX(-30px) translateY(0px) rotate(-3deg);
     }
 
-    .phone-front {
-        transform: rotate(3deg) translateX(15px) translateY(-5px) scale(0.96);
-        animation: none;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 242, 254, 0.3);
-    }
-
-    .phone-screen {
-        padding: 10px 8px;
-        font-size: 0.65rem;
+    .phone-back-white {
+        transform: translateX(30px) translateY(10px) rotate(3deg);
     }
 
     /* WHY CHOOSE US */

@@ -34,7 +34,8 @@ function initHeroCanvas() {
     });
 
     const particles = [];
-    const particleCount = Math.min(Math.floor(width / 15), 65);
+    const particleCount = Math.min(Math.floor(width / 14), 70);
+    let globeAngle = 0;
 
     class Particle {
         constructor() {
@@ -44,8 +45,8 @@ function initHeroCanvas() {
         reset() {
             this.x = Math.random() * width;
             this.y = Math.random() * height;
-            this.vx = (Math.random() - 0.5) * 0.8;
-            this.vy = (Math.random() - 0.5) * 0.8;
+            this.vx = (Math.random() - 0.5) * 0.7;
+            this.vy = (Math.random() - 0.5) * 0.7;
             this.radius = Math.random() * 2 + 1;
             this.alpha = Math.random() * 0.6 + 0.2;
             this.color = Math.random() > 0.4 ? '#00f2fe' : '#4364F7';
@@ -76,22 +77,139 @@ function initHeroCanvas() {
         particles.push(new Particle());
     }
 
+    function drawGlowingGlobeWithIndia(cx, cy, radius, angle) {
+        ctx.save();
+        ctx.translate(cx, cy);
+
+        // Globe atmosphere glow
+        const grad = ctx.createRadialGradient(0, 0, radius * 0.1, 0, 0, radius * 1.15);
+        grad.addColorStop(0, 'rgba(0, 242, 254, 0.22)');
+        grad.addColorStop(0.6, 'rgba(67, 100, 247, 0.12)');
+        grad.addColorStop(1, 'rgba(7, 11, 22, 0)');
+
+        ctx.beginPath();
+        ctx.arc(0, 0, radius * 1.15, 0, Math.PI * 2);
+        ctx.fillStyle = grad;
+        ctx.fill();
+
+        // Sphere boundary
+        ctx.beginPath();
+        ctx.arc(0, 0, radius, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(0, 242, 254, 0.4)';
+        ctx.lineWidth = 1.5;
+        ctx.shadowColor = '#00f2fe';
+        ctx.shadowBlur = 20;
+        ctx.stroke();
+
+        // Latitude & Longitude grid lines
+        ctx.strokeStyle = 'rgba(0, 242, 254, 0.2)';
+        ctx.lineWidth = 1;
+
+        for (let lat = -60; lat <= 60; lat += 20) {
+            const rLat = radius * Math.cos((lat * Math.PI) / 180);
+            const yLat = radius * Math.sin((lat * Math.PI) / 180);
+            ctx.beginPath();
+            ctx.ellipse(0, yLat, rLat, rLat * 0.3, 0, 0, Math.PI * 2);
+            ctx.stroke();
+        }
+
+        for (let lon = 0; lon < 360; lon += 30) {
+            const rLon = (lon * Math.PI) / 180 + angle;
+            const xLon = radius * Math.cos(rLon);
+            if (Math.sin(rLon) > -0.2) {
+                ctx.beginPath();
+                ctx.ellipse(0, 0, Math.abs(xLon), radius, 0, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+        }
+
+        // DRAW GLOWING INDIA MAP CONTOUR IN CENTER (MATCHING IMAGE COPY 3)
+        ctx.save();
+        ctx.shadowColor = '#00f2fe';
+        ctx.shadowBlur = 16;
+        ctx.strokeStyle = '#00f2fe';
+        ctx.lineWidth = 2.2;
+        ctx.fillStyle = 'rgba(0, 242, 254, 0.25)';
+
+        const scaleS = radius / 120;
+        const offsetX = Math.sin(angle * 0.8) * 20;
+        const offsetY = -radius * 0.05;
+
+        // India map polygon points
+        const indiaPoints = [
+            [0, -65],   // North tip (Kashmir)
+            [16, -45],  // Himalayas / Nepal border
+            [35, -35],  // Northeast / Arunachal
+            [28, -10],  // Assam / East
+            [18, 15],   // Odisha coast
+            [12, 45],   // Tamil Nadu / East coast
+            [0, 68],    // Kanyakumari South tip
+            [-15, 35],  // Kerala / West coast
+            [-25, 10],  // Goa / Mumbai coast
+            [-38, -15], // Gujarat peninsula
+            [-22, -35], // Rajasthan
+            [-12, -50]  // Punjab / West border
+        ];
+
+        ctx.beginPath();
+        indiaPoints.forEach((pt, idx) => {
+            const px = pt[0] * scaleS + offsetX;
+            const py = pt[1] * scaleS + offsetY;
+            if (idx === 0) ctx.moveTo(px, py);
+            else ctx.lineTo(px, py);
+        });
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Pulsing India Tech Hub Nodes
+        const hubNodes = [
+            [0, -35],  // North (Delhi)
+            [-18, 12], // West (Mumbai)
+            [5, 30],   // South (Hyderabad / Bangalore)
+            [15, 0]    // East (Kolkata)
+        ];
+
+        hubNodes.forEach(([nx, ny]) => {
+            ctx.beginPath();
+            ctx.arc(nx * scaleS + offsetX, ny * scaleS + offsetY, 4, 0, Math.PI * 2);
+            ctx.fillStyle = '#38ef7d';
+            ctx.shadowColor = '#38ef7d';
+            ctx.shadowBlur = 10;
+            ctx.fill();
+        });
+
+        ctx.restore();
+        ctx.restore();
+    }
+
     function animate() {
         ctx.clearRect(0, 0, width, height);
 
-        // Draw connections
+        globeAngle += 0.005;
+
+        // Center coordinates for Globe (Desktop right half, Mobile centered)
+        const isMobile = width <= 768;
+        const gx = isMobile ? width * 0.5 : width * 0.72;
+        const gy = isMobile ? height * 0.72 : height * 0.5;
+        const gRadius = isMobile ? Math.min(width, height) * 0.28 : Math.min(width, height) * 0.32;
+
+        // Draw animated globe with India
+        drawGlowingGlobeWithIndia(gx, gy, Math.max(120, gRadius), globeAngle);
+
+        // Draw particle connections
         for (let i = 0; i < particles.length; i++) {
             for (let j = i + 1; j < particles.length; j++) {
                 const dx = particles[i].x - particles[j].x;
                 const dy = particles[i].y - particles[j].y;
                 const dist = Math.sqrt(dx * dx + dy * dy);
 
-                if (dist < 130) {
+                if (dist < 120) {
                     ctx.beginPath();
                     ctx.moveTo(particles[i].x, particles[i].y);
                     ctx.lineTo(particles[j].x, particles[j].y);
                     ctx.strokeStyle = '#00f2fe';
-                    ctx.globalAlpha = (1 - dist / 130) * 0.25;
+                    ctx.globalAlpha = (1 - dist / 120) * 0.22;
                     ctx.lineWidth = 0.8;
                     ctx.stroke();
                     ctx.globalAlpha = 1;

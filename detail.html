@@ -190,23 +190,44 @@
             text-align: center;
             margin-top: 60px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            box-sizing: border-box;
+            width: 100%;
         }
 
         .detail-cta-box h2 {
-            font-size: 2.2rem;
+            font-size: clamp(1.4rem, 5vw, 2.2rem);
             font-weight: 800;
             margin-bottom: 14px;
+            overflow-wrap: break-word;
+            word-break: break-word;
+            line-height: 1.3;
         }
 
         .detail-cta-box p {
             font-size: 1.05rem;
             color: rgba(255, 255, 255, 0.8);
             margin-bottom: 28px;
+            overflow-wrap: break-word;
+            word-break: break-word;
         }
 
         @media (max-width: 900px) {
             .detail-grid { grid-template-columns: 1fr; }
             .detail-title { font-size: 2.2rem; }
+        }
+
+        @media (max-width: 768px) {
+            .detail-hero { padding: 40px 16px 30px 16px; }
+            .detail-title { font-size: 1.8rem; word-break: break-word; }
+            .detail-summary { font-size: 0.95rem; word-break: break-word; }
+            .detail-grid { grid-template-columns: 1fr; gap: 16px; }
+            .detail-card { padding: 20px 16px; word-break: break-word; }
+            .detail-card h3 { font-size: 1.1rem; word-break: break-word; }
+            .detail-cta-box { padding: 24px 14px; margin-top: 36px; border-radius: 16px; width: 100%; }
+            .detail-cta-box h2 { font-size: 1.35rem; word-break: break-word; line-height: 1.3; }
+            .detail-cta-box p { font-size: 0.88rem; word-break: break-word; }
+            .detail-cta-box .btn { white-space: normal !important; width: 100%; font-size: 0.88rem; padding: 12px 14px; line-height: 1.4; word-break: break-word; box-sizing: border-box; }
+            .back-link { font-size: 0.8rem; padding: 6px 12px; }
         }
     </style>
 </head>

@@ -1227,19 +1227,28 @@ button, input, select, textarea {
     font-weight: 600;
 }
 
-/* HD HANDSHAKE & SHIELD CARD */
+/* HD HANDSHAKE & SHIELD CARD (MATCHING IMAGE COPY 26) */
 .handshake-hd-card {
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    margin: 10px 0;
-    padding: 12px 6px;
-    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
-    border-radius: 16px;
-    border: 1px solid #e2e8f0;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+    justify-content: space-between;
+    margin: 6px 0;
+    padding: 4px;
+    background: #ffffff;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.handshake-hd-photo {
+    width: 100%;
+    height: auto;
+    max-height: 240px;
+    object-fit: contain;
+    border-radius: 10px;
+    display: block;
+    margin-bottom: 6px;
 }
 
 .shield-3d-hd {
@@ -2652,6 +2661,26 @@ button, input, select, textarea {
     .form-row {
         grid-template-columns: 1fr;
         gap: 12px;
+    }
+}
+
+/* GLOBAL MOBILE TEXT OVERFLOW & ALIGNMENT PREVENTIONS (MATCHING IMAGE COPY 24) */
+h1, h2, h3, h4, h5, h6, p, span, a, button {
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+@media (max-width: 768px) {
+    .btn, button, a.btn {
+        white-space: normal !important;
+        text-align: center;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    .main-title, .cta-text h2 {
+        font-size: clamp(1.4rem, 6vw, 1.8rem);
+        line-height: 1.3;
+        word-break: break-word;
     }
 }
 

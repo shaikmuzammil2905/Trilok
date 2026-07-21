@@ -845,38 +845,63 @@ button, input, select, textarea {
     overflow: hidden;
 }
 
-.product-title-wrap {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin: 8px 0;
+.product-header-top {
+    margin-bottom: 16px;
+    text-align: center;
 }
 
-.esa-logo-icon {
+.esa-official-logo-box {
+    margin: 12px auto;
+    display: flex;
+    justify-content: center;
+}
+
+.esa-icon-badge {
     position: relative;
-    width: 48px;
-    height: 48px;
+    width: 58px;
+    height: 58px;
     background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    border-radius: 12px;
+    border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #ffffff;
-    font-size: 1.5rem;
-    box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+    font-size: 1.8rem;
+    box-shadow: 0 0 25px rgba(16, 185, 129, 0.6);
 }
 
-.esa-mini {
+.esa-label {
     position: absolute;
-    bottom: 2px;
+    bottom: 3px;
     right: 4px;
-    font-size: 0.6rem;
+    font-size: 0.68rem;
     font-weight: 900;
     color: #ffffff;
     background: #064e3b;
-    padding: 1px 3px;
+    padding: 1px 4px;
     border-radius: 4px;
     line-height: 1;
+}
+
+.interactive-option {
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.interactive-option:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 10px 25px rgba(0, 242, 254, 0.25);
+    border-color: var(--primary-cyan) !important;
+}
+
+.anim-step-btn {
+    animation: stepPulse 3s infinite ease-in-out;
+}
+
+@keyframes stepPulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 242, 254, 0.4); }
+    50% { transform: scale(1.08); box-shadow: 0 0 0 12px rgba(0, 242, 254, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 242, 254, 0); }
 }
 
 .product-badge-tag {

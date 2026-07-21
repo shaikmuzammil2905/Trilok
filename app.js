@@ -412,12 +412,13 @@ function initPhoneMockupTabs() {
    10. INTERACTIVE SERVICE & OPTION DETAILS POPUP
    ========================================================================== */
 function initServiceModalSystem() {
-    const serviceCards = document.querySelectorAll('.service-card, .service-arrow');
+    const interactiveElements = document.querySelectorAll('.service-card, .service-arrow, .interactive-option');
     const serviceModal = document.getElementById('service-details-modal');
     const closeBtn = document.getElementById('service-modal-close');
     const titleEl = document.getElementById('svc-modal-title');
     const descEl = document.getElementById('svc-modal-desc');
     const iconEl = document.getElementById('svc-modal-icon');
+    const categoryEl = document.getElementById('svc-modal-category');
     const featuresList = document.getElementById('svc-modal-features-list');
     const inquireBtn = document.getElementById('svc-modal-inquire-btn');
 
@@ -471,21 +472,150 @@ function initServiceModalSystem() {
                 'Robotic Process Automation (RPA) for Enterprise Workflows',
                 'Predictive Data Analytics & Automated Business Insights'
             ]
+        },
+        // WHY CHOOSE US OPTIONS
+        'Enterprise-grade Security': {
+            icon: 'fa-solid fa-shield-halved',
+            category: 'WHY CHOOSE TRILOK INFOTECH',
+            desc: 'We embed zero-trust architectures, end-to-end data encryption, and compliance controls into every software solution we build for maximum reliability.',
+            features: [
+                'Zero-Trust Security & Multi-Layer Encryption',
+                'Regulatory Compliance (ISO 27001, SOC 2, HIPAA, GDPR)',
+                'Proactive Threat Intelligence & Continuous Security Monitoring'
+            ]
+        },
+        'Innovative Solutions': {
+            icon: 'fa-solid fa-lightbulb',
+            category: 'WHY CHOOSE TRILOK INFOTECH',
+            desc: 'Leveraging cutting-edge technologies like AI, modern web frameworks, and cloud-native microservices to drive competitive advantage for your business.',
+            features: [
+                'State-of-the-Art Technology Stack & Frameworks',
+                'AI-Driven Business Intelligence & Automation',
+                'Future-Proof Architecture Designed for Growth'
+            ]
+        },
+        'Scalable Infrastructure': {
+            icon: 'fa-solid fa-server',
+            category: 'WHY CHOOSE TRILOK INFOTECH',
+            desc: 'High-availability infrastructure solutions designed to seamlessly handle high traffic spikes, distributed enterprise workloads, and zero-downtime deployments.',
+            features: [
+                'Auto-scaling Microservices & Container Orchestration',
+                'Multi-Region Cloud Redundancy & Load Balancing',
+                '99.99% Uptime Guarantee & High-Throughput Databases'
+            ]
+        },
+        'Digital Transformation Experts': {
+            icon: 'fa-solid fa-chart-line',
+            category: 'WHY CHOOSE TRILOK INFOTECH',
+            desc: 'Empowering legacy businesses with modern digital tools, cloud migration, automated workflows, and customer-centric digital platforms.',
+            features: [
+                'Legacy System Modernization & Cloud Migration',
+                'End-to-End Process Automation & Workflow Digitization',
+                'Data-Driven Decision Making & Business Analytics'
+            ]
+        },
+        '24x7 Technical Support': {
+            icon: 'fa-solid fa-headset',
+            category: 'WHY CHOOSE TRILOK INFOTECH',
+            desc: 'Round-the-clock dedicated technical assistance, system monitoring, incident management, and proactive maintenance by senior engineers.',
+            features: [
+                '24/7/365 Rapid Response Helpdesk & Support Team',
+                'SLA-Backed Incident Resolution & Real-Time Alerting',
+                'Continuous Health Checks & Automated Security Patching'
+            ]
+        },
+        'Customer Centric Approach': {
+            icon: 'fa-solid fa-handshake-angle',
+            category: 'WHY CHOOSE TRILOK INFOTECH',
+            desc: 'We prioritize customer success with transparent agile collaboration, tailored product roadmaps, and dedicated account management.',
+            features: [
+                'Agile Development Sprints with Regular Deliverable Reviews',
+                'Dedicated Account Managers & Transparent Project Tracking',
+                'Customized Tech Solutions Tailored Exactly to Business Goals'
+            ]
+        },
+        // PROCESS STEPS
+        'Discover': {
+            icon: 'fa-solid fa-magnifying-glass',
+            category: 'OUR METHODOLOGY - PHASE 1',
+            desc: 'Comprehensive requirement gathering, stakeholder interviews, technical feasibility analysis, and architecture blueprinting.',
+            features: [
+                'Business Needs Analysis & Technical Scope Definition',
+                'Security & Compliance Requirement Mapping',
+                'Project Timeline, Budget & Resource Allocation Blueprint'
+            ]
+        },
+        'Design': {
+            icon: 'fa-solid fa-pencil',
+            category: 'OUR METHODOLOGY - PHASE 2',
+            desc: 'UI/UX wireframing, high-fidelity interactive design prototypes, database schema modeling, and system architecture specification.',
+            features: [
+                'User-Centric UI/UX Prototyping & Visual Guidelines',
+                'Scalable Database & Microservices Architecture Design',
+                'Security Protocol & Data Flow Specification'
+            ]
+        },
+        'Develop': {
+            icon: 'fa-solid fa-code',
+            category: 'OUR METHODOLOGY - PHASE 3',
+            desc: 'Agile code execution using clean architecture standards, automated unit testing, continuous integration, and secure code audits.',
+            features: [
+                'Full-Stack Agile Sprint Development & Code Reviews',
+                'Automated Testing, CI/CD Pipeline Implementation',
+                'Code Security Audits & Performance Optimization'
+            ]
+        },
+        'Deploy': {
+            icon: 'fa-solid fa-rocket',
+            category: 'OUR METHODOLOGY - PHASE 4',
+            desc: 'Seamless zero-downtime deployment to cloud environments, staging verification, load testing, and go-live launch management.',
+            features: [
+                'Automated Cloud Staging & Production Deployment',
+                'Load & Stress Testing under Simulated Traffic Spikes',
+                'Go-Live Operations & Real-Time Performance Telemetry'
+            ]
+        },
+        'Support': {
+            icon: 'fa-solid fa-headset',
+            category: 'OUR METHODOLOGY - PHASE 5',
+            desc: 'Long-term system maintenance, SLA support, continuous security upgrades, and feature enhancements to ensure business growth.',
+            features: [
+                'Ongoing Maintenance, System Patching & Updates',
+                '24/7 Performance Monitoring & Issue Remediation',
+                'Continuous Feature Scaling & Tech Stack Upgrades'
+            ]
         }
     };
 
-    serviceCards.forEach((card) => {
-        card.addEventListener('click', (e) => {
-            if (e.target.closest('.open-modal-btn') && !e.target.closest('.service-arrow')) return;
+    interactiveElements.forEach((el) => {
+        el.addEventListener('click', (e) => {
+            if (e.target.closest('.open-modal-btn') && !e.target.closest('.service-arrow') && !e.target.closest('.interactive-option')) return;
 
-            const cardTitleEl = card.querySelector('.service-title') || card.closest('.service-card')?.querySelector('.service-title');
-            const title = cardTitleEl ? cardTitleEl.textContent.trim() : 'Software Development';
-            const data = serviceData[title] || serviceData['Software Development'];
+            const titleKey = 
+                el.getAttribute('data-why') ||
+                el.getAttribute('data-industry') ||
+                el.getAttribute('data-tech') ||
+                el.getAttribute('data-process') ||
+                el.querySelector('.service-title')?.textContent.trim() ||
+                el.querySelector('h4')?.textContent.trim() ||
+                el.textContent.trim();
 
-            if (titleEl) titleEl.textContent = title;
+            const data = serviceData[titleKey] || {
+                icon: 'fa-solid fa-layer-group',
+                category: 'TRILOK INFOTECH CAPABILITY',
+                desc: `Trilok Infotech Private Limited delivers specialized ${titleKey} solutions customized to meet your enterprise goals with high efficiency, security, and scalability.`,
+                features: [
+                    `Tailored ${titleKey} Strategy & Implementation`,
+                    `Enterprise Security, Quality Assurance & 24/7 Monitoring`,
+                    `Dedicated Expert Team & SLA Guarantees`
+                ]
+            };
+
+            if (titleEl) titleEl.textContent = titleKey;
             if (descEl) descEl.textContent = data.desc;
+            if (categoryEl) categoryEl.textContent = data.category;
             if (iconEl) iconEl.innerHTML = `<i class="${data.icon}"></i>`;
-            if (inquireBtn) inquireBtn.setAttribute('data-subject', `${title} Direct Inquiry`);
+            if (inquireBtn) inquireBtn.setAttribute('data-subject', `${titleKey} Inquiry`);
 
             if (featuresList) {
                 featuresList.innerHTML = data.features

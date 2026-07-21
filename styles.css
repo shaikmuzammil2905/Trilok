@@ -1234,7 +1234,7 @@ button, input, select, textarea {
     font-weight: 600;
 }
 
-/* HD HANDSHAKE & SHIELD CARD (MATCHING IMAGE COPY 26 & 28) */
+/* HD HANDSHAKE & SHIELD CARD (SEAMLESS BACKGROUND BLENDING MATCHING IMAGE COPY 29) */
 .handshake-hd-card {
     flex: 1;
     display: flex;
@@ -1242,20 +1242,24 @@ button, input, select, textarea {
     align-items: center;
     justify-content: space-between;
     margin: 4px 0;
-    padding: 4px;
-    background: #ffffff;
-    border-radius: 14px;
-    overflow: hidden;
+    padding: 0;
+    background: transparent !important;
+    border-radius: 0;
+    border: none !important;
+    box-shadow: none !important;
+    overflow: visible;
 }
 
 .handshake-hd-photo {
     width: 100%;
     height: auto;
-    max-height: 180px;
+    max-height: 185px;
     object-fit: contain;
-    border-radius: 10px;
+    border-radius: 0;
     display: block;
     margin-bottom: 4px;
+    mix-blend-mode: multiply; /* REMOVES LIGHT PATCH/BOX IN BACKGROUND, BLENDS 100% SEAMLESSLY INTO WHITE SCREEN */
+    filter: contrast(1.08) brightness(1.02);
 }
 
 /* RICH CONTENT FILLING PHONE 1 WHITE SPACE (MATCHING IMAGE COPY 28) */

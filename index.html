@@ -148,8 +148,25 @@
                         <div class="ring ring-1"></div>
                         <div class="ring ring-2"></div>
                         <div class="ring ring-3"></div>
-                        <div class="center-core">
-                            <i class="fa-solid fa-shield-halved"></i>
+                        <div class="center-core india-shield-core">
+                            <svg viewBox="0 0 100 120" class="india-shield-svg" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="shieldGrad" x1="0" y1="0" x2="1" y2="1">
+                                        <stop offset="0%" stop-color="#00f2fe"/>
+                                        <stop offset="50%" stop-color="#0052D4"/>
+                                        <stop offset="100%" stop-color="#070b16"/>
+                                    </linearGradient>
+                                    <linearGradient id="indiaGrad" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stop-color="#00f2fe"/>
+                                        <stop offset="100%" stop-color="#38ef7d"/>
+                                    </linearGradient>
+                                </defs>
+                                <path d="M 50 5 L 90 22 C 90 65, 50 110, 50 110 C 50 110, 10 65, 10 22 Z" fill="url(#shieldGrad)" stroke="#00f2fe" stroke-width="3" />
+                                <path d="M 50 12 L 82 27 C 82 62, 50 100, 50 100 C 50 100, 18 62, 18 27 Z" fill="none" stroke="rgba(0,242,254,0.4)" stroke-width="1.5" />
+                                <path d="M 50 25 L 56 32 L 64 35 L 60 44 L 56 55 L 52 70 L 48 82 L 44 70 L 38 60 L 32 50 L 38 40 L 44 32 Z" fill="url(#indiaGrad)" opacity="0.9" />
+                                <circle cx="50" cy="52" r="8" fill="#070b16" stroke="#00f2fe" stroke-width="2"/>
+                                <path d="M 46 52 L 49 55 L 55 49" fill="none" stroke="#38ef7d" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
                         </div>
                     </div>
 
@@ -772,14 +789,14 @@
                 </div>
 
                 <!-- Col 4: Our Product -->
-                <div class="footer-col">
-                    <h4 class="footer-heading">Our Product</h4>
-                    <div class="footer-product-mini">
-                        <div class="footer-esa-brand">
+                <div class="footer-col text-center">
+                    <h4 class="footer-heading text-center">Our Product</h4>
+                    <div class="footer-product-mini flex-center-col text-center">
+                        <div class="footer-esa-brand flex-center-col text-center">
                             <img src="image copy 9.png" alt="eSaleAgreement Logo" class="esa-logo-img-sm">
-                            <h5 class="text-teal">eSaleAgreement</h5>
+                            <h5 class="text-teal text-center">eSaleAgreement</h5>
                         </div>
-                        <p>India's Trusted Digital Agreement Platform</p>
+                        <p class="text-center">India's Trusted Digital Agreement Platform</p>
                         <a href="detail.html?title=eSaleAgreement Platform&type=product" target="_self" class="btn btn-xs">
                             Visit Product <i class="fa-solid fa-arrow-right"></i>
                         </a>

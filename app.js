@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initModalSystem();
     initWhatsAppForm();
     initPhoneMockupTabs();
+    initServiceModalSystem();
 });
 
 /* ==========================================================================
@@ -405,4 +406,104 @@ function initPhoneMockupTabs() {
             tab.classList.add('active');
         });
     });
+}
+
+/* ==========================================================================
+   10. INTERACTIVE SERVICE & OPTION DETAILS POPUP
+   ========================================================================== */
+function initServiceModalSystem() {
+    const serviceCards = document.querySelectorAll('.service-card, .service-arrow');
+    const serviceModal = document.getElementById('service-details-modal');
+    const closeBtn = document.getElementById('service-modal-close');
+    const titleEl = document.getElementById('svc-modal-title');
+    const descEl = document.getElementById('svc-modal-desc');
+    const iconEl = document.getElementById('svc-modal-icon');
+    const featuresList = document.getElementById('svc-modal-features-list');
+    const inquireBtn = document.getElementById('svc-modal-inquire-btn');
+
+    const serviceData = {
+        'Software Development': {
+            icon: 'fa-solid fa-code',
+            category: 'CUSTOM SOFTWARE & SAAS',
+            desc: 'Custom enterprise web applications, cross-platform mobile apps, cloud microservices architectures, and scalable SaaS platforms built with high security and performance.',
+            features: [
+                'Custom Full-Stack Web & Mobile App Development',
+                'Scalable Microservices & Cloud-Native Architectures',
+                'API Integration, DevOps & Continuous Delivery'
+            ]
+        },
+        'Cybersecurity Services': {
+            icon: 'fa-solid fa-shield-halved',
+            category: 'CYBER DEFENSE & COMPLIANCE',
+            desc: 'Comprehensive security audits, Vulnerability Assessment & Penetration Testing (VAPT), SIEM monitoring, SOC consulting, and ISO 27001 / SOC2 compliance.',
+            features: [
+                'Vulnerability Assessment & Penetration Testing (VAPT)',
+                '24/7 Security Operations Center (SOC) & SIEM Monitoring',
+                'Cloud Security Audits, Encryption & Regulatory Compliance'
+            ]
+        },
+        'Network Infrastructure': {
+            icon: 'fa-solid fa-network-wired',
+            category: 'ENTERPRISE NETWORKING',
+            desc: 'Robust enterprise data center setups, secure Wi-Fi deployment, high-throughput VPNs, next-gen firewalls, and SD-WAN network architecture.',
+            features: [
+                'Enterprise Data Center & Server Infrastructure',
+                'Next-Gen Firewalls, VPN & Secure SD-WAN Solutions',
+                'High-Speed Managed Wi-Fi & Network Topology Design'
+            ]
+        },
+        'Cloud Solutions': {
+            icon: 'fa-solid fa-cloud',
+            category: 'CLOUD MIGRATION & MANAGEMENT',
+            desc: 'End-to-end cloud strategy, AWS/Azure/GCP migration, hybrid cloud management, containerization with Docker/Kubernetes, and cost optimization.',
+            features: [
+                'AWS, Azure & Google Cloud Migration & Optimization',
+                'Kubernetes & Docker Microservices Orchestration',
+                'Disaster Recovery, High Availability & Automated Backups'
+            ]
+        },
+        'AI & Automation': {
+            icon: 'fa-solid fa-robot',
+            category: 'INTELLIGENT AUTOMATION',
+            desc: 'Custom AI chatbots, robotic process automation (RPA), intelligent predictive workflow automation, LLM integrations, and business analytics engines.',
+            features: [
+                'Custom AI Chatbots & Natural Language Processing',
+                'Robotic Process Automation (RPA) for Enterprise Workflows',
+                'Predictive Data Analytics & Automated Business Insights'
+            ]
+        }
+    };
+
+    serviceCards.forEach((card) => {
+        card.addEventListener('click', (e) => {
+            if (e.target.closest('.open-modal-btn') && !e.target.closest('.service-arrow')) return;
+
+            const cardTitleEl = card.querySelector('.service-title') || card.closest('.service-card')?.querySelector('.service-title');
+            const title = cardTitleEl ? cardTitleEl.textContent.trim() : 'Software Development';
+            const data = serviceData[title] || serviceData['Software Development'];
+
+            if (titleEl) titleEl.textContent = title;
+            if (descEl) descEl.textContent = data.desc;
+            if (iconEl) iconEl.innerHTML = `<i class="${data.icon}"></i>`;
+            if (inquireBtn) inquireBtn.setAttribute('data-subject', `${title} Direct Inquiry`);
+
+            if (featuresList) {
+                featuresList.innerHTML = data.features
+                    .map((f) => `<li><i class="fa-solid fa-circle-check text-green"></i> ${f}</li>`)
+                    .join('');
+            }
+
+            if (serviceModal) serviceModal.classList.add('open');
+        });
+    });
+
+    if (closeBtn && serviceModal) {
+        closeBtn.addEventListener('click', () => serviceModal.classList.remove('open'));
+    }
+
+    if (serviceModal) {
+        serviceModal.addEventListener('click', (e) => {
+            if (e.target === serviceModal) serviceModal.classList.remove('open');
+        });
+    }
 }

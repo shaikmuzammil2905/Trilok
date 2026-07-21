@@ -122,6 +122,24 @@
                             Our Products <i class="fa-solid fa-arrow-right"></i>
                         </a>
                     </div>
+
+                    <!-- BLACK APP STORE & GOOGLE PLAY BUTTONS -->
+                    <div class="store-buttons-wrap hero-stores">
+                        <a href="https://play.google.com" target="_blank" class="store-btn store-play">
+                            <i class="fa-brands fa-google-play"></i>
+                            <div class="store-text">
+                                <small>GET IT ON</small>
+                                <strong>Google Play</strong>
+                            </div>
+                        </a>
+                        <a href="https://apple.com/app-store" target="_blank" class="store-btn store-apple">
+                            <i class="fa-brands fa-apple"></i>
+                            <div class="store-text">
+                                <small>Download on the</small>
+                                <strong>App Store</strong>
+                            </div>
+                        </a>
+                    </div>
                 </div>
 
                 <!-- HERO FLOATING TECH CARDS VISUAL -->
@@ -363,6 +381,24 @@
                             <button class="btn btn-teal open-modal-btn" data-subject="eSaleAgreement Inquiry">
                                 Visit eSaleAgreement <i class="fa-solid fa-arrow-right"></i>
                             </button>
+                            
+                            <!-- BLACK STORE BUTTONS -->
+                            <div class="store-buttons-wrap">
+                                <a href="https://play.google.com" target="_blank" class="store-btn store-play">
+                                    <i class="fa-brands fa-google-play"></i>
+                                    <div class="store-text">
+                                        <small>GET IT ON</small>
+                                        <strong>Google Play</strong>
+                                    </div>
+                                </a>
+                                <a href="https://apple.com/app-store" target="_blank" class="store-btn store-apple">
+                                    <i class="fa-brands fa-apple"></i>
+                                    <div class="store-text">
+                                        <small>Download on the</small>
+                                        <strong>App Store</strong>
+                                    </div>
+                                </a>
+                            </div>
                         </div>
                     </div>
 
@@ -391,7 +427,7 @@
                                 </div>
                             </div>
 
-                            <!-- FRONT PHONE (RIGHT ANGLED WITH ANIMATED HANDSHAKE) -->
+                            <!-- FRONT PHONE (RIGHT ANGLED WITH HD ANIMATED HANDSHAKE) -->
                             <div class="mobile-mockup phone-front">
                                 <div class="phone-speaker"></div>
                                 <div class="phone-screen">
@@ -412,17 +448,29 @@
                                         <span class="tab-item">Seller Details</span>
                                     </div>
 
-                                    <!-- ANIMATED HANDSHAKE HERO CARD -->
-                                    <div class="handshake-card">
-                                        <div class="handshake-pulse-bg"></div>
-                                        <div class="handshake-anim-box">
-                                            <div class="hand left-hand">
+                                    <!-- HD 3D SHIELD & ANIMATED HANDSHAKE MATCHING IMAGE COPY 5 -->
+                                    <div class="handshake-card-hd">
+                                        <div class="shield-container-3d">
+                                            <div class="shield-3d-box">
+                                                <i class="fa-solid fa-shield-halved shield-base-icon"></i>
+                                                <div class="animated-tick-wrap">
+                                                    <i class="fa-solid fa-check tick-icon"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="handshake-arms-display">
+                                            <div class="arm arm-left">
+                                                <div class="suit-sleeve blue-sleeve"></div>
+                                            </div>
+                                            <div class="hand-center-icon">
                                                 <i class="fa-solid fa-handshake"></i>
                                             </div>
-                                            <div class="handshake-sparkle"></div>
+                                            <div class="arm arm-right">
+                                                <div class="suit-sleeve green-sleeve"></div>
+                                            </div>
                                         </div>
                                         <div class="handshake-status-badge">
-                                            <i class="fa-solid fa-circle-check"></i> Digital Agreement Verified
+                                            <i class="fa-solid fa-circle-check text-green"></i> Signed & Verified
                                         </div>
                                     </div>
 
@@ -803,9 +851,41 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-block">
-                    Submit & Send to WhatsApp (8639833447) <i class="fa-brands fa-whatsapp"></i>
+                    Submit <i class="fa-solid fa-paper-plane"></i>
                 </button>
             </form>
+        </div>
+    </div>
+
+    <!-- SERVICE DETAILS MODAL POPUP -->
+    <div class="modal-backdrop" id="service-details-modal">
+        <div class="modal-content service-modal-content">
+            <button class="modal-close" id="service-modal-close"><i class="fa-solid fa-xmark"></i></button>
+            <div class="service-modal-body">
+                <div class="service-modal-header">
+                    <div class="service-modal-icon" id="svc-modal-icon"><i class="fa-solid fa-code"></i></div>
+                    <div>
+                        <h3 id="svc-modal-title">Software Development</h3>
+                        <span class="sub-heading" id="svc-modal-category">ENTERPRISE SOLUTION</span>
+                    </div>
+                </div>
+                <p class="svc-modal-desc" id="svc-modal-desc">Detailed explanation of the selected solution option...</p>
+                
+                <div class="svc-modal-features">
+                    <h4>Key Capabilities & Features:</h4>
+                    <ul id="svc-modal-features-list" class="modal-bullets">
+                        <li><i class="fa-solid fa-circle-check text-green"></i> Enterprise Architecture & Scalable Systems</li>
+                        <li><i class="fa-solid fa-circle-check text-green"></i> End-to-End Security & Compliance</li>
+                        <li><i class="fa-solid fa-circle-check text-green"></i> 24x7 Support & Cloud Integration</li>
+                    </ul>
+                </div>
+                
+                <div class="service-modal-footer">
+                    <button class="btn btn-primary btn-block open-modal-btn" id="svc-modal-inquire-btn" data-subject="Service Inquiry">
+                        Inquire About This Option <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 

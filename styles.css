@@ -2028,12 +2028,13 @@ button, input, select, textarea {
         font-size: 0.75rem;
     }
 
-    /* HERO MOBILE FIT - CLEAN DARK CANVAS (REMOVES CLUTTERED BG CONTENT IN MOBILE VIEW) */
+    /* HERO MOBILE FIT - ANIMATED BACKGROUND PICTURE MATCHING DESKTOP VIEW */
     .hero-section {
         padding-top: 110px;
         padding-bottom: 50px;
         min-height: auto;
-        background: radial-gradient(circle at 50% 40%, #0c142c 0%, #070b16 100%) !important;
+        background: radial-gradient(circle at 50% 50%, rgba(7, 11, 22, 0.4) 0%, rgba(7, 11, 22, 0.92) 100%), url('image copy 10.png') center/cover no-repeat !important;
+        animation: heroBgPulse 22s ease-in-out infinite alternate !important;
     }
 
     .hero-container {

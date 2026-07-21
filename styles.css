@@ -1982,25 +1982,61 @@ button, input, select, textarea {
     }
 
     .hero-visual {
-        height: 300px;
+        height: 340px;
         margin-top: 16px;
+        position: relative;
     }
 
     .globe-center-graphic {
-        transform: scale(0.85);
+        transform: scale(0.75);
     }
 
+    /* VISIBLE FLOATING BADGES & PRODUCT LOGO CARD ON MOBILE (MATCHING IMAGE COPY 3) */
     .floating-badge {
-        display: none; /* Hide cluttered floats on small screens for clean viewport */
+        display: flex !important;
+        transform: scale(0.68);
+        padding: 6px 10px;
+        z-index: 5;
+    }
+
+    .badge-top-right { top: 0px; right: -15px; }
+    .badge-mid-right { top: 90px; right: -25px; }
+    .badge-mid-left { top: 90px; left: -25px; }
+    .badge-bottom-right { bottom: 40px; right: -15px; }
+
+    /* FEATURED FLAGSHIP PRODUCT LOGO CARD ON MOBILE */
+    .floating-badge.featured-card {
+        display: flex !important;
+        position: absolute;
+        bottom: 5px;
+        left: 50%;
+        transform: translateX(-50%) scale(0.85) !important;
+        background: #ffffff !important;
+        color: #0f172a !important;
+        border: 2px solid #10b981 !important;
+        box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4) !important;
+        z-index: 10;
+        width: max-content;
+    }
+
+    .featured-card h4 {
+        color: #0f172a !important;
+        font-weight: 800;
+        font-size: 0.95rem;
+    }
+
+    .featured-card .flagship-mini-tag {
+        color: #059669 !important;
+        font-weight: 700;
     }
 
     /* SECTIONS MOBILE FIT */
     .section {
-        padding: 60px 0;
+        padding: 50px 0;
     }
 
     .section-header {
-        margin-bottom: 32px;
+        margin-bottom: 28px;
     }
 
     .main-title {
@@ -2041,7 +2077,7 @@ button, input, select, textarea {
         padding: 24px 20px;
     }
 
-    /* FLAGSHIP PRODUCT */
+    /* FLAGSHIP PRODUCT - DESKTOP-LIKE BOX VIEW ON MOBILE (MATCHING IMAGE COPY 4) */
     .product-banner-card {
         padding: 24px 14px;
         border-radius: 20px;
@@ -2095,33 +2131,41 @@ button, input, select, textarea {
 
     .product-mockup-wrapper {
         padding: 10px 0;
+        width: 100%;
+        overflow: visible;
     }
 
     .phones-container {
         width: 100%;
-        max-width: 300px;
-        height: 450px;
+        max-width: 290px;
+        height: 480px;
         margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .mobile-mockup {
-        width: 220px;
-        height: 440px;
+        width: 230px;
+        height: 465px;
         padding: 8px;
         border-radius: 32px;
     }
 
     .phone-back {
-        transform: rotate(-10deg) translateX(-25px) translateY(10px) scale(0.85);
+        transform: rotate(-10deg) translateX(-30px) translateY(10px) scale(0.88);
+        opacity: 0.8;
     }
 
     .phone-front {
-        transform: rotate(3deg) translateX(15px) translateY(-5px) scale(0.95);
+        transform: rotate(3deg) translateX(15px) translateY(-5px) scale(0.96);
         animation: none;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 242, 254, 0.3);
     }
 
     .phone-screen {
-        padding: 12px 10px;
+        padding: 10px 8px;
+        font-size: 0.65rem;
     }
 
     /* WHY CHOOSE US */

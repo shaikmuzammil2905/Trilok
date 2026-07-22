@@ -2756,7 +2756,7 @@ h1, h2, h3, h4, h5, h6, p, span, a, button {
 
 @media (max-width: 400px) {
     .brand-title { font-size: 0.95rem; }
-    .brand-sub { display: none; }
+    .brand-sub { font-size: 0.55rem; }
     .navbar .btn-primary { padding: 6px 10px; font-size: 0.72rem; }
     .hero-title { font-size: 1.7rem; }
     .stats-grid { grid-template-columns: 1fr; }

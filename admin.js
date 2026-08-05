@@ -144,10 +144,15 @@ function initNavItems() {
 
 function navigateTo(page) {
   currentPage = page;
-  // Update nav items
+  // Update sidebar nav items
   document.querySelectorAll('.nav-item[data-page]').forEach(el => el.classList.remove('active'));
   const active = document.querySelector(`.nav-item[data-page="${page}"]`);
   if (active) active.classList.add('active');
+
+  // Update mobile bottom nav
+  document.querySelectorAll('.mob-nav-item[data-page]').forEach(el => el.classList.remove('active'));
+  const mobActive = document.querySelector(`.mob-nav-item[data-page="${page}"]`);
+  if (mobActive) mobActive.classList.add('active');
 
   // Show correct section
   document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
@@ -157,6 +162,16 @@ function navigateTo(page) {
   // Load page data
   loadPageData(page);
 }
+
+// Mobile bottom nav click — also closes sidebar overlay
+function mobileNavClick(page) {
+  navigateTo(page);
+  closeMobileSidebar();
+  // Scroll to top on page change
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+
 
 function loadPageData(page) {
   switch(page) {
@@ -962,10 +977,18 @@ function deleteContact(id, name) {
 }
 
 function updateUnreadBadge(count) {
+  // Sidebar badge
   const badge = document.getElementById('unread-badge');
-  if (!badge) return;
-  if (count > 0) { badge.textContent = count; badge.style.display = 'flex'; }
-  else badge.style.display = 'none';
+  if (badge) {
+    if (count > 0) { badge.textContent = count; badge.style.display = 'flex'; }
+    else badge.style.display = 'none';
+  }
+  // Mobile bottom nav badge
+  const mobBadge = document.getElementById('mob-unread-badge');
+  if (mobBadge) {
+    if (count > 0) { mobBadge.textContent = count; mobBadge.style.display = 'block'; }
+    else mobBadge.style.display = 'none';
+  }
 }
 
 // ============================================================

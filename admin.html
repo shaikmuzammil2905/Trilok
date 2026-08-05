@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0a0f1e">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Admin Panel – Trilok Infotech</title>
   <meta name="robots" content="noindex, nofollow">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -875,6 +879,26 @@
 
 <!-- TOAST CONTAINER -->
 <div class="toast-container" id="toast-container"></div>
+
+<!-- MOBILE BOTTOM NAV BAR -->
+<nav class="mobile-bottom-nav" id="mobile-bottom-nav">
+  <div class="mob-nav-item active" data-page="dashboard" onclick="mobileNavClick('dashboard')">
+    <i class="fa-solid fa-gauge-high"></i><span>Home</span>
+  </div>
+  <div class="mob-nav-item" data-page="services" onclick="mobileNavClick('services')">
+    <i class="fa-solid fa-gears"></i><span>Services</span>
+  </div>
+  <div class="mob-nav-item" data-page="contacts" onclick="mobileNavClick('contacts')">
+    <i class="fa-solid fa-envelope-open-text"></i><span>Contacts</span>
+    <span class="mob-nav-badge" id="mob-unread-badge" style="display:none">0</span>
+  </div>
+  <div class="mob-nav-item" data-page="gallery" onclick="mobileNavClick('gallery')">
+    <i class="fa-solid fa-images"></i><span>Media</span>
+  </div>
+  <div class="mob-nav-item" data-page="profile" onclick="mobileNavClick('profile')">
+    <i class="fa-solid fa-user-circle"></i><span>Profile</span>
+  </div>
+</nav>
 
 <!-- SUPABASE CDN -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

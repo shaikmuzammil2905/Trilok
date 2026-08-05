@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel – Trilok Infotech</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<!-- ============================================================
+     LOGIN PAGE
+     ============================================================ -->
+<div id="login-page">
+  <div class="login-card">
+    <div class="login-logo">
+      <img src="trilok-logo-icon.png" alt="Trilok Infotech">
+      <div class="login-logo-text">
+        <span class="l-title">TRILOK</span>
+        <span class="l-sub">ADMIN PANEL</span>
+      </div>
+    </div>
+    <h2>Welcome Back</h2>
+    <p class="login-sub">Sign in to manage your website content</p>
+    <div class="login-error" id="login-error"><i class="fa-solid fa-circle-exclamation"></i> <span id="login-error-msg">Invalid credentials.</span></div>
+    <form id="login-form" onsubmit="return false;">
+      <div class="login-form-group">
+        <label>Email Address</label>
+        <div class="login-input-wrap">
+          <i class="fa-solid fa-envelope"></i>
+          <input type="email" id="login-email" placeholder="admin@trilokinfotech.com" autocomplete="email" required>
+        </div>
+      </div>
+      <div class="login-form-group">
+        <label>Password</label>
+        <div class="login-input-wrap">
+          <i class="fa-solid fa-lock"></i>
+          <input type="password" id="login-password" placeholder="Enter your password" autocomplete="current-password" required>
+          <i class="fa-solid fa-eye eye-toggle" id="pwd-eye"></i>
+        </div>
+      </div>
+      <button type="submit" class="btn-login" id="login-btn">
+        <span class="btn-text">Sign In</span>
+        <span class="btn-spinner"></span>
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- ============================================================
+     ADMIN LAYOUT
+     ============================================================ -->
+<div id="admin-layout" style="display:none;">
+
+  <!-- SIDEBAR MOBILE OVERLAY -->
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <!-- ====== SIDEBAR ====== -->
+  <aside class="admin-sidebar" id="admin-sidebar">
+    <div class="sidebar-logo">
+      <img src="trilok-logo-icon.png" alt="Trilok Infotech">
+      <div class="sidebar-logo-text">
+        <span class="s-title">TRILOK</span>
+        <span class="s-sub">ADMIN PANEL</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <!-- MAIN -->
+      <div class="sidebar-section-label">Main</div>
+      <div class="nav-item active" data-page="dashboard">
+        <i class="fa-solid fa-gauge-high"></i><span>Dashboard</span>
+      </div>
+
+      <!-- CONTENT -->
+      <div class="sidebar-section-label">Content</div>
+      <div class="nav-item" data-page="hero">
+        <i class="fa-solid fa-house-laptop"></i><span>Hero Section</span>
+      </div>
+      <div class="nav-item" data-page="about">
+        <i class="fa-solid fa-circle-info"></i><span>About Section</span>
+      </div>
+      <div class="nav-item" data-page="services">
+        <i class="fa-solid fa-gears"></i><span>Services</span>
+      </div>
+      <div class="nav-item" data-page="features">
+        <i class="fa-solid fa-star"></i><span>Features</span>
+      </div>
+      <div class="nav-item" data-page="testimonials">
+        <i class="fa-solid fa-quote-right"></i><span>Testimonials</span>
+      </div>
+      <div class="nav-item" data-page="faqs">
+        <i class="fa-solid fa-circle-question"></i><span>FAQs</span>
+      </div>
+      <div class="nav-item" data-page="gallery">
+        <i class="fa-solid fa-images"></i><span>Gallery / Media</span>
+      </div>
+
+      <!-- LEADS -->
+      <div class="sidebar-section-label">Leads</div>
+      <div class="nav-item" data-page="contacts" id="contacts-nav-item">
+        <i class="fa-solid fa-envelope-open-text"></i><span>Contact Requests</span>
+        <span class="nav-badge" id="unread-badge" style="display:none;">0</span>
+      </div>
+
+      <!-- SETTINGS -->
+      <div class="sidebar-section-label">Settings</div>
+      <div class="nav-item" data-page="settings">
+        <i class="fa-solid fa-sliders"></i><span>Website Settings</span>
+      </div>
+      <div class="nav-item" data-page="seo">
+        <i class="fa-solid fa-magnifying-glass-chart"></i><span>SEO Management</span>
+      </div>
+      <div class="nav-item" data-page="profile">
+        <i class="fa-solid fa-user-circle"></i><span>Admin Profile</span>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="nav-item" id="logout-btn" style="color: #ef4444;">
+        <i class="fa-solid fa-right-from-bracket"></i><span>Logout</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ====== MAIN AREA ====== -->
+  <div class="admin-main" id="admin-main">
+
+    <!-- TOP HEADER -->
+    <header class="admin-header">
+      <button class="header-toggle" id="sidebar-toggle" aria-label="Toggle Sidebar">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <div class="header-search">
+        <i class="fa-solid fa-search"></i>
+        <input type="text" id="admin-search" placeholder="Search pages…" autocomplete="off">
+      </div>
+
+      <div class="header-spacer"></div>
+
+      <div class="header-actions">
+        <button class="header-icon-btn" title="View Website" onclick="window.open('index.html','_blank')">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </button>
+        <div class="admin-avatar" id="header-avatar" data-page-link="profile">
+          <div class="avatar-img" id="header-avatar-img">A</div>
+          <div class="avatar-info">
+            <span class="avatar-name" id="header-admin-name">Admin</span>
+            <span class="avatar-role">Administrator</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- PAGE CONTENT -->
+    <div class="admin-content">
+
+      <!-- ======================================================
+           1. DASHBOARD PAGE
+           ====================================================== -->
+      <section class="page-section active" id="page-dashboard">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h1>Dashboard Overview</h1>
+            <p>Welcome back! Here's what's happening with your website.</p>
+          </div>
+          <div class="page-header-actions">
+            <button class="btn btn-secondary btn-sm" onclick="refreshDashboard()"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
+          </div>
+        </div>
+
+        <!-- STAT CARDS -->
+        <div class="stats-grid" id="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon blue"><i class="fa-solid fa-gears"></i></div>
+            <div class="stat-info"><div class="stat-value" id="stat-services">–</div><div class="stat-label">Total Services</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon cyan"><i class="fa-solid fa-quote-right"></i></div>
+            <div class="stat-info"><div class="stat-value" id="stat-testimonials">–</div><div class="stat-label">Testimonials</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon green"><i class="fa-solid fa-envelope-open-text"></i></div>
+            <div class="stat-info"><div class="stat-value" id="stat-contacts">–</div><div class="stat-label">Contact Requests</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon yellow"><i class="fa-solid fa-circle-question"></i></div>
+            <div class="stat-info"><div class="stat-value" id="stat-faqs">–</div><div class="stat-label">FAQs</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon purple"><i class="fa-solid fa-images"></i></div>
+            <div class="stat-info"><div class="stat-value" id="stat-gallery">–</div><div class="stat-label">Gallery Images</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon red"><i class="fa-solid fa-envelope"></i></div>
+            <div class="stat-info"><div class="stat-value" id="stat-unread">–</div><div class="stat-label">Unread Messages</div></div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <!-- QUICK ACTIONS -->
+          <div class="card">
+            <div class="card-header"><div><div class="card-title">Quick Actions</div></div></div>
+            <div class="quick-actions">
+              <div class="quick-action" data-page="hero"><i class="fa-solid fa-house-laptop"></i><span>Edit Hero</span></div>
+              <div class="quick-action" data-page="services"><i class="fa-solid fa-plus"></i><span>Add Service</span></div>
+              <div class="quick-action" data-page="testimonials"><i class="fa-solid fa-plus"></i><span>Add Testimonial</span></div>
+              <div class="quick-action" data-page="faqs"><i class="fa-solid fa-plus"></i><span>Add FAQ</span></div>
+              <div class="quick-action" data-page="gallery"><i class="fa-solid fa-upload"></i><span>Upload Media</span></div>
+              <div class="quick-action" data-page="contacts"><i class="fa-solid fa-inbox"></i><span>View Contacts</span></div>
+              <div class="quick-action" data-page="settings"><i class="fa-solid fa-sliders"></i><span>Settings</span></div>
+              <div class="quick-action" data-page="seo"><i class="fa-solid fa-magnifying-glass-chart"></i><span>SEO Settings</span></div>
+            </div>
+          </div>
+
+          <!-- ACTIVITY LOG -->
+          <div class="card">
+            <div class="card-header">
+              <div><div class="card-title">Recent Activity</div><div class="card-subtitle">Last 10 admin actions</div></div>
+            </div>
+            <div class="activity-list" id="activity-list">
+              <div class="empty-state"><i class="fa-solid fa-clock-rotate-left"></i><h4>No activity yet</h4><p>Actions will appear here</p></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RECENT CONTACTS -->
+        <div class="card">
+          <div class="card-header">
+            <div><div class="card-title">Recent Contact Requests</div></div>
+            <button class="btn btn-secondary btn-sm" onclick="navigateTo('contacts')">View All</button>
+          </div>
+          <div class="table-wrap">
+            <table class="admin-table">
+              <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Message</th><th>Date</th><th>Status</th></tr></thead>
+              <tbody id="recent-contacts-tbody">
+                <tr><td colspan="6"><div class="empty-state" style="padding:24px"><i class="fa-solid fa-envelope" style="font-size:28px"></i><p>No contact requests yet</p></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================
+           2. HERO SECTION PAGE
+           ====================================================== -->
+      <section class="page-section" id="page-hero">
+        <div class="page-header">
+          <div class="page-header-left"><h1>Hero Section</h1><p>Manage your homepage hero banner content</p></div>
+          <div class="page-header-actions">
+            <button class="btn btn-primary" id="save-hero-btn" onclick="saveHeroSettings()"><i class="fa-solid fa-save"></i> Save Changes</button>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div>
+            <div class="card">
+              <div class="card-header"><div class="card-title">Hero Content</div></div>
+              <div class="form-group">
+                <label>Hero Heading</label>
+                <textarea class="form-control" id="hero-heading" rows="3" placeholder="Main headline text..." oninput="updateHeroPreview()"></textarea>
+              </div>
+              <div class="form-group">
+                <label>Hero Sub Heading</label>
+                <textarea class="form-control" id="hero-subheading" rows="3" placeholder="Supporting description text..." oninput="updateHeroPreview()"></textarea>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Primary CTA Text</label>
+                  <input type="text" class="form-control" id="hero-cta-primary" placeholder="Explore Services" oninput="updateHeroPreview()">
+                </div>
+                <div class="form-group">
+                  <label>Secondary CTA Text</label>
+                  <input type="text" class="form-control" id="hero-cta-secondary" placeholder="Our Products" oninput="updateHeroPreview()">
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Section Visibility</label>
+                <div class="toggle-wrap">
+                  <label class="toggle-switch"><input type="checkbox" id="hero-visible" checked><span class="toggle-slider"></span></label>
+                  <span class="toggle-label">Show Hero Section on Website</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header"><div class="card-title">Hero Background Image</div></div>
+              <div class="upload-area" id="hero-bg-upload-area">
+                <input type="file" id="hero-bg-file" accept="image/*" onchange="handleHeroBgUpload(event)">
+                <div class="upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                <div class="upload-text">Click or drag to upload background image</div>
+                <div class="upload-sub">Recommended: 1920×1080px, max 5MB</div>
+              </div>
+              <div class="upload-preview" id="hero-bg-preview">
+                <img src="" id="hero-bg-preview-img" alt="Hero BG Preview">
+                <button class="btn btn-danger btn-sm" style="margin-top:8px" onclick="removeHeroBg()"><i class="fa-solid fa-trash"></i> Remove</button>
+              </div>
+              <input type="hidden" id="hero-bg-url" value="">
+            </div>
+          </div>
+
+          <!-- LIVE PREVIEW -->
+          <div class="card">
+            <div class="card-header"><div class="card-title">Live Preview</div><div class="card-subtitle">Updates as you type</div></div>
+            <div class="preview-panel" id="hero-preview-panel">
+              <div class="preview-heading" id="preview-heading">Hero Heading</div>
+              <div class="preview-sub" id="preview-sub">Sub heading text will appear here...</div>
+              <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
+                <span style="background:var(--accent);color:#fff;padding:6px 16px;border-radius:6px;font-size:12px;font-weight:700;" id="preview-cta1">CTA Button</span>
+                <span style="border:1px solid var(--border);color:var(--text-secondary);padding:6px 16px;border-radius:6px;font-size:12px;font-weight:700;" id="preview-cta2">Secondary</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================
+           3. SERVICES PAGE
+           ====================================================== -->
+      <section class="page-section" id="page-services">
+        <div class="page-header">
+          <div class="page-header-left"><h1>Services</h1><p>Manage your service offerings</p></div>
+          <div class="page-header-actions">
+            <button class="btn btn-primary" onclick="openServiceModal()"><i class="fa-solid fa-plus"></i> Add Service</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">All Services</div>
+            <div class="filter-bar" style="margin:0">
+              <div class="filter-search"><i class="fa-solid fa-search"></i><input type="text" placeholder="Search services…" oninput="filterServices(this.value)"></div>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="admin-table">
+              <thead><tr><th>Order</th><th>Image</th><th>Title</th><th>Description</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="services-tbody"></tbody>
+            </table>
+          </div>
+          <div id="services-empty" class="empty-state" style="display:none"><i class="fa-solid fa-gears"></i><h4>No services yet</h4><p>Add your first service using the button above</p></div>
+        </div>
+      </section>
+
+      <!-- ======================================================
+           4. ABOUT SECTION PAGE
+           ====================================================== -->
+      <section class="page-section" id="page-about">
+        <div class="page-header">
+          <div class="page-header-left"><h1>About Section</h1><p>Manage your About Us content</p></div>
+          <div class="page-header-actions">
+            <button class="btn btn-primary" onclick="saveAboutSettings()"><i class="fa-solid fa-save"></i> Save Changes</button>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><div class="card-title">About Content</div></div>
+            <div class="form-group">
+              <label>Section Heading</label>
+              <input type="text" class="form-control" id="about-heading" placeholder="About Trilok Infotech">
+            </div>
+            <div class="form-group">
+              <label>Content / Description</label>
+              <textarea class="form-control" id="about-content" rows="8" placeholder="Write your about section content here..."></textarea>
+            </div>
+            <div class="form-group">
+              <label>Section Visibility</label>
+              <div class="toggle-wrap">
+                <label class="toggle-switch"><input type="checkbox" id="about-visible" checked><span class="toggle-slider"></span></label>
+                <span class="toggle-label">Show About Section on Website</span>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">About Image</div></div>
+            <div class="upload-area">
+              <input type="file" accept="image/*" onchange="handleAboutImageUpload(event)">
+              <div class="upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+              <div class="upload-text">Click or drag to upload about image</div>
+              <div class="upload-sub">Recommended: 800×600px</div>
+            </div>
+            <div class="upload-preview" id="about-img-preview">
+              <img src="" id="about-img-preview-img" alt="About Image">
+              <button class="btn btn-danger btn-sm" style="margin-top:8px" onclick="removeAboutImg()"><i class="fa-solid fa-trash"></i> Remove</button>
+            </div>
+            <input type="hidden" id="about-img-url" value="">
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================
+           5. FEATURES PAGE
+           ====================================================== -->
+      <section class="page-section" id="page-features">
+        <div class="page-header">
+          <div class="page-header-left"><h1>Features</h1><p>Manage your key features and highlights</p></div>
+          <div class="page-header-actions">
+            <button class="btn btn-primary" onclick="openFeatureModal()"><i class="fa-solid fa-plus"></i> Add Feature</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">All Features</div></div>
+          <div class="table-wrap">
+            <table class="admin-table">
+              <thead><tr><th>Order</th><th>Icon</th><th>Title</th><th>Description</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="features-tbody"></tbody>
+            </table>
+          </div>
+          <div id="features-empty" class="empty-state" style="display:none"><i class="fa-solid fa-star"></i><h4>No features yet</h4><p>Add your first feature using the button above</p></div>
+        </div>
+      </section>
+
+      <!-- ======================================================
+           6. TESTIMONIALS PAGE
+           ====================================================== -->
+      <section class="page-section" id="page-testimonials">
+        <div class="page-header">
+          <div class="page-header-left"><h1>Testimonials</h1><p>Manage customer reviews and testimonials</p></div>
+          <div class="page-header-actions">
+            <button class="btn btn-primary" onclick="openTestimonialModal()"><i class="fa-solid fa-plus"></i> Add Testimonial</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">All Testimonials</div></div>
+          <div class="table-wrap">
+            <table class="admin-table">
+              <thead><tr><th>Photo</th><th>Customer Name</th><th>Rating</th><th>Review</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="testimonials-tbody"></tbody>
+            </table>
+          </div>
+          <div id="testimonials-empty" class="empty-state" style="display:none"><i class="fa-solid fa-quote-right"></i><h4>No testimonials yet</h4><p>Add your first testimonial using the button above</p></div>
+        </div>
+      </section>
+
+      <!-- ======================================================
+           7. FAQS PAGE
+           ====================================================== -->
+      <section class="page-section" id="page-faqs">
+        <div class="page-header">
+          <div class="page-header-left"><h1>FAQs</h1><p>Manage frequently asked questions</p></div>
+          <div class="page-header-actions">
+            <button class="btn btn-primary" onclick="openFaqModal()"><i class="fa-solid fa-plus"></i> Add FAQ</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">All FAQs</div></div>
+          <div class="table-wrap">
+            <table class="admin-table">
+              <thead><tr><th>Order</th><th>Question</th><th>Answer</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="faqs-tbody"></tbody>
+            </table>
+          </div>
+          <div id="faqs-empty" class="empty-state" style="display:none"><i class="fa-solid fa-circle-question"></i><h4>No FAQs yet</h4><p>Add your first FAQ using the button above</p></div>
+        </div>
+      </section>
+
+      <!-- ======================================================
+           8. GALLERY PAGE
+           ====================================================== -->
+      <section class="page-section" id="page-gallery">
+        <div class="page-header">
+          <div class="page-header-left"><h1>Gallery / Media</h1><p>Manage your media library</p></div>
+          <div class="page-header-actions">
+            <button class="btn btn-primary" onclick="document.getElementById('gallery-file-input').click()">
+              <i class="fa-solid fa-upload"></i> Upload Images
+            </button>
+            <input type="file" id="gallery-file-input" accept="image/*" multiple style="display:none" onchange="handleGalleryUpload(event)">
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Media Library</div>
+            <span class="card-subtitle" id="gallery-count">0 images</span>
+          </div>
+          <div class="upload-area" id="gallery-drop-area" style="margin-bottom:20px;">
+            <input type="file" accept="image/*" multiple onchange="handleGalleryUpload(event)">
+            <div class="upload-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+            <div class="upload-text">Drag & Drop images here or click to browse</div>
+            <div class="upload-sub">Supports JPG, PNG, WebP, GIF – Multiple files allowed</div>
+          </div>
+          <div class="gallery-grid" id="gallery-grid"></div>
+          <div class="empty-state" id="gallery-empty" style="display:none"><i class="fa-solid fa-images"></i><h4>No images uploaded</h4><p>Upload images to build your media library</p></div>
+        </div>
+      </section>
+
+      <!-- ======================================================
+           9. CONTACT REQUESTS PAGE
+           ====================================================== -->
+      <section class="page-section" id="page-contacts">
+        <div class="page-header">
+          <div class="page-header-left"><h1>Contact Requests</h1><p>View and manage customer enquiries</p></div>
+          <div class="page-header-actions">
+            <button class="btn btn-secondary btn-sm" onclick="markAllRead()"><i class="fa-solid fa-check-double"></i> Mark All Read</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header" style="flex-wrap:wrap;gap:12px;">
+            <div class="card-title">All Requests</div>
+            <div class="filter-bar" style="margin:0;flex:1;justify-content:flex-end;">
+              <div class="filter-search"><i class="fa-solid fa-search"></i><input type="text" placeholder="Search by name, email…" oninput="filterContacts(this.value)" id="contact-search-input"></div>
+              <select class="filter-select" onchange="filterContactsByStatus(this.value)">
+                <option value="all">All Requests</option>
+                <option value="unread">Unread</option>
+                <option value="read">Read</option>
+              </select>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="admin-table">
+              <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Subject</th><th>Message</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="contacts-tbody"></tbody>
+            </table>
+          </div>
+          <div id="contacts-empty" class="empty-state" style="display:none"><i class="fa-solid fa-envelope-open-text"></i><h4>No contact requests</h4><p>Contact requests from your website will appear here</p></div>
+          <div class="pagination" id="contacts-pagination"></div>
+        </div>
+      </section>
+
+      <!-- ======================================================
+           10. WEBSITE SETTINGS PAGE
+           ====================================================== -->
+      <section class="page-section" id="page-settings">
+        <div class="page-header">
+          <div class="page-header-left"><h1>Website Settings</h1><p>Manage your company information and social links</p></div>
+          <div class="page-header-actions">
+            <button class="btn btn-primary" onclick="saveWebsiteSettings()"><i class="fa-solid fa-save"></i> Save Settings</button>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><div class="card-title">Company Information</div></div>
+            <div class="form-group"><label>Company Name</label><input type="text" class="form-control" id="ws-company-name" placeholder="Trilok Infotech Private Limited"></div>
+            <div class="form-group"><label>Contact Number</label><input type="text" class="form-control" id="ws-contact-number" placeholder="+91 8639833447"></div>
+            <div class="form-group"><label>Email Address</label><input type="email" class="form-control" id="ws-email" placeholder="contact@trilokinfotech.com"></div>
+            <div class="form-group"><label>Business Address</label><textarea class="form-control" id="ws-address" rows="3" placeholder="Your business address..."></textarea></div>
+          </div>
+
+          <div>
+            <div class="card">
+              <div class="card-header"><div class="card-title">Website Logo</div></div>
+              <div class="upload-area">
+                <input type="file" accept="image/*" onchange="handleLogoUpload(event)">
+                <div class="upload-icon"><i class="fa-solid fa-image"></i></div>
+                <div class="upload-text">Upload Website Logo</div>
+                <div class="upload-sub">PNG with transparency recommended</div>
+              </div>
+              <div class="upload-preview" id="logo-preview">
+                <img src="" id="logo-preview-img" alt="Logo Preview">
+                <button class="btn btn-danger btn-sm" style="margin-top:8px" onclick="removeLogo()"><i class="fa-solid fa-trash"></i> Remove</button>
+              </div>
+              <input type="hidden" id="ws-logo-url" value="">
+            </div>
+
+            <div class="card">
+              <div class="card-header"><div class="card-title">Social Media Links</div></div>
+              <div class="form-group"><label><i class="fa-brands fa-facebook" style="color:#1877f2;margin-right:6px"></i>Facebook URL</label><input type="url" class="form-control" id="ws-facebook" placeholder="https://facebook.com/..."></div>
+              <div class="form-group"><label><i class="fa-brands fa-instagram" style="color:#e4405f;margin-right:6px"></i>Instagram URL</label><input type="url" class="form-control" id="ws-instagram" placeholder="https://instagram.com/..."></div>
+              <div class="form-group"><label><i class="fa-brands fa-linkedin" style="color:#0a66c2;margin-right:6px"></i>LinkedIn URL</label><input type="url" class="form-control" id="ws-linkedin" placeholder="https://linkedin.com/company/..."></div>
+              <div class="form-group"><label><i class="fa-brands fa-youtube" style="color:#ff0000;margin-right:6px"></i>YouTube URL</label><input type="url" class="form-control" id="ws-youtube" placeholder="https://youtube.com/@..."></div>
+              <div class="form-group"><label><i class="fa-brands fa-whatsapp" style="color:#25d366;margin-right:6px"></i>WhatsApp Number</label><input type="text" class="form-control" id="ws-whatsapp" placeholder="+91 8639833447"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================
+           11. SEO PAGE
+           ====================================================== -->
+      <section class="page-section" id="page-seo">
+        <div class="page-header">
+          <div class="page-header-left"><h1>SEO Management</h1><p>Optimize your website for search engines</p></div>
+          <div class="page-header-actions">
+            <button class="btn btn-primary" onclick="saveSeoSettings()"><i class="fa-solid fa-save"></i> Save SEO</button>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><div class="card-title">Meta Information</div></div>
+            <div class="form-group">
+              <label>Meta Title <span style="color:var(--text-muted);font-size:11px">(max 60 chars)</span></label>
+              <input type="text" class="form-control" id="seo-title" placeholder="Page Title for Search Engines" maxlength="60" oninput="updateSeoCounter('seo-title','seo-title-count',60)">
+              <div class="form-hint"><span id="seo-title-count">0</span>/60 characters</div>
+            </div>
+            <div class="form-group">
+              <label>Meta Description <span style="color:var(--text-muted);font-size:11px">(max 160 chars)</span></label>
+              <textarea class="form-control" id="seo-desc" rows="3" placeholder="Brief description of your website for search results…" maxlength="160" oninput="updateSeoCounter('seo-desc','seo-desc-count',160)"></textarea>
+              <div class="form-hint"><span id="seo-desc-count">0</span>/160 characters</div>
+            </div>
+            <div class="form-group">
+              <label>Keywords <span style="color:var(--text-muted);font-size:11px">(comma separated)</span></label>
+              <textarea class="form-control" id="seo-keywords" rows="3" placeholder="software development, cybersecurity, digital transformation…"></textarea>
+            </div>
+          </div>
+          <div>
+            <div class="card">
+              <div class="card-header"><div class="card-title">Open Graph Image</div></div>
+              <div class="upload-area">
+                <input type="file" accept="image/*" onchange="handleOgImageUpload(event)">
+                <div class="upload-icon"><i class="fa-solid fa-share-nodes"></i></div>
+                <div class="upload-text">Upload OG Image for social sharing</div>
+                <div class="upload-sub">Recommended: 1200×630px</div>
+              </div>
+              <div class="upload-preview" id="og-img-preview">
+                <img src="" id="og-img-preview-img" alt="OG Image">
+                <button class="btn btn-danger btn-sm" style="margin-top:8px" onclick="removeOgImg()"><i class="fa-solid fa-trash"></i> Remove</button>
+              </div>
+              <input type="hidden" id="seo-og-url" value="">
+            </div>
+            <div class="card">
+              <div class="card-header"><div class="card-title">Favicon</div></div>
+              <div class="upload-area">
+                <input type="file" accept="image/*,.ico" onchange="handleFaviconUpload(event)">
+                <div class="upload-icon"><i class="fa-solid fa-bookmark"></i></div>
+                <div class="upload-text">Upload Favicon (.ico or PNG)</div>
+                <div class="upload-sub">Recommended: 32×32px or 64×64px</div>
+              </div>
+              <div class="upload-preview" id="favicon-preview">
+                <img src="" id="favicon-preview-img" alt="Favicon Preview">
+                <button class="btn btn-danger btn-sm" style="margin-top:8px" onclick="removeFavicon()"><i class="fa-solid fa-trash"></i> Remove</button>
+              </div>
+              <input type="hidden" id="seo-favicon-url" value="">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================
+           12. ADMIN PROFILE PAGE
+           ====================================================== -->
+      <section class="page-section" id="page-profile">
+        <div class="page-header">
+          <div class="page-header-left"><h1>Admin Profile</h1><p>Manage your admin account settings</p></div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><div class="card-title">Profile Details</div></div>
+            <div class="profile-header">
+              <div class="profile-avatar-lg" id="profile-avatar-lg">
+                A
+                <div class="profile-avatar-edit" onclick="document.getElementById('profile-avatar-file').click()">
+                  <i class="fa-solid fa-camera" style="color:#fff;font-size:18px"></i>
+                </div>
+              </div>
+              <input type="file" id="profile-avatar-file" accept="image/*" style="display:none" onchange="handleProfileAvatarUpload(event)">
+              <div class="profile-info">
+                <h3 id="profile-display-name">Admin User</h3>
+                <p id="profile-display-email">admin@trilokinfotech.com</p>
+                <p style="font-size:11px;color:var(--accent);margin-top:4px;font-weight:600;">Administrator</p>
+              </div>
+            </div>
+            <div class="form-group"><label>Full Name</label><input type="text" class="form-control" id="profile-name" placeholder="Your full name"></div>
+            <div class="form-group"><label>Email (read-only)</label><input type="email" class="form-control" id="profile-email" placeholder="admin@example.com" readonly style="opacity:0.7"></div>
+            <input type="hidden" id="profile-avatar-url" value="">
+            <button class="btn btn-primary" onclick="saveProfile()"><i class="fa-solid fa-save"></i> Save Profile</button>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><div class="card-title">Change Password</div></div>
+            <div class="form-group"><label>New Password</label><input type="password" class="form-control" id="new-password" placeholder="Enter new password (min 6 chars)" autocomplete="new-password"></div>
+            <div class="form-group"><label>Confirm New Password</label><input type="password" class="form-control" id="confirm-password" placeholder="Repeat new password" autocomplete="new-password"></div>
+            <button class="btn btn-secondary" onclick="changePassword()"><i class="fa-solid fa-key"></i> Update Password</button>
+
+            <hr style="border:none;border-top:1px solid var(--border);margin:24px 0;">
+            <div class="card-header" style="margin-bottom:12px;padding:0"><div class="card-title">Danger Zone</div></div>
+            <button class="btn btn-danger" onclick="confirmLogout()" style="width:100%"><i class="fa-solid fa-right-from-bracket"></i> Logout from Admin Panel</button>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /admin-content -->
+  </div><!-- /admin-main -->
+</div><!-- /admin-layout -->
+
+<!-- ============================================================
+     MODALS
+     ============================================================ -->
+
+<!-- SERVICE MODAL -->
+<div class="modal-backdrop" id="service-modal">
+  <div class="modal-box" style="width:640px;">
+    <div class="modal-header">
+      <h3 id="service-modal-title">Add Service</h3>
+      <button class="modal-close-btn" onclick="closeModal('service-modal')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="service-edit-id" value="">
+      <div class="form-row">
+        <div class="form-group"><label>Service Title *</label><input type="text" class="form-control" id="svc-title" placeholder="e.g. Software Development"></div>
+        <div class="form-group"><label>Status</label>
+          <select class="form-control" id="svc-status">
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group"><label>Description</label><textarea class="form-control" id="svc-desc" rows="4" placeholder="Service description..."></textarea></div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Icon Class (FontAwesome)</label>
+          <input type="text" class="form-control" id="svc-icon" placeholder="fa-solid fa-code">
+          <div class="form-hint">e.g. fa-solid fa-code, fa-solid fa-shield</div>
+        </div>
+        <div class="form-group"><label>Display Order</label><input type="number" class="form-control" id="svc-order" value="0" min="0"></div>
+      </div>
+      <div class="form-group">
+        <label>Service Image</label>
+        <div class="upload-area" style="padding:20px">
+          <input type="file" accept="image/*" onchange="handleServiceImageUpload(event)">
+          <div class="upload-icon" style="font-size:24px;margin-bottom:6px"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+          <div class="upload-text" style="font-size:12px">Click to upload service image</div>
+        </div>
+        <div class="upload-preview" id="svc-img-preview">
+          <img src="" id="svc-img-preview-img" alt="Service Image" style="max-height:100px">
+        </div>
+        <input type="hidden" id="svc-img-url" value="">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('service-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveService()"><i class="fa-solid fa-save"></i> Save Service</button>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURE MODAL -->
+<div class="modal-backdrop" id="feature-modal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3 id="feature-modal-title">Add Feature</h3>
+      <button class="modal-close-btn" onclick="closeModal('feature-modal')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="feature-edit-id" value="">
+      <div class="form-group"><label>Feature Title *</label><input type="text" class="form-control" id="feat-title" placeholder="e.g. 24/7 Support"></div>
+      <div class="form-group"><label>Description</label><textarea class="form-control" id="feat-desc" rows="3" placeholder="Feature description..."></textarea></div>
+      <div class="form-row">
+        <div class="form-group"><label>Icon Class (FontAwesome)</label><input type="text" class="form-control" id="feat-icon" placeholder="fa-solid fa-star"></div>
+        <div class="form-group"><label>Status</label>
+          <select class="form-control" id="feat-status">
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group"><label>Display Order</label><input type="number" class="form-control" id="feat-order" value="0" min="0"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('feature-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveFeature()"><i class="fa-solid fa-save"></i> Save Feature</button>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIAL MODAL -->
+<div class="modal-backdrop" id="testimonial-modal">
+  <div class="modal-box" style="width:640px;">
+    <div class="modal-header">
+      <h3 id="testimonial-modal-title">Add Testimonial</h3>
+      <button class="modal-close-btn" onclick="closeModal('testimonial-modal')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="testimonial-edit-id" value="">
+      <div class="form-row">
+        <div class="form-group"><label>Customer Name *</label><input type="text" class="form-control" id="test-name" placeholder="John Smith"></div>
+        <div class="form-group"><label>Status</label>
+          <select class="form-control" id="test-status">
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Rating</label>
+        <div class="star-rating" id="rating-stars" data-value="5">
+          <i class="fa-solid fa-star active" data-val="1"></i>
+          <i class="fa-solid fa-star active" data-val="2"></i>
+          <i class="fa-solid fa-star active" data-val="3"></i>
+          <i class="fa-solid fa-star active" data-val="4"></i>
+          <i class="fa-solid fa-star active" data-val="5"></i>
+        </div>
+        <input type="hidden" id="test-rating" value="5">
+      </div>
+      <div class="form-group"><label>Review Message</label><textarea class="form-control" id="test-message" rows="4" placeholder="Customer review text..."></textarea></div>
+      <div class="form-group">
+        <label>Profile Image</label>
+        <div class="upload-area" style="padding:20px">
+          <input type="file" accept="image/*" onchange="handleTestimonialImageUpload(event)">
+          <div class="upload-icon" style="font-size:24px;margin-bottom:6px"><i class="fa-solid fa-user-circle"></i></div>
+          <div class="upload-text" style="font-size:12px">Click to upload profile photo</div>
+        </div>
+        <div class="upload-preview" id="test-img-preview">
+          <img src="" id="test-img-preview-img" alt="Profile Image" style="max-height:80px;border-radius:50%">
+        </div>
+        <input type="hidden" id="test-img-url" value="">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('testimonial-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveTestimonial()"><i class="fa-solid fa-save"></i> Save Testimonial</button>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ MODAL -->
+<div class="modal-backdrop" id="faq-modal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3 id="faq-modal-title">Add FAQ</h3>
+      <button class="modal-close-btn" onclick="closeModal('faq-modal')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="faq-edit-id" value="">
+      <div class="form-group"><label>Question *</label><input type="text" class="form-control" id="faq-question" placeholder="e.g. What services do you offer?"></div>
+      <div class="form-group"><label>Answer *</label><textarea class="form-control" id="faq-answer" rows="5" placeholder="Detailed answer..."></textarea></div>
+      <div class="form-row">
+        <div class="form-group"><label>Display Order</label><input type="number" class="form-control" id="faq-order" value="0" min="0"></div>
+        <div class="form-group"><label>Status</label>
+          <select class="form-control" id="faq-status">
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('faq-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveFaq()"><i class="fa-solid fa-save"></i> Save FAQ</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT VIEW MODAL -->
+<div class="modal-backdrop" id="contact-view-modal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Contact Request Details</h3>
+      <button class="modal-close-btn" onclick="closeModal('contact-view-modal')"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body" id="contact-view-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('contact-view-modal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM DELETE MODAL -->
+<div class="modal-backdrop confirm-modal" id="confirm-modal">
+  <div class="modal-box">
+    <div class="modal-body" style="padding:32px 24px">
+      <div class="confirm-icon"><i class="fa-solid fa-trash-can"></i></div>
+      <h4 id="confirm-title">Delete Item?</h4>
+      <p id="confirm-msg">This action cannot be undone.</p>
+      <div style="display:flex;gap:10px;justify-content:center;margin-top:24px">
+        <button class="btn btn-secondary" onclick="closeModal('confirm-modal')">Cancel</button>
+        <button class="btn btn-danger" id="confirm-action-btn"><i class="fa-solid fa-trash"></i> Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GALLERY IMAGE PREVIEW MODAL -->
+<div class="modal-backdrop" id="gallery-preview-modal">
+  <div class="modal-box" style="max-width:700px;background:transparent;border:none;box-shadow:none;">
+    <button class="modal-close-btn" style="position:fixed;top:20px;right:20px;z-index:10" onclick="closeModal('gallery-preview-modal')"><i class="fa-solid fa-xmark"></i></button>
+    <img src="" id="gallery-preview-img" style="width:100%;border-radius:12px;object-fit:contain;max-height:80vh" alt="Preview">
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- SUPABASE CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- ADMIN JS -->
+<script src="admin.js"></script>
+</body>
+</html>

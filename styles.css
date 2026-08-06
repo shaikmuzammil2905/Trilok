@@ -274,55 +274,90 @@ button, input, select, textarea {
 
 /* LOGO */
 .logo-brand {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
+    text-decoration: none;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.logo-brand:hover {
+    transform: translateY(-1px);
 }
 
 .logo-box {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 12px;
+    background: rgba(0, 242, 254, 0.08);
+    border: 1px solid rgba(0, 242, 254, 0.3);
+    box-shadow: 0 0 16px rgba(0, 242, 254, 0.2), inset 0 0 12px rgba(0, 242, 254, 0.05);
     flex-shrink: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.logo-brand:hover .logo-box {
+    background: rgba(0, 242, 254, 0.16);
+    border-color: rgba(0, 242, 254, 0.6);
+    box-shadow: 0 0 24px rgba(0, 242, 254, 0.45);
+    transform: scale(1.06);
 }
 
 .logo-icon, .logo-img {
-    height: 100%;
+    height: 32px;
     width: auto;
-    max-height: 40px;
+    max-height: 32px;
     object-fit: contain;
-    filter: drop-shadow(0 2px 8px rgba(0, 242, 254, 0.45));
-    transition: var(--transition);
+    filter: drop-shadow(0 0 8px rgba(0, 242, 254, 0.8)) brightness(1.15);
+    transition: all 0.3s ease;
 }
 
 .logo-brand:hover .logo-img,
 .logo-brand:hover .logo-icon {
     transform: scale(1.08);
-    filter: drop-shadow(0 0 14px rgba(0, 242, 254, 0.8));
+    filter: drop-shadow(0 0 14px rgba(0, 242, 254, 1)) brightness(1.25);
 }
 
 .logo-text {
     display: flex;
     flex-direction: column;
+    justify-content: center;
 }
 
 .brand-title {
-    font-family: var(--font-heading);
-    font-size: 1.3rem;
+    font-family: 'Space Grotesk', var(--font-heading), sans-serif;
+    font-size: 1.4rem;
     font-weight: 800;
-    letter-spacing: 1.5px;
-    color: var(--text-white);
+    letter-spacing: 2px;
+    color: #ffffff !important;
     line-height: 1;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5), 0 0 12px rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.logo-brand:hover .brand-title {
+    color: #ffffff !important;
+    text-shadow: 0 0 16px rgba(0, 242, 254, 0.7);
 }
 
 .brand-sub {
-    font-size: 0.65rem;
-    font-weight: 600;
-    letter-spacing: 1px;
-    color: var(--primary-cyan);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    color: #00f2fe !important;
     margin-top: 3px;
+    text-transform: uppercase;
+    text-shadow: 0 0 8px rgba(0, 242, 254, 0.4);
+    transition: all 0.3s ease;
+}
+
+.logo-brand:hover .brand-sub {
+    color: #38ef7d !important;
+    text-shadow: 0 0 12px rgba(56, 239, 125, 0.6);
 }
 
 /* MENU */
@@ -2776,36 +2811,48 @@ h1, h2, h3, h4, h5, h6, p, span, a, button {
    IMAGE COPY 33 REDESIGN STYLES & LIGHT THEME DESIGN SYSTEM
    ========================================================================== */
 
-/* NAVBAR LIGHT THEME REDESIGN */
+/* NAVBAR REDESIGN & HIGH-CONTRAST LOGO STYLING */
 .navbar {
-    background: rgba(255, 255, 255, 0.96) !important;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
-    border-bottom: 1px solid #e2e8f0 !important;
+    background: rgba(11, 17, 32, 0.94) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.navbar.scrolled {
+    background: rgba(7, 11, 22, 0.97) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+    border-bottom: 1px solid rgba(0, 242, 254, 0.2) !important;
 }
 
 .brand-title {
-    color: #0f172a !important;
+    color: #ffffff !important;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5), 0 0 12px rgba(255, 255, 255, 0.2) !important;
 }
 
 .brand-sub {
-    color: #0284c7 !important;
+    color: #00f2fe !important;
+    text-shadow: 0 0 8px rgba(0, 242, 254, 0.5) !important;
 }
 
 .nav-link {
-    color: #475569 !important;
+    color: #cbd5e1 !important;
+    font-weight: 600;
 }
 
 .nav-link:hover, .nav-link.active {
-    color: #0284c7 !important;
+    color: #00f2fe !important;
+    text-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
 }
 
 .nav-link.active::after {
-    background: #0284c7 !important;
-    box-shadow: 0 0 8px rgba(2, 132, 199, 0.5) !important;
+    background: #00f2fe !important;
+    box-shadow: 0 0 10px rgba(0, 242, 254, 0.8) !important;
 }
 
 .mobile-toggle {
-    color: #0f172a !important;
+    color: #ffffff !important;
 }
 
 /* HERO SECTION V2 (LIGHT THEME MATCHING IMAGE COPY 33) */

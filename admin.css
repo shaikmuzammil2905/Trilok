@@ -110,10 +110,10 @@ ul { list-style: none; }
   margin-bottom: 32px;
   justify-content: center;
 }
-.login-logo img { width: 44px; height: 44px; }
+.login-logo img { width: 44px; height: 44px; filter: drop-shadow(0 0 10px rgba(0, 242, 254, 0.7)) brightness(1.15); }
 .login-logo-text { line-height: 1; }
-.login-logo-text .l-title { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; color: var(--text-primary); letter-spacing: 2px; display: block; }
-.login-logo-text .l-sub { font-size: 10px; color: var(--accent); letter-spacing: 3px; display: block; }
+.login-logo-text .l-title { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 800; color: #ffffff !important; letter-spacing: 2px; display: block; text-shadow: 0 0 10px rgba(255, 255, 255, 0.3); }
+.login-logo-text .l-sub { font-size: 10px; color: #00f2fe !important; font-weight: 700; letter-spacing: 3px; display: block; margin-top: 3px; text-shadow: 0 0 8px rgba(0, 242, 254, 0.4); }
 .login-card h2 { font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 6px; }
 .login-card p.login-sub { text-align: center; color: var(--text-secondary); font-size: 14px; margin-bottom: 32px; }
 .login-form-group { margin-bottom: 18px; }
@@ -186,10 +186,10 @@ ul { list-style: none; }
   border-bottom: 1px solid var(--border);
   min-height: 72px;
 }
-.sidebar-logo img { width: 36px; height: 36px; flex-shrink: 0; }
+.sidebar-logo img { width: 38px; height: 38px; flex-shrink: 0; filter: drop-shadow(0 0 8px rgba(0, 242, 254, 0.7)) brightness(1.15); }
 .sidebar-logo-text { white-space: nowrap; overflow: hidden; }
-.sidebar-logo-text .s-title { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 2px; display: block; color: var(--text-primary); }
-.sidebar-logo-text .s-sub { font-size: 9px; color: var(--accent); letter-spacing: 3px; display: block; }
+.sidebar-logo-text .s-title { font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 800; letter-spacing: 2px; display: block; color: #ffffff !important; text-shadow: 0 0 8px rgba(255, 255, 255, 0.2); }
+.sidebar-logo-text .s-sub { font-size: 9px; color: #00f2fe !important; font-weight: 700; letter-spacing: 3px; display: block; margin-top: 2px; text-shadow: 0 0 8px rgba(0, 242, 254, 0.4); }
 
 .sidebar-nav { flex: 1; padding: 12px 8px; overflow-y: auto; }
 .sidebar-section-label {

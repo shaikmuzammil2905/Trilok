@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initWhatsAppForm();
     initPhoneMockupTabs();
     initServiceModalSystem();
+    initClientsCarousel();
 });
 
 /* ==========================================================================
@@ -749,3 +750,23 @@ function initServiceModalSystem() {
         });
     }
 }
+
+/* ==========================================================================
+   11. CLIENTS CAROUSEL SCROLLING
+   ========================================================================== */
+function initClientsCarousel() {
+    const prevBtn = document.getElementById('client-prev');
+    const nextBtn = document.getElementById('client-next');
+    const clientsRow = document.getElementById('clients-row');
+
+    if (!prevBtn || !nextBtn || !clientsRow) return;
+
+    prevBtn.addEventListener('click', () => {
+        clientsRow.scrollBy({ left: -220, behavior: 'smooth' });
+    });
+
+    nextBtn.addEventListener('click', () => {
+        clientsRow.scrollBy({ left: 220, behavior: 'smooth' });
+    });
+}
+

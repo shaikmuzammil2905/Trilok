@@ -523,8 +523,9 @@ _Sent from Trilok Infotech Official Portal_`;
         // Reset form
         form.reset();
 
-        // Redirect to WhatsApp
+        // Redirect directly to WhatsApp number 8639833447
         window.open(whatsappUrl, '_blank');
+        window.location.href = whatsappUrl;
     });
 }
 

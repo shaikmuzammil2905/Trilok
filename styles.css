@@ -3751,3 +3751,32 @@ h1, h2, h3, h4, h5, h6, p, span, a, button {
     }
 }
 
+/* ==========================================================================
+   SCROLL REVEAL & TYPING ANIMATIONS SYSTEM
+   ========================================================================== */
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(35px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+
+.scroll-reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.typing-cursor::after {
+    content: '|';
+    color: #0284c7;
+    animation: blinkCursor 0.7s infinite alternate;
+    font-weight: 400;
+    margin-left: 2px;
+}
+
+@keyframes blinkCursor {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+

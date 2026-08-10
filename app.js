@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initPhoneMockupTabs();
     initServiceModalSystem();
     initClientsCarousel();
+    initWorksFilter();
 });
 
 /* ==========================================================================
@@ -770,4 +771,59 @@ function initClientsCarousel() {
         clientsRow.scrollBy({ left: 220, behavior: 'smooth' });
     });
 }
+
+/* ==========================================================================
+   12. VIEW OUR WORKS PORTFOLIO SEARCH & CATEGORY FILTER
+   ========================================================================== */
+function initWorksFilter() {
+    const searchInput = document.getElementById('works-search-input');
+    const categoryPills = document.querySelectorAll('.cat-pill');
+    const cards = document.querySelectorAll('.work-card');
+    const noResults = document.getElementById('no-results');
+
+    if (!cards.length) return;
+
+    let activeCategory = 'all';
+    let searchQuery = '';
+
+    function filterCards() {
+        let visibleCount = 0;
+
+        cards.forEach((card) => {
+            const cardCategory = card.getAttribute('data-category') || '';
+            const cardName = (card.getAttribute('data-name') || '') + ' ' + card.textContent;
+            
+            const matchesCategory = (activeCategory === 'all') || (cardCategory === activeCategory);
+            const matchesSearch = !searchQuery || cardName.toLowerCase().includes(searchQuery.toLowerCase());
+
+            if (matchesCategory && matchesSearch) {
+                card.style.display = 'flex';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        if (noResults) {
+            noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+        }
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value.trim();
+            filterCards();
+        });
+    }
+
+    categoryPills.forEach((pill) => {
+        pill.addEventListener('click', () => {
+            categoryPills.forEach((p) => p.classList.remove('active'));
+            pill.classList.add('active');
+            activeCategory = pill.getAttribute('data-filter') || 'all';
+            filterCards();
+        });
+    });
+}
+
 

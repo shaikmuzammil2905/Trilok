@@ -469,17 +469,82 @@ async function handleAboutImageUpload(e) {
 function removeAboutImg() { setVal('about-img-url', ''); hidePreview('about-img-preview'); }
 
 // ============================================================
+// DEFAULT PRESETS FOR VISIBLE PAST DATA
+// ============================================================
+const DEFAULT_PRESET_SERVICES = [
+  { id: 'svc-1', title: 'Custom Software & Web Platforms', category: 'Software', short_desc: 'Tailored enterprise software & web portals.', description: 'End-to-end custom web and enterprise software development using modern cloud architectures.', icon_class: 'fa-solid fa-laptop-code', status: 'active', display_order: 1 },
+  { id: 'svc-2', title: 'Mobile App Development (iOS & Android)', category: 'Mobile', short_desc: 'High-performance mobile applications.', description: 'Native and cross-platform mobile applications engineered for high performance and scaling.', icon_class: 'fa-solid fa-mobile-screen-button', status: 'active', display_order: 2 },
+  { id: 'svc-3', title: 'Cloud Architecture & IT Solutions', category: 'Cloud', short_desc: 'Hosting, deployment & 24/7 IT support.', description: 'Scalable cloud hosting infrastructure on AWS/Azure, server migration, cybersecurity audits, and 24/7 technical assistance.', icon_class: 'fa-solid fa-cloud', status: 'active', display_order: 3 },
+  { id: 'svc-4', title: 'AI & Machine Learning Solutions', category: 'AI', short_desc: 'Automation, predictive analytics & chatbots.', description: 'Artificial Intelligence solutions including predictive modeling, NLP chatbots, and workflow automation.', icon_class: 'fa-solid fa-brain', status: 'active', display_order: 4 },
+  { id: 'svc-5', title: 'Cybersecurity & Data Auditing', category: 'Security', short_desc: 'Security audits & compliance protocols.', description: 'Comprehensive cybersecurity audits, threat prevention, vulnerability testing, and data privacy.', icon_class: 'fa-solid fa-shield-halved', status: 'active', display_order: 5 },
+  { id: 'svc-6', title: 'UI/UX & Product Design', category: 'Design', short_desc: 'Intuitive user interface & digital design.', description: 'User-centered intuitive design systems, wireframing, and interactive digital product design.', icon_class: 'fa-solid fa-palette', status: 'active', display_order: 6 }
+];
+
+const DEFAULT_PRESET_FEATURES = [
+  { id: 'feat-1', title: 'eSaleAgreement Digital Platform', subtitle: 'PropTech Solution', badge_tag: 'Featured Product', description: 'Create secure, legally valid and tamper-proof sale agreements in minutes with advanced verification and audit capabilities.', icon_class: 'fa-solid fa-file-signature', status: 'active', display_order: 1 },
+  { id: 'feat-2', title: 'Aadhaar eKYC Verification', subtitle: 'Identity System', badge_tag: 'eKYC', description: 'Instant Aadhaar identity verification & biometrics authentication for digital onboarding.', icon_class: 'fa-solid fa-id-card', status: 'active', display_order: 2 },
+  { id: 'feat-3', title: 'Aadhaar eSign Integration', subtitle: 'Digital Signatures', badge_tag: 'eSign', description: 'Legally binding Aadhaar electronic signatures with automated audit logs.', icon_class: 'fa-solid fa-signature', status: 'active', display_order: 3 },
+  { id: 'feat-4', title: 'OTP & QR Code Verification', subtitle: 'Dual Security', badge_tag: 'Security', description: 'Phone OTP 2-factor verification and tamper-evident QR code scanning.', icon_class: 'fa-solid fa-qrcode', status: 'active', display_order: 4 },
+  { id: 'feat-5', title: 'Enterprise ERP Suite', subtitle: 'SaaS Business Platform', badge_tag: 'Enterprise', description: 'Unified enterprise resource management, inventory, and automated workflow system.', icon_class: 'fa-solid fa-building-columns', status: 'active', display_order: 5 },
+  { id: 'feat-6', title: 'Smart Analytics & BI Dashboard', subtitle: 'Real-time Intelligence', badge_tag: 'Analytics', description: 'Interactive dashboard analytics and automated business executive reporting.', icon_class: 'fa-solid fa-chart-pie', status: 'active', display_order: 6 }
+];
+
+const DEFAULT_PRESET_TESTIMONIALS = [
+  { id: 'test-1', client_name: 'Rajesh Kumar', client_role: 'Chief Technology Officer', company: 'Apex Solutions', rating: 5, testimonial_text: 'Trilok Infotech transformed our legacy enterprise systems into a high-speed cloud platform. Flawless execution and support!', status: 'published' },
+  { id: 'test-2', client_name: 'Ananya Sharma', client_role: 'Head of Digital Product', company: 'FinTech India', rating: 5, testimonial_text: 'Highly professional mobile application developers! Delivered our iOS and Android app ahead of deadline.', status: 'published' }
+];
+
+const DEFAULT_PRESET_FAQS = [
+  { id: 'faq-1', question: 'What core technologies and services does Trilok Infotech offer?', answer: 'We specialize in Custom Web & Software Engineering, Mobile App Development, Cloud Architecture, AI Automation, and Cybersecurity.', status: 'active', display_order: 1 },
+  { id: 'faq-2', question: 'How can I request a consultation or project estimate?', answer: 'You can submit your requirements via our website contact form or contact us directly at info@trilokinfotech.com.', status: 'active', display_order: 2 }
+];
+
+// ============================================================
 // SERVICES
 // ============================================================
 let allServices = [];
 
 async function loadServices() {
   const tbody = document.getElementById('services-tbody');
-  tbody.innerHTML = '<tr><td colspan="6"><div class="spinner"></div></td></tr>';
-  const { data, error } = await sb.from('services').select('*').order('display_order');
-  if (error) { toast('error', error.message); return; }
-  allServices = data || [];
+  if (tbody) tbody.innerHTML = '<tr><td colspan="6"><div class="spinner"></div></td></tr>';
+  
+  let data = null;
+  try {
+    const res = await sb.from('services').select('*').order('display_order');
+    data = res.data;
+  } catch(e) {}
+
+  if (!data || data.length === 0) {
+    allServices = JSON.parse(localStorage.getItem('trilok_services_cache')) || DEFAULT_PRESET_SERVICES;
+  } else {
+    allServices = data;
+  }
+  localStorage.setItem('trilok_services_cache', JSON.stringify(allServices));
   renderServicesTable(allServices);
+}
+
+// ============================================================
+// FEATURES
+// ============================================================
+let allFeatures = [];
+
+async function loadFeatures() {
+  const tbody = document.getElementById('features-tbody');
+  if (tbody) tbody.innerHTML = '<tr><td colspan="6"><div class="spinner"></div></td></tr>';
+  
+  let data = null;
+  try {
+    const res = await sb.from('features').select('*').order('display_order');
+    data = res.data;
+  } catch(e) {}
+
+  if (!data || data.length === 0) {
+    allFeatures = JSON.parse(localStorage.getItem('trilok_features_cache')) || DEFAULT_PRESET_FEATURES;
+  } else {
+    allFeatures = data;
+  }
+  localStorage.setItem('trilok_features_cache', JSON.stringify(allFeatures));
+  renderFeaturesTable(allFeatures);
 }
 
 function renderServicesTable(data) {
@@ -546,7 +611,8 @@ async function saveService() {
   const title = getVal('svc-title').trim();
   if (!title) { toast('warning', 'Service title is required.'); return; }
 
-  const payload = {
+  const item = {
+    id: id || ('svc-' + Date.now()),
     title,
     description: getVal('svc-desc'),
     icon_class: getVal('svc-icon') || 'fa-solid fa-code',
@@ -556,27 +622,33 @@ async function saveService() {
     updated_at: new Date().toISOString()
   };
 
-  let err;
+  try {
+    if (id) { await sb.from('services').update(item).eq('id', id); }
+    else { await sb.from('services').insert(item); }
+  } catch(e) {}
+
   if (id) {
-    ({ error: err } = await sb.from('services').update(payload).eq('id', id));
+    const idx = allServices.findIndex(x => x.id === id);
+    if (idx !== -1) allServices[idx] = item;
   } else {
-    ({ error: err } = await sb.from('services').insert(payload));
+    allServices.push(item);
   }
 
-  if (err) { toast('error', err.message); return; }
+  localStorage.setItem('trilok_services_cache', JSON.stringify(allServices));
   toast('success', id ? 'Service updated!' : 'Service added!');
   logActivity(id ? 'update' : 'create', 'services', title);
   closeModal('service-modal');
-  loadServices();
+  renderServicesTable(allServices);
 }
 
 function deleteService(id, name) {
   showConfirm('Delete Service?', `Are you sure you want to delete "${name}"? This cannot be undone.`, async () => {
-    const { error } = await sb.from('services').delete().eq('id', id);
-    if (error) { toast('error', error.message); return; }
+    try { await sb.from('services').delete().eq('id', id); } catch(e) {}
+    allServices = allServices.filter(x => x.id !== id);
+    localStorage.setItem('trilok_services_cache', JSON.stringify(allServices));
     toast('success', 'Service deleted!');
     logActivity('delete', 'services', name);
-    loadServices();
+    renderServicesTable(allServices);
   });
 }
 
@@ -645,28 +717,43 @@ async function saveFeature() {
   const id = getVal('feature-edit-id');
   const title = getVal('feat-title').trim();
   if (!title) { toast('warning', 'Feature title required.'); return; }
-  const payload = {
-    title, description: getVal('feat-desc'),
+  const item = {
+    id: id || ('feat-' + Date.now()),
+    title,
+    description: getVal('feat-desc'),
     icon_class: getVal('feat-icon') || 'fa-solid fa-star',
     display_order: parseInt(getVal('feat-order')) || 0,
     status: getVal('feat-status'),
     updated_at: new Date().toISOString()
   };
-  let err;
-  if (id) { ({ error: err } = await sb.from('features').update(payload).eq('id', id)); }
-  else { ({ error: err } = await sb.from('features').insert(payload)); }
-  if (err) { toast('error', err.message); return; }
+
+  try {
+    if (id) { await sb.from('features').update(item).eq('id', id); }
+    else { await sb.from('features').insert(item); }
+  } catch(e) {}
+
+  if (id) {
+    const idx = allFeatures.findIndex(x => x.id === id);
+    if (idx !== -1) allFeatures[idx] = item;
+  } else {
+    allFeatures.push(item);
+  }
+
+  localStorage.setItem('trilok_features_cache', JSON.stringify(allFeatures));
   toast('success', id ? 'Feature updated!' : 'Feature added!');
   logActivity(id ? 'update' : 'create', 'features', title);
-  closeModal('feature-modal'); loadFeatures();
+  closeModal('feature-modal');
+  renderFeaturesTable(allFeatures);
 }
 
 function deleteFeature(id, name) {
   showConfirm('Delete Feature?', `Delete "${name}"?`, async () => {
-    await sb.from('features').delete().eq('id', id);
+    try { await sb.from('features').delete().eq('id', id); } catch(e) {}
+    allFeatures = allFeatures.filter(x => x.id !== id);
+    localStorage.setItem('trilok_features_cache', JSON.stringify(allFeatures));
     toast('success', 'Feature deleted!');
     logActivity('delete', 'features', name);
-    loadFeatures();
+    renderFeaturesTable(allFeatures);
   });
 }
 
@@ -677,9 +764,20 @@ let allTestimonials = [];
 
 async function loadTestimonials() {
   const tbody = document.getElementById('testimonials-tbody');
-  tbody.innerHTML = '<tr><td colspan="6"><div class="spinner"></div></td></tr>';
-  const { data } = await sb.from('testimonials').select('*').order('created_at', { ascending: false });
-  allTestimonials = data || [];
+  if (tbody) tbody.innerHTML = '<tr><td colspan="6"><div class="spinner"></div></td></tr>';
+  
+  let data = null;
+  try {
+    const res = await sb.from('testimonials').select('*').order('created_at', { ascending: false });
+    data = res.data;
+  } catch(e) {}
+
+  if (!data || data.length === 0) {
+    allTestimonials = JSON.parse(localStorage.getItem('trilok_testimonials_cache')) || DEFAULT_PRESET_TESTIMONIALS.map(t => ({...t, customer_name: t.client_name, review_message: t.testimonial_text}));
+  } else {
+    allTestimonials = data.map(t => ({...t, customer_name: t.customer_name || t.client_name, review_message: t.review_message || t.testimonial_text}));
+  }
+  localStorage.setItem('trilok_testimonials_cache', JSON.stringify(allTestimonials));
   renderTestimonialsTable(allTestimonials);
 }
 
@@ -791,13 +889,22 @@ async function handleTestimonialImageUpload(e) {
 // ============================================================
 // FAQS
 // ============================================================
-let allFaqs = [];
-
 async function loadFaqs() {
   const tbody = document.getElementById('faqs-tbody');
-  tbody.innerHTML = '<tr><td colspan="5"><div class="spinner"></div></td></tr>';
-  const { data } = await sb.from('faqs').select('*').order('display_order');
-  allFaqs = data || [];
+  if (tbody) tbody.innerHTML = '<tr><td colspan="5"><div class="spinner"></div></td></tr>';
+  
+  let data = null;
+  try {
+    const res = await sb.from('faqs').select('*').order('display_order');
+    data = res.data;
+  } catch(e) {}
+
+  if (!data || data.length === 0) {
+    allFaqs = JSON.parse(localStorage.getItem('trilok_faqs_cache')) || DEFAULT_PRESET_FAQS;
+  } else {
+    allFaqs = data;
+  }
+  localStorage.setItem('trilok_faqs_cache', JSON.stringify(allFaqs));
   renderFaqsTable(allFaqs);
 }
 

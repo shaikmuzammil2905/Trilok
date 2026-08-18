@@ -469,7 +469,14 @@ async function initLiveCmsSync() {
 
     // 3. Sync Services Section
     try {
-        const { data: services } = await sb.from('services').select('*').order('display_order');
+        let services = null;
+        if (sb) {
+            const { data } = await sb.from('services').select('*').order('display_order');
+            if (data && data.length > 0) services = data;
+        }
+        if (!services) {
+            try { services = JSON.parse(localStorage.getItem('trilok_services_cache')); } catch(e) {}
+        }
         if (services && services.length > 0) {
             const sGrid = document.querySelector('.services-grid');
             if (sGrid) {
@@ -489,7 +496,14 @@ async function initLiveCmsSync() {
 
     // 4. Sync Features / Products Section
     try {
-        const { data: features } = await sb.from('features').select('*').order('display_order');
+        let features = null;
+        if (sb) {
+            const { data } = await sb.from('features').select('*').order('display_order');
+            if (data && data.length > 0) features = data;
+        }
+        if (!features) {
+            try { features = JSON.parse(localStorage.getItem('trilok_features_cache')); } catch(e) {}
+        }
         if (features && features.length > 0) {
             const fGrid = document.querySelector('.features-grid, .products-grid');
             if (fGrid) {

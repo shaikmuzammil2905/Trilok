@@ -38,7 +38,11 @@ function initUIListeners() {
   const eye = document.getElementById('pwd-eye');
   if (eye) eye.addEventListener('click', togglePasswordVisibility);
 
-  // Global Mobile sidebar drawer helpers
+  // Mobile sidebar drawer DOM elements
+  const toggleBtn = document.getElementById('sidebar-toggle');
+  const closeBtn = document.getElementById('sidebar-close-btn');
+  const overlay = document.getElementById('sidebar-overlay');
+  const sidebar = document.getElementById('admin-sidebar');
   window.toggleAdminSidebar = function(e) {
     if (e && e.preventDefault) e.preventDefault();
     const sidebar = document.getElementById('admin-sidebar');

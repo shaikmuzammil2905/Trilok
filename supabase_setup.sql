@@ -1,6 +1,6 @@
 -- ============================================================
 -- TRILOK INFOTECH ADMIN CMS - SUPABASE COMPLETE DATABASE SETUP
--- Safe migrations & column additions for existing tables
+-- Safe migrations & column additions for all existing tables
 -- ============================================================
 
 -- 1. HERO SETTINGS
@@ -18,7 +18,6 @@ CREATE TABLE IF NOT EXISTS hero_settings (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Ensure missing columns are added if hero_settings already existed
 ALTER TABLE hero_settings ADD COLUMN IF NOT EXISTS cta_primary_url TEXT DEFAULT '#services';
 ALTER TABLE hero_settings ADD COLUMN IF NOT EXISTS cta_secondary_url TEXT DEFAULT '#products';
 
@@ -193,6 +192,9 @@ CREATE TABLE IF NOT EXISTS website_settings (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+ALTER TABLE website_settings ADD COLUMN IF NOT EXISTS footer_content TEXT DEFAULT 'Building Digital Solutions. Driving Growth.';
+ALTER TABLE website_settings ADD COLUMN IF NOT EXISTS copyright_text TEXT DEFAULT '© 2026 Trilok Infotech Private Limited. All Rights Reserved.';
+
 -- 13. SEO SETTINGS
 CREATE TABLE IF NOT EXISTS seo_settings (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -207,6 +209,12 @@ CREATE TABLE IF NOT EXISTS seo_settings (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+ALTER TABLE seo_settings ADD COLUMN IF NOT EXISTS og_title TEXT DEFAULT 'Trilok Infotech | Software & Digital Trust';
+ALTER TABLE seo_settings ADD COLUMN IF NOT EXISTS og_description TEXT DEFAULT '';
+ALTER TABLE seo_settings ADD COLUMN IF NOT EXISTS og_image_url TEXT DEFAULT '';
+ALTER TABLE seo_settings ADD COLUMN IF NOT EXISTS favicon_url TEXT DEFAULT '';
+ALTER TABLE seo_settings ADD COLUMN IF NOT EXISTS robots_settings TEXT DEFAULT 'index, follow';
 
 -- 14. ADMIN PROFILES
 CREATE TABLE IF NOT EXISTS admin_profiles (

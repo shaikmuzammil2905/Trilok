@@ -228,17 +228,19 @@ button {
     left: 0;
     right: 0;
     z-index: 1000;
-    padding: 16px 0;
+    padding: 14px 0;
     transition: var(--transition);
-    background: transparent;
+    background: #FFFFFF !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid #E2E8F0;
 }
 
 .navbar.scrolled {
-    background: var(--navy-header);
+    background: #FFFFFF !important;
     backdrop-filter: blur(16px);
-    padding: 12px 0;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 10px 0;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+    border-bottom: 1px solid #E2E8F0;
 }
 
 .nav-container {
@@ -252,6 +254,13 @@ button {
     align-items: center;
     gap: 12px;
     text-decoration: none;
+}
+
+.logo-header-img {
+    height: 42px;
+    width: auto;
+    object-fit: contain;
+    display: block;
 }
 
 .logo-box {
@@ -277,14 +286,14 @@ button {
 .brand-title {
     font-size: 1.25rem;
     font-weight: 800;
-    color: #FFFFFF;
+    color: #07132B;
     letter-spacing: 0.5px;
 }
 
 .brand-sub {
     font-size: 0.65rem;
     font-weight: 700;
-    color: var(--bright-blue);
+    color: #0066FF;
     letter-spacing: 2px;
 }
 
@@ -297,7 +306,7 @@ button {
 .nav-link {
     font-size: 0.92rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.9);
+    color: #0F172A;
     transition: var(--transition-fast);
     position: relative;
     padding: 6px 0;
@@ -305,7 +314,7 @@ button {
 
 .nav-link:hover,
 .nav-link.active {
-    color: #FFFFFF;
+    color: #0066FF;
 }
 
 .nav-link::after {
@@ -315,7 +324,7 @@ button {
     left: 0;
     width: 0;
     height: 2px;
-    background: var(--bright-blue);
+    background: #0066FF;
     transition: var(--transition-fast);
     border-radius: 2px;
 }
@@ -328,20 +337,26 @@ button {
 .nav-actions {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
 }
 
 .mobile-toggle {
     display: none;
-    font-size: 1.4rem;
-    color: #FFFFFF;
-    width: 44px;
-    height: 44px;
+    font-size: 1.3rem;
+    color: #0F172A;
+    width: 42px;
+    height: 42px;
     align-items: center;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.15);
+    background: #F1F5F9;
     border-radius: var(--radius-sm);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid #E2E8F0;
+    transition: var(--transition-fast);
+}
+
+.mobile-toggle:hover {
+    background: #E2E8F0;
+    color: #0066FF;
 }
 
 /* Mobile Drawer */
@@ -666,6 +681,8 @@ button {
     grid-template-columns: 1fr 1fr;
     gap: 50px;
     align-items: center;
+    overflow: hidden;
+    max-width: 100%;
 }
 
 .product-badge-tag {
@@ -685,21 +702,28 @@ button {
 .esa-official-logo-box {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
     margin-bottom: 12px;
+    flex-wrap: wrap;
+    max-width: 100%;
 }
 
 .esa-header-logo-png {
-    height: 48px;
+    height: clamp(34px, 6vw, 48px);
     width: auto;
     object-fit: contain;
+    flex-shrink: 0;
 }
 
 .product-title {
-    font-size: clamp(2rem, 3.5vw, 2.75rem);
+    font-size: clamp(1.4rem, 5.5vw, 2.75rem);
     font-weight: 800;
     color: #FFFFFF;
     margin: 0;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+    line-height: 1.18;
 }
 
 .title-esale { color: #FFFFFF; }
@@ -710,6 +734,7 @@ button {
     font-weight: 600;
     color: rgba(255, 255, 255, 0.85);
     margin-bottom: 16px;
+    word-break: break-word;
 }
 
 .product-desc {
@@ -717,6 +742,7 @@ button {
     color: rgba(255, 255, 255, 0.75);
     line-height: 1.6;
     margin-bottom: 24px;
+    word-break: break-word;
 }
 
 /* Feature Pills Grid */
@@ -725,6 +751,7 @@ button {
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
     margin-bottom: 32px;
+    width: 100%;
 }
 
 .feature-pill-box {
@@ -738,6 +765,10 @@ button {
     font-size: 0.88rem;
     font-weight: 600;
     color: #FFFFFF;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .feature-pill-box .pill-icon {
@@ -1578,6 +1609,14 @@ button {
 @media (max-width: 768px) {
     .section { padding: 60px 0; }
 
+    .navbar {
+        padding: 10px 0;
+    }
+
+    .logo-header-img {
+        height: 36px;
+    }
+
     .hero-section {
         padding-top: 120px;
         padding-bottom: 40px;
@@ -1590,11 +1629,19 @@ button {
     }
 
     .product-banner-card {
-        padding: 28px 20px;
+        padding: 28px 18px;
+        border-radius: 24px;
+        gap: 30px;
     }
 
     .product-features-grid {
         grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .feature-pill-box {
+        padding: 10px 14px;
+        font-size: 0.88rem;
     }
 
     .footer-grid {
@@ -1612,7 +1659,60 @@ button {
 }
 
 @media (max-width: 480px) {
-    .container { padding: 0 16px; }
+    .container { padding: 0 14px; }
+
+    .logo-header-img {
+        height: 32px;
+    }
+
+    .nav-actions .btn {
+        padding: 8px 14px;
+        font-size: 0.82rem;
+    }
+
+    .mobile-toggle {
+        width: 38px;
+        height: 38px;
+        font-size: 1.15rem;
+    }
+
+    .product-banner-card {
+        padding: 20px 14px;
+        border-radius: 20px;
+    }
+
+    .product-badge-tag {
+        font-size: 0.7rem;
+        padding: 4px 12px;
+        margin-bottom: 12px;
+    }
+
+    .esa-official-logo-box {
+        gap: 8px;
+    }
+
+    .esa-header-logo-png {
+        height: 32px;
+    }
+
+    .product-title {
+        font-size: 1.35rem;
+    }
+
+    .product-subtitle {
+        font-size: 0.95rem;
+        margin-bottom: 12px;
+    }
+
+    .product-desc {
+        font-size: 0.88rem;
+        margin-bottom: 18px;
+    }
+
+    .feature-pill-box {
+        padding: 9px 12px;
+        font-size: 0.82rem;
+    }
 
     .btn {
         width: 100%;

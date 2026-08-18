@@ -3,7 +3,10 @@
 -- Safe migrations & column additions for all existing tables
 -- ============================================================
 
--- 1. HERO SETTINGS
+-- ============================================================
+-- 1. CREATE TABLES (IF NOT EXIST)
+-- ============================================================
+
 CREATE TABLE IF NOT EXISTS hero_settings (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   heading TEXT DEFAULT 'Building the Future of Software, Cybersecurity & Digital Trust',
@@ -18,10 +21,6 @@ CREATE TABLE IF NOT EXISTS hero_settings (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-ALTER TABLE hero_settings ADD COLUMN IF NOT EXISTS cta_primary_url TEXT DEFAULT '#services';
-ALTER TABLE hero_settings ADD COLUMN IF NOT EXISTS cta_secondary_url TEXT DEFAULT '#products';
-
--- 2. ABOUT SETTINGS
 CREATE TABLE IF NOT EXISTS about_settings (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   heading TEXT DEFAULT 'Why Businesses Choose Trilok',
@@ -36,12 +35,6 @@ CREATE TABLE IF NOT EXISTS about_settings (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-ALTER TABLE about_settings ADD COLUMN IF NOT EXISTS paragraphs TEXT DEFAULT '';
-ALTER TABLE about_settings ADD COLUMN IF NOT EXISTS mission TEXT DEFAULT '';
-ALTER TABLE about_settings ADD COLUMN IF NOT EXISTS vision TEXT DEFAULT '';
-ALTER TABLE about_settings ADD COLUMN IF NOT EXISTS values TEXT DEFAULT '';
-
--- 3. SERVICES
 CREATE TABLE IF NOT EXISTS services (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   title TEXT NOT NULL,
@@ -57,7 +50,6 @@ CREATE TABLE IF NOT EXISTS services (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 4. PROJECTS (VIEW OUR WORK)
 CREATE TABLE IF NOT EXISTS projects (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   title TEXT NOT NULL,
@@ -71,7 +63,6 @@ CREATE TABLE IF NOT EXISTS projects (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 5. PRODUCTS
 CREATE TABLE IF NOT EXISTS products (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   name TEXT NOT NULL,
@@ -86,7 +77,6 @@ CREATE TABLE IF NOT EXISTS products (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 6. INDUSTRIES
 CREATE TABLE IF NOT EXISTS industries (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   title TEXT NOT NULL,
@@ -99,7 +89,6 @@ CREATE TABLE IF NOT EXISTS industries (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 7. CAREERS
 CREATE TABLE IF NOT EXISTS careers (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   job_title TEXT NOT NULL,
@@ -118,7 +107,6 @@ CREATE TABLE IF NOT EXISTS careers (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 8. TESTIMONIALS
 CREATE TABLE IF NOT EXISTS testimonials (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   customer_name TEXT NOT NULL,
@@ -132,10 +120,6 @@ CREATE TABLE IF NOT EXISTS testimonials (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-ALTER TABLE testimonials ADD COLUMN IF NOT EXISTS position_company TEXT DEFAULT '';
-ALTER TABLE testimonials ADD COLUMN IF NOT EXISTS display_order INTEGER DEFAULT 0;
-
--- 9. FAQS
 CREATE TABLE IF NOT EXISTS faqs (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   question TEXT NOT NULL,
@@ -146,7 +130,6 @@ CREATE TABLE IF NOT EXISTS faqs (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 10. GALLERY / MEDIA
 CREATE TABLE IF NOT EXISTS gallery (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   name TEXT DEFAULT 'Untitled',
@@ -159,7 +142,6 @@ CREATE TABLE IF NOT EXISTS gallery (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 11. CONTACT REQUESTS
 CREATE TABLE IF NOT EXISTS contact_requests (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   name TEXT NOT NULL,
@@ -171,7 +153,6 @@ CREATE TABLE IF NOT EXISTS contact_requests (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 12. WEBSITE SETTINGS
 CREATE TABLE IF NOT EXISTS website_settings (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   company_name TEXT DEFAULT 'Trilok Infotech Private Limited',
@@ -192,10 +173,6 @@ CREATE TABLE IF NOT EXISTS website_settings (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-ALTER TABLE website_settings ADD COLUMN IF NOT EXISTS footer_content TEXT DEFAULT 'Building Digital Solutions. Driving Growth.';
-ALTER TABLE website_settings ADD COLUMN IF NOT EXISTS copyright_text TEXT DEFAULT '© 2026 Trilok Infotech Private Limited. All Rights Reserved.';
-
--- 13. SEO SETTINGS
 CREATE TABLE IF NOT EXISTS seo_settings (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   meta_title TEXT DEFAULT 'Trilok Infotech Private Limited | Digital Solutions & eSaleAgreement',
@@ -210,13 +187,6 @@ CREATE TABLE IF NOT EXISTS seo_settings (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-ALTER TABLE seo_settings ADD COLUMN IF NOT EXISTS og_title TEXT DEFAULT 'Trilok Infotech | Software & Digital Trust';
-ALTER TABLE seo_settings ADD COLUMN IF NOT EXISTS og_description TEXT DEFAULT '';
-ALTER TABLE seo_settings ADD COLUMN IF NOT EXISTS og_image_url TEXT DEFAULT '';
-ALTER TABLE seo_settings ADD COLUMN IF NOT EXISTS favicon_url TEXT DEFAULT '';
-ALTER TABLE seo_settings ADD COLUMN IF NOT EXISTS robots_settings TEXT DEFAULT 'index, follow';
-
--- 14. ADMIN PROFILES
 CREATE TABLE IF NOT EXISTS admin_profiles (
   id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
   full_name TEXT DEFAULT 'Admin User',
@@ -227,7 +197,6 @@ CREATE TABLE IF NOT EXISTS admin_profiles (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 15. ACTIVITY LOGS
 CREATE TABLE IF NOT EXISTS activity_logs (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   admin_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
@@ -239,7 +208,30 @@ CREATE TABLE IF NOT EXISTS activity_logs (
 );
 
 -- ============================================================
--- ROW LEVEL SECURITY (RLS) POLICIES
+-- 2. ALTER EXISTING TABLES TO ADD ALL MISSING COLUMNS (SAFE)
+-- ============================================================
+ALTER TABLE hero_settings ADD COLUMN IF NOT EXISTS cta_primary_url TEXT DEFAULT '#services';
+ALTER TABLE hero_settings ADD COLUMN IF NOT EXISTS cta_secondary_url TEXT DEFAULT '#products';
+
+ALTER TABLE about_settings ADD COLUMN IF NOT EXISTS paragraphs TEXT DEFAULT '';
+ALTER TABLE about_settings ADD COLUMN IF NOT EXISTS mission TEXT DEFAULT '';
+ALTER TABLE about_settings ADD COLUMN IF NOT EXISTS vision TEXT DEFAULT '';
+ALTER TABLE about_settings ADD COLUMN IF NOT EXISTS values TEXT DEFAULT '';
+
+ALTER TABLE testimonials ADD COLUMN IF NOT EXISTS position_company TEXT DEFAULT '';
+ALTER TABLE testimonials ADD COLUMN IF NOT EXISTS display_order INTEGER DEFAULT 0;
+
+ALTER TABLE website_settings ADD COLUMN IF NOT EXISTS footer_content TEXT DEFAULT 'Building Digital Solutions. Driving Growth.';
+ALTER TABLE website_settings ADD COLUMN IF NOT EXISTS copyright_text TEXT DEFAULT '© 2026 Trilok Infotech Private Limited. All Rights Reserved.';
+
+ALTER TABLE seo_settings ADD COLUMN IF NOT EXISTS og_title TEXT DEFAULT 'Trilok Infotech | Software & Digital Trust';
+ALTER TABLE seo_settings ADD COLUMN IF NOT EXISTS og_description TEXT DEFAULT '';
+ALTER TABLE seo_settings ADD COLUMN IF NOT EXISTS og_image_url TEXT DEFAULT '';
+ALTER TABLE seo_settings ADD COLUMN IF NOT EXISTS favicon_url TEXT DEFAULT '';
+ALTER TABLE seo_settings ADD COLUMN IF NOT EXISTS robots_settings TEXT DEFAULT 'index, follow';
+
+-- ============================================================
+-- 3. ROW LEVEL SECURITY (RLS) POLICIES
 -- ============================================================
 ALTER TABLE hero_settings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE about_settings ENABLE ROW LEVEL SECURITY;
@@ -345,8 +337,9 @@ DROP POLICY IF EXISTS "Admin full access activity_logs" ON activity_logs;
 CREATE POLICY "Admin full access activity_logs" ON activity_logs FOR ALL USING (auth.role() = 'authenticated');
 
 -- ============================================================
--- INITIAL SEED DATA
+-- 4. INITIAL SEED DATA
 -- ============================================================
+
 INSERT INTO hero_settings (heading, sub_heading, cta_primary_text, cta_secondary_text, is_visible)
 VALUES ('Build. Innovate. Grow.', 'Digital solutions that help businesses move faster.', 'Get Free Quote', 'View Our Work', true)
 ON CONFLICT DO NOTHING;
@@ -411,8 +404,8 @@ VALUES
   ('Do you provide post-launch technical maintenance and support?', 'Yes! All Trilok Infotech projects include dedicated post-launch support, regular security updates, server monitoring, and feature upgrades.', 'active', 4)
 ON CONFLICT DO NOTHING;
 
-INSERT INTO website_settings (company_name, contact_number, email_address, business_address, whatsapp_number, footer_content, copyright_text)
-VALUES ('Trilok Infotech Private Limited', '+91 8639833447', 'info@trilokinfotech.com', 'Hyderabad, India', '+918639833447', 'Building Digital Solutions. Driving Growth.', '© 2026 Trilok Infotech Private Limited. All Rights Reserved.')
+INSERT INTO website_settings (company_name, contact_number, email_address, business_address, whatsapp_number)
+VALUES ('Trilok Infotech Private Limited', '+91 8639833447', 'info@trilokinfotech.com', 'Hyderabad, India', '+918639833447')
 ON CONFLICT DO NOTHING;
 
 INSERT INTO seo_settings (meta_title, meta_description, keywords)

@@ -1,7 +1,6 @@
 /**
  * TRILOK INFOTECH PRIVATE LIMITED — INTERACTIVE JAVASCRIPT ENGINE
  * Handles animated hero canvas particles, scroll reveals, navbar scroll,
- * interactive flagship phone mockups (image copy 34 & 35 screen switching),
  * mobile drawer navigation, portfolio tab filtering, statistics counters,
  * testimonial carousel slider, modals, and WhatsApp inquiry.
  */
@@ -16,7 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initTestimonialCarousel();
     initModalSystem();
     initServiceModals();
-    initPhoneMockupClick();
 });
 
 /* ==========================================================================
@@ -109,33 +107,7 @@ function initHeroCanvas() {
 }
 
 /* ==========================================================================
-   2. INTERACTIVE FLAGSHIP PHONE MOCKUP CLICK (IMAGE COPY 34 & 35)
-   ========================================================================== */
-function initPhoneMockupClick() {
-    const box = document.getElementById('phones-interactive-box');
-    const frontPhone = document.getElementById('phone-front');
-    const backPhone = document.getElementById('phone-back');
-
-    if (!box || !frontPhone || !backPhone) return;
-
-    let isSwapped = false;
-
-    function togglePhones() {
-        isSwapped = !isSwapped;
-        if (isSwapped) {
-            backPhone.classList.add('active-front');
-            frontPhone.classList.add('active-back');
-        } else {
-            backPhone.classList.remove('active-front');
-            frontPhone.classList.remove('active-back');
-        }
-    }
-
-    box.addEventListener('click', togglePhones);
-}
-
-/* ==========================================================================
-   3. SCROLL REVEAL ANIMATIONS
+   2. SCROLL REVEAL ANIMATIONS
    ========================================================================== */
 function initScrollReveal() {
     const reveals = document.querySelectorAll('.scroll-reveal');
@@ -153,7 +125,7 @@ function initScrollReveal() {
 }
 
 /* ==========================================================================
-   4. NAVBAR SCROLL EFFECT & ACTIVE STATE
+   3. NAVBAR SCROLL EFFECT & ACTIVE STATE
    ========================================================================== */
 function initNavbarScroll() {
     const navbar = document.getElementById('navbar');
@@ -169,7 +141,7 @@ function initNavbarScroll() {
 }
 
 /* ==========================================================================
-   5. MOBILE DRAWER NAVIGATION
+   4. MOBILE DRAWER NAVIGATION
    ========================================================================== */
 function initMobileDrawer() {
     const toggleBtn = document.getElementById('mobile-toggle');
@@ -202,7 +174,7 @@ function initMobileDrawer() {
 }
 
 /* ==========================================================================
-   6. STATISTICS COUNTER ANIMATION
+   5. STATISTICS COUNTER ANIMATION
    ========================================================================== */
 function initStatsCounters() {
     const counters = document.querySelectorAll('.counter-num');
@@ -244,7 +216,7 @@ function initStatsCounters() {
 }
 
 /* ==========================================================================
-   7. PORTFOLIO TAB FILTERING
+   6. PORTFOLIO TAB FILTERING
    ========================================================================== */
 function initPortfolioFilters() {
     const filterBtns = document.querySelectorAll('.filter-btn');
@@ -275,7 +247,7 @@ function initPortfolioFilters() {
 }
 
 /* ==========================================================================
-   8. CLIENT TESTIMONIALS CAROUSEL SLIDER
+   7. CLIENT TESTIMONIALS CAROUSEL SLIDER
    ========================================================================== */
 function initTestimonialCarousel() {
     const quoteEl = document.getElementById('t-quote');
@@ -334,7 +306,7 @@ function initTestimonialCarousel() {
 }
 
 /* ==========================================================================
-   9. MODAL POPUP & INQUIRY FORM (WHATSAPP INTEGRATION)
+   8. MODAL POPUP & INQUIRY FORM (WHATSAPP INTEGRATION)
    ========================================================================== */
 function initModalSystem() {
     const contactModal = document.getElementById('contact-modal');
@@ -399,7 +371,7 @@ function initModalSystem() {
 }
 
 /* ==========================================================================
-   10. SERVICE DETAIL POPUP MODAL
+   9. SERVICE DETAIL POPUP MODAL
    ========================================================================== */
 function initServiceModals() {
     const serviceModal = document.getElementById('service-modal');

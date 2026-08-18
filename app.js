@@ -541,13 +541,13 @@ async function initLiveCmsSync() {
     try {
         const { data: features } = await sb.from('features').select('*').eq('status', 'active').order('display_order');
         if (features && features.length > 0) {
-            const fGrid = document.querySelector('.features-grid, .why-features-grid');
+            const fGrid = document.querySelector('.why-grid, .features-grid, .why-features-grid');
             if (fGrid) {
                 fGrid.innerHTML = features.map(f => `
-                    <div class="feature-card scroll-reveal visible">
-                        <div class="feature-icon"><i class="${f.icon_class || 'fa-solid fa-star'}"></i></div>
-                        <h3>${f.title}</h3>
-                        <p>${f.description || ''}</p>
+                    <div class="why-card scroll-reveal visible">
+                        <div class="why-icon"><i class="${f.icon_class || 'fa-solid fa-star'}"></i></div>
+                        <h3 class="why-title">${f.title}</h3>
+                        <p class="why-desc">${f.description || ''}</p>
                     </div>
                 `).join('');
             }

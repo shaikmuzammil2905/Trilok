@@ -110,6 +110,12 @@ ul { list-style: none; }
   margin-bottom: 32px;
   justify-content: center;
 }
+.admin-brand-logo {
+  height: 48px;
+  width: auto;
+  max-width: 220px;
+  object-fit: contain;
+}
 .login-logo img { width: 44px; height: 44px; filter: drop-shadow(0 0 10px rgba(0, 242, 254, 0.7)) brightness(1.15); }
 .login-logo-text { line-height: 1; }
 .login-logo-text .l-title { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 800; color: #ffffff !important; letter-spacing: 2px; display: block; text-shadow: 0 0 10px rgba(255, 255, 255, 0.3); }

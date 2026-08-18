@@ -257,10 +257,26 @@ button {
 }
 
 .logo-header-img {
-    height: 42px;
+    height: 44px;
     width: auto;
+    max-width: 220px;
     object-fit: contain;
     display: block;
+    transition: transform var(--transition-fast);
+}
+
+.logo-header-img:hover,
+.logo-footer-img:hover {
+    transform: scale(1.03);
+}
+
+.logo-footer-img {
+    height: 48px;
+    width: auto;
+    max-width: 250px;
+    object-fit: contain;
+    display: block;
+    transition: transform var(--transition-fast);
 }
 
 .logo-box {
@@ -1615,6 +1631,11 @@ button {
 
     .logo-header-img {
         height: 36px;
+        max-width: 180px;
+    }
+    .logo-footer-img {
+        height: 42px;
+        max-width: 200px;
     }
 
     .hero-section {
@@ -1663,6 +1684,11 @@ button {
 
     .logo-header-img {
         height: 32px;
+        max-width: 160px;
+    }
+    .logo-footer-img {
+        height: 38px;
+        max-width: 180px;
     }
 
     .nav-actions .btn {

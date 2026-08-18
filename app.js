@@ -537,6 +537,23 @@ async function initLiveCmsSync() {
         }
     } catch(e) {}
 
+    // 5.5 Features Section
+    try {
+        const { data: features } = await sb.from('features').select('*').eq('status', 'active').order('display_order');
+        if (features && features.length > 0) {
+            const fGrid = document.querySelector('.features-grid, .why-features-grid');
+            if (fGrid) {
+                fGrid.innerHTML = features.map(f => `
+                    <div class="feature-card scroll-reveal visible">
+                        <div class="feature-icon"><i class="${f.icon_class || 'fa-solid fa-star'}"></i></div>
+                        <h3>${f.title}</h3>
+                        <p>${f.description || ''}</p>
+                    </div>
+                `).join('');
+            }
+        }
+    } catch(e) {}
+
     // 6. View Our Work / Projects Section
     try {
         const { data: projects } = await sb.from('projects').select('*').eq('status', 'active').order('display_order');

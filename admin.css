@@ -194,10 +194,10 @@ ul { list-style: none; }
 .sidebar-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  z-index: 199;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  z-index: 300;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.28s ease;
@@ -226,7 +226,7 @@ ul { list-style: none; }
   flex-direction: column;
   position: fixed;
   left: 0; top: 0; bottom: 0;
-  z-index: 200;
+  z-index: 400;
   transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), width 0.25s ease;
   overflow: hidden;
 }
@@ -334,22 +334,35 @@ ul { list-style: none; }
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
-  padding: 0 24px;
-  gap: 16px;
+  padding: 0 16px;
+  gap: 12px;
   position: sticky;
-  top: 0; z-index: 50;
+  top: 0; z-index: 100;
 }
 .header-toggle {
-  background: none;
-  border: 1px solid var(--border);
-  color: var(--text-secondary);
-  width: 36px; height: 36px;
-  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  border: 1px solid var(--border-accent);
+  color: #FFFFFF !important;
+  width: 44px; height: 44px;
+  min-width: 44px; min-height: 44px;
+  border-radius: var(--radius-md);
   display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
   transition: var(--transition);
   flex-shrink: 0;
+  cursor: pointer;
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 110;
+  box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
 }
-.header-toggle:hover { background: var(--bg-card); color: var(--text-primary); }
+.header-toggle:hover,
+.header-toggle:active {
+  background: var(--accent-glow);
+  color: var(--cyan) !important;
+  border-color: var(--cyan);
+  box-shadow: 0 0 16px rgba(0, 242, 254, 0.5);
+}
 
 .header-search {
   flex: 1;
@@ -1151,7 +1164,7 @@ table.admin-table {
   .admin-sidebar {
     transform: translateX(-100%) !important;
     width: 285px !important;
-    z-index: 200;
+    z-index: 400 !important;
     box-shadow: 4px 0 30px rgba(0,0,0,0.6);
     transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
   }

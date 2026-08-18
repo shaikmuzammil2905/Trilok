@@ -81,19 +81,38 @@ function initUIListeners() {
     document.body.style.overflow = '';
   };
 
-  if (toggleBtn) toggleBtn.addEventListener('click', window.toggleAdminSidebar);
-  if (closeBtn) closeBtn.addEventListener('click', window.closeAdminSidebar);
-  if (overlay) overlay.addEventListener('click', window.closeAdminSidebar);
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', window.toggleAdminSidebar);
+    toggleBtn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      window.toggleAdminSidebar(e);
+    }, { passive: false });
+  }
+  if (closeBtn) {
+    closeBtn.addEventListener('click', window.closeAdminSidebar);
+    closeBtn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      window.closeAdminSidebar();
+    }, { passive: false });
+  }
+  if (overlay) {
+    overlay.addEventListener('click', window.closeAdminSidebar);
+    overlay.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      window.closeAdminSidebar();
+    }, { passive: false });
+  }
 
-  // Sidebar navigation click handlers
+  // Sidebar navigation click & touch handlers
   document.querySelectorAll('.sidebar-nav .nav-item').forEach(item => {
-    item.addEventListener('click', () => {
+    const handleNavSelect = (e) => {
       const page = item.getAttribute('data-page');
       if (page) {
         navigateTo(page);
-        closeSidebar();
+        window.closeAdminSidebar();
       }
-    });
+    };
+    item.addEventListener('click', handleNavSelect);
   });
 }
 
@@ -207,9 +226,28 @@ async function executeLogout() {
 }
 
 // ============================================================
-// PAGE NAVIGATION CONTROLLER
+// PAGE NAVIGATION CONTROLLER & HISTORY STACK
 // ============================================================
-function navigateTo(pageId) {
+let adminPageHistory = [];
+
+function navigateTo(pageId, pushHistory = true) {
+  if (!pageId) return;
+
+  // Don't duplicate if already on the same page
+  if (pageId === currentPage) {
+    if (typeof window.closeAdminSidebar === 'function') {
+      window.closeAdminSidebar();
+    }
+    return;
+  }
+
+  // Push previous page to history stack
+  if (pushHistory && currentPage) {
+    if (adminPageHistory[adminPageHistory.length - 1] !== currentPage) {
+      adminPageHistory.push(currentPage);
+    }
+  }
+
   currentPage = pageId;
   document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
   document.querySelectorAll('.sidebar-nav .nav-item').forEach(item => {
@@ -242,18 +280,31 @@ function navigateTo(pageId) {
     titleEl.textContent = titles[pageId] || 'Admin Dashboard';
   }
 
-  // Auto-close mobile sidebar drawer and restore scroll
-  const sidebar = document.getElementById('admin-sidebar');
-  const overlay = document.getElementById('sidebar-overlay');
-  if (sidebar) {
-    sidebar.classList.remove('open');
-    sidebar.classList.remove('mobile-open');
+  // Auto-close mobile sidebar drawer
+  if (typeof window.closeAdminSidebar === 'function') {
+    window.closeAdminSidebar();
+  } else {
+    const sidebar = document.getElementById('admin-sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    if (sidebar) {
+      sidebar.classList.remove('open');
+      sidebar.classList.remove('mobile-open');
+    }
+    if (overlay) overlay.classList.remove('open');
+    document.body.style.overflow = '';
   }
-  if (overlay) overlay.classList.remove('open');
-  document.body.style.overflow = '';
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+window.navigateBackAdmin = function() {
+  if (adminPageHistory.length > 0) {
+    const prevPage = adminPageHistory.pop();
+    navigateTo(prevPage, false);
+  } else {
+    navigateTo('dashboard', false);
+  }
+};
 
 // ============================================================
 // CMS DATA LOADER & STATISTICS

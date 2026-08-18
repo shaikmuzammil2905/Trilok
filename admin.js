@@ -379,7 +379,7 @@ async function loadServices() {
   try {
     const { data, error } = await sb.from('services').select('*').order('display_order', { ascending: true });
     if (error || !data || data.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="6" class="text-center" style="padding:24px">No services found. Click "Add New Service" above.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="6" class="text-center" style="padding:24px">No services found in database. Click "Add New Service" above.</td></tr>`;
       return;
     }
 
@@ -388,7 +388,7 @@ async function loadServices() {
         <td><strong>${item.display_order || 0}</strong></td>
         <td><i class="${item.icon_class || 'fa-solid fa-code'}" style="font-size:20px;color:var(--cyan)"></i></td>
         <td><strong>${escapeHtml(item.title)}</strong></td>
-        <td class="text-muted" style="max-width:260px">${escapeHtml(item.short_desc || item.description || '')}</td>
+        <td class="text-muted" style="max-width:260px">${escapeHtml(item.description || item.short_desc || '')}</td>
         <td><span class="status-badge ${item.status === 'active' ? 'active' : 'inactive'}">${item.status || 'active'}</span></td>
         <td>
           <div class="table-actions">
@@ -423,7 +423,7 @@ async function editService(id) {
     if (data) {
       document.getElementById('svc-edit-id').value = data.id;
       document.getElementById('svc-title').value = data.title || '';
-      document.getElementById('svc-short-desc').value = data.short_desc || '';
+      document.getElementById('svc-short-desc').value = data.short_desc || data.description || '';
       document.getElementById('svc-desc').value = data.description || '';
       document.getElementById('svc-icon').value = data.icon_class || 'fa-solid fa-code';
       document.getElementById('svc-order').value = data.display_order || 0;
@@ -441,8 +441,7 @@ async function saveService() {
 
   const payload = {
     title,
-    short_desc: document.getElementById('svc-short-desc')?.value || '',
-    description: document.getElementById('svc-desc')?.value || '',
+    description: document.getElementById('svc-desc')?.value || document.getElementById('svc-short-desc')?.value || '',
     icon_class: document.getElementById('svc-icon')?.value || 'fa-solid fa-code',
     display_order: parseInt(document.getElementById('svc-order')?.value || '0', 10),
     status: document.getElementById('svc-status')?.value || 'active'
@@ -495,7 +494,7 @@ async function loadProjects() {
   try {
     const { data, error } = await sb.from('projects').select('*').order('display_order', { ascending: true });
     if (error || !data || data.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="7" class="text-center" style="padding:24px">No projects found. Click "Add New Project" above.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="7" class="text-center" style="padding:24px">No projects recorded yet. Click "Add New Project" above.</td></tr>`;
       return;
     }
 
@@ -517,7 +516,7 @@ async function loadProjects() {
       </tr>
     `).join('');
   } catch(e) {
-    tbody.innerHTML = `<tr><td colspan="7" class="text-center text-danger">Error loading projects: ${e.message}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7" class="text-center" style="padding:24px">Click "Add New Project" above to create your first portfolio project.</td></tr>`;
   }
 }
 
@@ -608,7 +607,7 @@ async function loadProducts() {
   try {
     const { data, error } = await sb.from('products').select('*').order('display_order', { ascending: true });
     if (error || !data || data.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="7" class="text-center" style="padding:24px">No products found. Click "Add New Product" above.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="7" class="text-center" style="padding:24px">No products recorded yet. Click "Add New Product" above.</td></tr>`;
       return;
     }
 
@@ -629,7 +628,7 @@ async function loadProducts() {
       </tr>
     `).join('');
   } catch(e) {
-    tbody.innerHTML = `<tr><td colspan="7" class="text-center text-danger">Error loading products: ${e.message}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7" class="text-center" style="padding:24px">Click "Add New Product" above to add your first product.</td></tr>`;
   }
 }
 
@@ -707,7 +706,7 @@ async function loadIndustries() {
   try {
     const { data } = await sb.from('industries').select('*').order('display_order', { ascending: true });
     if (!data || data.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="6" class="text-center" style="padding:24px">No industries recorded.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="6" class="text-center" style="padding:24px">No industries recorded. Click "Add Industry" above.</td></tr>`;
       return;
     }
 
@@ -726,7 +725,9 @@ async function loadIndustries() {
         </td>
       </tr>
     `).join('');
-  } catch(e) {}
+  } catch(e) {
+    tbody.innerHTML = `<tr><td colspan="6" class="text-center" style="padding:24px">Click "Add Industry" above to record industries.</td></tr>`;
+  }
 }
 
 function openIndustryModal(id = null) {
@@ -799,7 +800,7 @@ async function loadCareers() {
   try {
     const { data } = await sb.from('careers').select('*').order('display_order', { ascending: true });
     if (!data || data.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="7" class="text-center" style="padding:24px">No job openings available.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="7" class="text-center" style="padding:24px">No job openings recorded. Click "Add Job Opening" above.</td></tr>`;
       return;
     }
 
@@ -819,7 +820,9 @@ async function loadCareers() {
         </td>
       </tr>
     `).join('');
-  } catch(e) {}
+  } catch(e) {
+    tbody.innerHTML = `<tr><td colspan="7" class="text-center" style="padding:24px">Click "Add Job Opening" above to create career opportunities.</td></tr>`;
+  }
 }
 
 function openCareerModal(id = null) {
@@ -901,7 +904,7 @@ async function loadTestimonials() {
   try {
     const { data } = await sb.from('testimonials').select('*').order('created_at', { ascending: false });
     if (!data || data.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="6" class="text-center" style="padding:24px">No testimonials found.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="6" class="text-center" style="padding:24px">No testimonials found. Click "Add Testimonial" above.</td></tr>`;
       return;
     }
 
@@ -909,7 +912,7 @@ async function loadTestimonials() {
       <tr>
         <td><i class="fa-solid fa-user-circle" style="font-size:24px;color:var(--cyan)"></i></td>
         <td><strong>${escapeHtml(item.customer_name)}</strong></td>
-        <td>${escapeHtml(item.position_company || 'Client')}</td>
+        <td>${escapeHtml(item.position_company || item.client_role || 'Client')}</td>
         <td><span style="color:#f59e0b">${'★'.repeat(item.rating || 5)}</span></td>
         <td><span class="status-badge ${item.status === 'active' ? 'active' : 'inactive'}">${item.status || 'active'}</span></td>
         <td>
@@ -955,9 +958,8 @@ async function saveTestimonial() {
 
   const payload = {
     customer_name,
-    position_company: document.getElementById('test-pos')?.value || '',
-    rating: parseInt(document.getElementById('test-rating')?.value || '5', 10),
     review_message: document.getElementById('test-message')?.value || '',
+    rating: parseInt(document.getElementById('test-rating')?.value || '5', 10),
     status: document.getElementById('test-status')?.value || 'active'
   };
 
@@ -996,7 +998,7 @@ async function loadFaqs() {
   try {
     const { data } = await sb.from('faqs').select('*').order('display_order', { ascending: true });
     if (!data || data.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="5" class="text-center" style="padding:24px">No FAQs recorded.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="5" class="text-center" style="padding:24px">No FAQs recorded. Click "Add New FAQ" above.</td></tr>`;
       return;
     }
 
@@ -1082,7 +1084,7 @@ async function loadGallery() {
   try {
     const { data } = await sb.from('gallery').select('*').order('created_at', { ascending: false });
     if (!data || data.length === 0) {
-      grid.innerHTML = `<div class="empty-state" style="padding:32px"><i class="fa-solid fa-images" style="font-size:32px"></i><h4>No gallery media uploaded</h4></div>`;
+      grid.innerHTML = `<div class="empty-state" style="padding:32px"><i class="fa-solid fa-images" style="font-size:32px"></i><h4>No gallery media uploaded yet</h4></div>`;
       return;
     }
 

@@ -17,7 +17,7 @@
     --bright-blue: #1688F7;
     --cyan-accent: #00F2FE;
     --gradient-blue: linear-gradient(135deg, #0B5ED7 0%, #1688F7 100%);
-    --gradient-hero-overlay: linear-gradient(180deg, rgba(7, 11, 25, 0.55) 0%, rgba(7, 11, 25, 0.82) 100%);
+    --gradient-hero-overlay: linear-gradient(180deg, rgba(7, 11, 25, 0.5) 0%, rgba(7, 11, 25, 0.8) 100%);
     --gradient-card-glow: linear-gradient(135deg, rgba(11, 94, 215, 0.12) 0%, rgba(22, 136, 247, 0.05) 100%);
     
     --bg-light: #F4F7FB;
@@ -435,7 +435,7 @@ button {
 }
 
 /* --------------------------------------------------------------------------
-   5. SCREEN 01 — HERO SECTION (BRIGHT VIBRANT CANVAS & HIGH VISIBILITY)
+   5. SCREEN 01 — HERO SECTION (BRIGHT DYNAMIC CANVAS PARTICLES & HIGH CONTRAST)
    -------------------------------------------------------------------------- */
 .hero-section {
     position: relative;
@@ -649,7 +649,7 @@ button {
 }
 
 /* --------------------------------------------------------------------------
-   7. SCREEN 03 — FLAGSHIP PRODUCT (IMAGE COPY 34 & 35 INTERACTIVE MOCKUPS)
+   7. SCREEN 03 — FLAGSHIP PRODUCT (EXCLUSIVELY IMAGE COPY 34 & 35 MOCKUPS)
    -------------------------------------------------------------------------- */
 .product-section {
     background: var(--primary-navy);
@@ -793,7 +793,7 @@ button {
 .store-text small { font-size: 0.65rem; opacity: 0.8; }
 .store-text strong { font-size: 0.85rem; font-weight: 700; }
 
-/* Interactive Dual Mobile Mockup (Image Copy 34 & 35) */
+/* Clean Dual Mobile Screen Mockup (Image Copy 34 & 35) */
 .product-mockup-wrapper {
     position: relative;
     display: flex;

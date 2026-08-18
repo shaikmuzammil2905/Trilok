@@ -199,6 +199,7 @@ function navigateTo(pageId) {
       hero: 'Hero Section Management',
       about: 'About Us Management',
       services: 'Services Management',
+      features: 'Key Features & Highlights',
       projects: 'View Our Work (Projects)',
       products: 'Products Management',
       industries: 'Industries We Serve',
@@ -224,6 +225,7 @@ async function loadAllCmsData() {
     loadHeroSettings(),
     loadAboutSettings(),
     loadServices(),
+    loadFeatures(),
     loadProjects(),
     loadProducts(),
     loadIndustries(),
@@ -241,7 +243,7 @@ async function loadDashboardStats() {
   if (!sb) return;
   try {
     const counts = {};
-    const tables = ['services', 'projects', 'products', 'industries', 'careers', 'testimonials', 'faqs', 'gallery', 'contact_requests'];
+    const tables = ['services', 'features', 'projects', 'products', 'industries', 'careers', 'testimonials', 'faqs', 'gallery', 'contact_requests'];
     
     for (const tbl of tables) {
       try {
@@ -252,6 +254,7 @@ async function loadDashboardStats() {
 
     const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
     setVal('stat-services', counts['services'] || 0);
+    setVal('stat-features', counts['features'] || 0);
     setVal('stat-projects', counts['projects'] || 0);
     setVal('stat-products', counts['products'] || 0);
     setVal('stat-industries', counts['industries'] || 0);
@@ -480,6 +483,120 @@ async function toggleServiceStatus(id, currentStatus) {
     await sb.from('services').update({ status: newStatus }).eq('id', id);
     showToast(`Service set to ${newStatus}`, 'info');
     await loadServices();
+  } catch(e) {}
+}
+
+// ============================================================
+// FEATURES CMS MANAGEMENT
+// ============================================================
+async function loadFeatures() {
+  if (!sb) return;
+  const tbody = document.getElementById('features-tbody');
+  if (!tbody) return;
+  tbody.innerHTML = `<tr><td colspan="6" class="text-center" style="padding:20px"><i class="fa-solid fa-spinner fa-spin"></i> Loading features...</td></tr>`;
+
+  try {
+    const { data, error } = await sb.from('features').select('*').order('display_order', { ascending: true });
+    if (error || !data || data.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="6" class="text-center" style="padding:24px">No features found in database. Click "Add New Feature" above.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = data.map(item => `
+      <tr>
+        <td><strong>${item.display_order || 0}</strong></td>
+        <td><i class="${item.icon_class || 'fa-solid fa-star'}" style="font-size:20px;color:var(--cyan)"></i></td>
+        <td><strong>${escapeHtml(item.title)}</strong></td>
+        <td class="text-muted" style="max-width:300px">${escapeHtml(item.description || '')}</td>
+        <td><span class="status-badge ${item.status === 'active' ? 'active' : 'inactive'}">${item.status || 'active'}</span></td>
+        <td>
+          <div class="table-actions">
+            <button class="action-btn edit" onclick="editFeature('${item.id}')" title="Edit"><i class="fa-solid fa-pen"></i></button>
+            <button class="action-btn toggle" onclick="toggleFeatureStatus('${item.id}', '${item.status}')" title="Toggle Status"><i class="fa-solid fa-eye"></i></button>
+            <button class="action-btn delete" onclick="confirmDeleteFeature('${item.id}')" title="Delete"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  } catch(e) {
+    tbody.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Error loading features: ${e.message}</td></tr>`;
+  }
+}
+
+function openFeatureModal(id = null) {
+  document.getElementById('feature-edit-id').value = id || '';
+  document.getElementById('feature-title').value = '';
+  document.getElementById('feature-desc').value = '';
+  document.getElementById('feature-icon').value = 'fa-solid fa-star';
+  document.getElementById('feature-order').value = '0';
+  document.getElementById('feature-status').value = 'active';
+
+  document.getElementById('feature-modal-title').textContent = id ? 'Edit Feature' : 'Add Key Feature';
+  openModal('feature-modal');
+}
+
+async function editFeature(id) {
+  try {
+    const { data } = await sb.from('features').select('*').eq('id', id).single();
+    if (data) {
+      document.getElementById('feature-edit-id').value = data.id;
+      document.getElementById('feature-title').value = data.title || '';
+      document.getElementById('feature-desc').value = data.description || '';
+      document.getElementById('feature-icon').value = data.icon_class || 'fa-solid fa-star';
+      document.getElementById('feature-order').value = data.display_order || 0;
+      document.getElementById('feature-status').value = data.status || 'active';
+      document.getElementById('feature-modal-title').textContent = 'Edit Feature';
+      openModal('feature-modal');
+    }
+  } catch(e) {}
+}
+
+async function saveFeature() {
+  const id = document.getElementById('feature-edit-id')?.value;
+  const title = document.getElementById('feature-title')?.value.trim();
+  if (!title) { showToast('Feature Title is required', 'error'); return; }
+
+  const payload = {
+    title,
+    description: document.getElementById('feature-desc')?.value || '',
+    icon_class: document.getElementById('feature-icon')?.value || 'fa-solid fa-star',
+    display_order: parseInt(document.getElementById('feature-order')?.value || '0', 10),
+    status: document.getElementById('feature-status')?.value || 'active'
+  };
+
+  try {
+    if (id) {
+      await sb.from('features').update(payload).eq('id', id);
+      showToast('Feature updated successfully', 'success');
+    } else {
+      await sb.from('features').insert([payload]);
+      showToast('New feature added successfully', 'success');
+    }
+    closeModal('feature-modal');
+    await loadFeatures();
+    await loadDashboardStats();
+  } catch(e) {
+    showToast('Error saving feature: ' + e.message, 'error');
+  }
+}
+
+function confirmDeleteFeature(id) {
+  showConfirm('Delete Feature?', 'Are you sure you want to delete this feature highlight?', async () => {
+    try {
+      await sb.from('features').delete().eq('id', id);
+      showToast('Feature deleted successfully', 'success');
+      await loadFeatures();
+      await loadDashboardStats();
+    } catch(e) { showToast('Delete failed: ' + e.message, 'error'); }
+  });
+}
+
+async function toggleFeatureStatus(id, currentStatus) {
+  const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+  try {
+    await sb.from('features').update({ status: newStatus }).eq('id', id);
+    showToast(`Feature set to ${newStatus}`, 'info');
+    await loadFeatures();
   } catch(e) {}
 }
 

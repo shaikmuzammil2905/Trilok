@@ -106,35 +106,22 @@ ul { list-style: none; }
 .login-logo {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 32px;
+  margin-bottom: 28px;
   justify-content: center;
 }
-.admin-brand-logo {
-  height: 48px;
+.admin-login-brand-logo {
+  height: 54px;
   width: auto;
-  max-width: 220px;
+  max-width: 280px;
   object-fit: contain;
+  filter: drop-shadow(0 0 14px rgba(0, 242, 254, 0.4));
 }
-.logo-card-bg {
-  background: #FFFFFF;
-  padding: 6px 14px;
-  border-radius: 10px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
-}
-.admin-login-icon {
-  width: 56px;
-  height: 56px;
-  background: #FFFFFF;
-  border-radius: 14px;
-  padding: 8px;
+.admin-sidebar-brand-logo {
+  height: 40px;
+  width: auto;
+  max-width: 200px;
   object-fit: contain;
-  box-shadow: 0 0 24px rgba(0, 242, 254, 0.7), 0 4px 14px rgba(0, 0, 0, 0.25);
-}
-.login-logo img {
-  width: 56px;
-  height: 56px;
-  object-fit: contain;
+  filter: drop-shadow(0 0 10px rgba(0, 242, 254, 0.3));
 }
 .login-logo-text { line-height: 1; }
 .login-logo-text .l-title { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 800; color: #ffffff !important; letter-spacing: 2px; display: block; text-shadow: 0 0 10px rgba(255, 255, 255, 0.3); }

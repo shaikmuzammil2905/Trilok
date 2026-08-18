@@ -23,7 +23,7 @@
 <div id="login-page">
   <div class="login-card">
     <div class="login-logo">
-      <img src="trilok-logo-icon.png" alt="Trilok Infotech Logo" class="admin-login-icon">
+      <img src="image copy 40.png" alt="Trilok Infotech Logo" class="admin-login-brand-logo">
     </div>
     <h2>Trilok Infotech Admin</h2>
     <p class="login-sub">Sign in with your admin account to manage CMS content</p>
@@ -70,7 +70,7 @@
   <!-- ====== SIDEBAR NAVIGATION ====== -->
   <aside class="admin-sidebar" id="admin-sidebar">
     <div class="sidebar-logo">
-      <img src="trilok-logo-light.png" alt="Trilok Infotech Logo" class="sidebar-brand-logo">
+      <img src="image copy 40.png" alt="Trilok Infotech Logo" class="admin-sidebar-brand-logo">
       <button class="sidebar-close-btn" id="sidebar-close-btn" aria-label="Close sidebar"><i class="fa-solid fa-xmark"></i></button>
     </div>
 
@@ -91,6 +91,9 @@
       </div>
       <div class="nav-item" data-page="services">
         <i class="fa-solid fa-gears"></i><span>Services</span>
+      </div>
+      <div class="nav-item" data-page="features">
+        <i class="fa-solid fa-star"></i><span>Key Features</span>
       </div>
       <div class="nav-item" data-page="projects">
         <i class="fa-solid fa-briefcase"></i><span>View Our Work</span>
@@ -192,6 +195,10 @@
             <div class="stat-icon blue"><i class="fa-solid fa-gears"></i></div>
             <div class="stat-info"><div class="stat-value" id="stat-services">–</div><div class="stat-label">Total Services</div></div>
           </div>
+          <div class="stat-card" onclick="navigateTo('features')">
+            <div class="stat-icon yellow"><i class="fa-solid fa-star"></i></div>
+            <div class="stat-info"><div class="stat-value" id="stat-features">–</div><div class="stat-label">Key Features</div></div>
+          </div>
           <div class="stat-card" onclick="navigateTo('projects')">
             <div class="stat-icon purple"><i class="fa-solid fa-briefcase"></i></div>
             <div class="stat-info"><div class="stat-value" id="stat-projects">–</div><div class="stat-label">Total Projects</div></div>
@@ -233,12 +240,12 @@
             <div class="quick-actions">
               <div class="quick-action" onclick="navigateTo('hero')"><i class="fa-solid fa-house-laptop"></i><span>Hero Banner</span></div>
               <div class="quick-action" onclick="openServiceModal()"><i class="fa-solid fa-plus"></i><span>Add Service</span></div>
+              <div class="quick-action" onclick="openFeatureModal()"><i class="fa-solid fa-plus"></i><span>Add Feature</span></div>
               <div class="quick-action" onclick="openProjectModal()"><i class="fa-solid fa-plus"></i><span>Add Project</span></div>
               <div class="quick-action" onclick="openProductModal()"><i class="fa-solid fa-plus"></i><span>Add Product</span></div>
               <div class="quick-action" onclick="openTestimonialModal()"><i class="fa-solid fa-plus"></i><span>Add Review</span></div>
               <div class="quick-action" onclick="navigateTo('gallery')"><i class="fa-solid fa-upload"></i><span>Media Library</span></div>
               <div class="quick-action" onclick="navigateTo('contacts')"><i class="fa-solid fa-inbox"></i><span>View Leads</span></div>
-              <div class="quick-action" onclick="navigateTo('settings')"><i class="fa-solid fa-sliders"></i><span>Settings</span></div>
             </div>
           </div>
 
@@ -400,7 +407,31 @@
         </div>
       </section>
 
-      <!-- 5. VIEW OUR WORK / PROJECTS CMS -->
+      <!-- 5. FEATURES CMS -->
+      <section class="page-section" id="page-features">
+        <div class="page-header">
+          <div class="page-header-left"><h1>Key Features & Highlights</h1><p>Manage key website features, highlights and value propositions</p></div>
+          <div class="page-header-actions">
+            <button class="btn btn-primary" onclick="openFeatureModal()"><i class="fa-solid fa-plus"></i> Add New Feature</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header" style="flex-wrap:wrap;gap:12px;">
+            <div class="card-title">All Features</div>
+            <div class="filter-bar" style="margin:0;">
+              <div class="filter-search"><i class="fa-solid fa-search"></i><input type="text" placeholder="Search features..." oninput="filterTable('features-tbody', this.value)"></div>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="admin-table">
+              <thead><tr><th>Order</th><th>Icon</th><th>Title</th><th>Description</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="features-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. VIEW OUR WORK / PROJECTS CMS -->
       <section class="page-section" id="page-projects">
         <div class="page-header">
           <div class="page-header-left"><h1>View Our Work (Projects) Management</h1><p>Manage website and application portfolio projects</p></div>
@@ -424,7 +455,7 @@
         </div>
       </section>
 
-      <!-- 6. PRODUCTS CMS -->
+      <!-- 7. PRODUCTS CMS -->
       <section class="page-section" id="page-products">
         <div class="page-header">
           <div class="page-header-left"><h1>Products Management</h1><p>Manage flagship software products and SaaS tools</p></div>
@@ -448,7 +479,7 @@
         </div>
       </section>
 
-      <!-- 7. INDUSTRIES CMS -->
+      <!-- 8. INDUSTRIES CMS -->
       <section class="page-section" id="page-industries">
         <div class="page-header">
           <div class="page-header-left"><h1>Industries We Serve</h1><p>Manage industry categories and descriptions</p></div>
@@ -467,7 +498,7 @@
         </div>
       </section>
 
-      <!-- 8. CAREERS CMS -->
+      <!-- 9. CAREERS CMS -->
       <section class="page-section" id="page-careers">
         <div class="page-header">
           <div class="page-header-left"><h1>Careers & Job Openings</h1><p>Manage open technical positions and career opportunities</p></div>
@@ -486,7 +517,7 @@
         </div>
       </section>
 
-      <!-- 9. TESTIMONIALS CMS -->
+      <!-- 10. TESTIMONIALS CMS -->
       <section class="page-section" id="page-testimonials">
         <div class="page-header">
           <div class="page-header-left"><h1>Testimonials Management</h1><p>Manage client reviews and star ratings</p></div>
@@ -505,7 +536,7 @@
         </div>
       </section>
 
-      <!-- 10. FAQS CMS -->
+      <!-- 11. FAQS CMS -->
       <section class="page-section" id="page-faqs">
         <div class="page-header">
           <div class="page-header-left"><h1>FAQs Management</h1><p>Manage frequently asked questions and answers</p></div>
@@ -524,7 +555,7 @@
         </div>
       </section>
 
-      <!-- 11. GALLERY CMS -->
+      <!-- 12. GALLERY CMS -->
       <section class="page-section" id="page-gallery">
         <div class="page-header">
           <div class="page-header-left"><h1>Gallery & Media Library</h1><p>Upload, manage and preview website images</p></div>
@@ -543,7 +574,7 @@
         </div>
       </section>
 
-      <!-- 12. CONTACT REQUESTS CMS -->
+      <!-- 13. CONTACT REQUESTS CMS -->
       <section class="page-section" id="page-contacts">
         <div class="page-header">
           <div class="page-header-left"><h1>Contact Requests & Leads</h1><p>View and manage website contact submissions</p></div>
@@ -567,7 +598,7 @@
         </div>
       </section>
 
-      <!-- 13. WEBSITE SETTINGS -->
+      <!-- 14. WEBSITE SETTINGS -->
       <section class="page-section" id="page-settings">
         <div class="page-header">
           <div class="page-header-left"><h1>Website Settings</h1><p>Manage company details, contact info, social links and footer text</p></div>
@@ -601,52 +632,49 @@
         </div>
       </section>
 
-      <!-- 14. SEO SETTINGS -->
+      <!-- 15. SEO SETTINGS -->
       <section class="page-section" id="page-seo">
         <div class="page-header">
-          <div class="page-header-left"><h1>SEO Management</h1><p>Search engine titles, meta descriptions, keywords and social tags</p></div>
+          <div class="page-header-left"><h1>SEO Settings</h1><p>Optimize meta titles, descriptions and social share metadata</p></div>
           <div class="page-header-actions">
             <button class="btn btn-primary" onclick="saveSeoSettings()"><i class="fa-solid fa-save"></i> Save SEO Settings</button>
           </div>
         </div>
-        <div class="grid-2">
-          <div class="card">
-            <div class="card-header"><div class="card-title">Search Engine Meta Tags</div></div>
-            <div class="form-group"><label>Meta Title</label><input type="text" class="form-control" id="seo-title" maxlength="60"></div>
-            <div class="form-group"><label>Meta Description</label><textarea class="form-control" id="seo-desc" rows="3" maxlength="160"></textarea></div>
-            <div class="form-group"><label>Keywords (comma separated)</label><textarea class="form-control" id="seo-keywords" rows="3"></textarea></div>
-          </div>
-          <div class="card">
-            <div class="card-header"><div class="card-title">Social Sharing (Open Graph)</div></div>
-            <div class="form-group"><label>OG Title</label><input type="text" class="form-control" id="seo-og-title"></div>
-            <div class="form-group"><label>OG Description</label><textarea class="form-control" id="seo-og-desc" rows="3"></textarea></div>
+        <div class="card">
+          <div class="form-group"><label>Meta Page Title</label><input type="text" class="form-control" id="seo-title" placeholder="Trilok Infotech Private Limited | Digital Solutions"></div>
+          <div class="form-group"><label>Meta Description</label><textarea class="form-control" id="seo-desc" rows="3" placeholder="Description for search engines..."></textarea></div>
+          <div class="form-group"><label>SEO Keywords (comma separated)</label><input type="text" class="form-control" id="seo-keywords" placeholder="software, cybersecurity, web apps..."></div>
+          <div class="form-row">
+            <div class="form-group"><label>OG Social Share Title</label><input type="text" class="form-control" id="seo-og-title"></div>
+            <div class="form-group"><label>OG Social Share Description</label><input type="text" class="form-control" id="seo-og-desc"></div>
           </div>
         </div>
       </section>
 
-      <!-- 15. ADMIN PROFILE -->
+      <!-- 16. ADMIN PROFILE -->
       <section class="page-section" id="page-profile">
         <div class="page-header">
-          <div class="page-header-left"><h1>Admin Profile</h1><p>Manage account information and security credentials</p></div>
+          <div class="page-header-left"><h1>Admin Profile</h1><p>Manage your account info and security password</p></div>
         </div>
         <div class="grid-2">
           <div class="card">
             <div class="card-header"><div class="card-title">Profile Info</div></div>
+            <div class="form-group"><label>Account Email</label><input type="email" class="form-control" id="profile-email" readonly disabled></div>
             <div class="form-group"><label>Full Name</label><input type="text" class="form-control" id="profile-name" placeholder="Admin User"></div>
-            <div class="form-group"><label>Email Address</label><input type="email" class="form-control" id="profile-email" readonly style="opacity:0.75"></div>
-            <button class="btn btn-primary" onclick="saveProfile()"><i class="fa-solid fa-save"></i> Update Profile</button>
+            <button class="btn btn-primary" onclick="saveProfile()"><i class="fa-solid fa-user-check"></i> Update Profile</button>
           </div>
           <div class="card">
-            <div class="card-header"><div class="card-title">Change Password</div></div>
-            <div class="form-group"><label>New Password</label><input type="password" class="form-control" id="new-password" placeholder="Min 6 characters"></div>
-            <div class="form-group"><label>Confirm New Password</label><input type="password" class="form-control" id="confirm-password" placeholder="Repeat new password"></div>
-            <button class="btn btn-secondary" onclick="changePassword()"><i class="fa-solid fa-key"></i> Update Password</button>
+            <div class="card-header"><div class="card-title">Security Password</div></div>
+            <div class="form-group"><label>New Password</label><input type="password" class="form-control" id="new-password" placeholder="At least 6 characters"></div>
+            <div class="form-group"><label>Confirm New Password</label><input type="password" class="form-control" id="confirm-password" placeholder="Confirm password"></div>
+            <button class="btn btn-primary" onclick="changePassword()"><i class="fa-solid fa-key"></i> Update Password</button>
           </div>
         </div>
       </section>
 
     </div><!-- /admin-content -->
   </div><!-- /admin-main -->
+
 </div><!-- /admin-layout -->
 
 <!-- ============================================================
@@ -669,6 +697,24 @@
       <div class="form-group"><label>Status</label><select class="form-control" id="svc-status"><option value="active">Active</option><option value="inactive">Inactive</option></select></div>
     </div>
     <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal('service-modal')">Cancel</button><button class="btn btn-primary" onclick="saveService()">Save Service</button></div>
+  </div>
+</div>
+
+<!-- FEATURE MODAL -->
+<div class="modal-backdrop" id="feature-modal">
+  <div class="modal-box">
+    <div class="modal-header"><h3 id="feature-modal-title">Add Key Feature</h3><button class="modal-close-btn" onclick="closeModal('feature-modal')"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="modal-body">
+      <input type="hidden" id="feature-edit-id" value="">
+      <div class="form-group"><label>Feature Title *</label><input type="text" class="form-control" id="feature-title" placeholder="e.g. High Performance & Scalability"></div>
+      <div class="form-group"><label>Description *</label><textarea class="form-control" id="feature-desc" rows="3" placeholder="Feature summary..."></textarea></div>
+      <div class="form-row">
+        <div class="form-group"><label>Icon Class (FontAwesome)</label><input type="text" class="form-control" id="feature-icon" placeholder="fa-solid fa-bolt"></div>
+        <div class="form-group"><label>Display Order</label><input type="number" class="form-control" id="feature-order" value="0"></div>
+      </div>
+      <div class="form-group"><label>Status</label><select class="form-control" id="feature-status"><option value="active">Active</option><option value="inactive">Inactive</option></select></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal('feature-modal')">Cancel</button><button class="btn btn-primary" onclick="saveFeature()">Save Feature</button></div>
   </div>
 </div>
 

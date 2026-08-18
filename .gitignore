@@ -7,5 +7,9 @@ node_modules/
 .vscode/
 .idea/
 
-# Backups
-backup_checkpoint/
+# Environment Variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local

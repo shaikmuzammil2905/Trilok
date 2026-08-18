@@ -1,10 +1,13 @@
 /**
  * TRILOK INFOTECH PRIVATE LIMITED — INTERACTIVE JAVASCRIPT ENGINE
- * Handles navbar scroll, mobile drawer navigation, portfolio tab filtering,
- * statistics counters, testimonial carousel slider, modals, and WhatsApp inquiry.
+ * Handles animated hero canvas particles, scroll reveals, navbar scroll,
+ * mobile drawer navigation, portfolio tab filtering, statistics counters,
+ * testimonial carousel slider, modals, and WhatsApp inquiry.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+    initHeroCanvas();
+    initScrollReveal();
     initNavbarScroll();
     initMobileDrawer();
     initStatsCounters();
@@ -15,7 +18,114 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ==========================================================================
-   1. NAVBAR SCROLL EFFECT & ACTIVE STATE
+   1. HERO ANIMATED DYNAMIC CANVAS PARTICLES & NETWORK
+   ========================================================================== */
+function initHeroCanvas() {
+    const canvas = document.getElementById('hero-canvas');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = canvas.parentElement.clientHeight || window.innerHeight);
+
+    window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = canvas.parentElement.clientHeight || window.innerHeight;
+    });
+
+    const particles = [];
+    const particleCount = Math.min(Math.floor(width / 15), 60);
+
+    class Particle {
+        constructor() {
+            this.reset();
+        }
+
+        reset() {
+            this.x = Math.random() * width;
+            this.y = Math.random() * height;
+            this.vx = (Math.random() - 0.5) * 0.9;
+            this.vy = (Math.random() - 0.5) * 0.9;
+            this.radius = Math.random() * 2.5 + 1;
+            this.alpha = Math.random() * 0.7 + 0.3;
+            this.color = Math.random() > 0.4 ? '#00f2fe' : '#1688f7';
+        }
+
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
+
+            if (this.x < 0 || this.x > width) this.vx *= -1;
+            if (this.y < 0 || this.y > height) this.vy *= -1;
+        }
+
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            ctx.globalAlpha = this.alpha;
+            ctx.shadowBlur = 12;
+            ctx.shadowColor = this.color;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+            ctx.globalAlpha = 1;
+        }
+    }
+
+    for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle());
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, width, height);
+
+        for (let i = 0; i < particles.length; i++) {
+            particles[i].update();
+            particles[i].draw();
+
+            for (let j = i + 1; j < particles.length; j++) {
+                const dx = particles[i].x - particles[j].x;
+                const dy = particles[i].y - particles[j].y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                if (dist < 130) {
+                    ctx.beginPath();
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
+                    ctx.strokeStyle = '#00f2fe';
+                    ctx.globalAlpha = (1 - dist / 130) * 0.35;
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                    ctx.globalAlpha = 1;
+                }
+            }
+        }
+        requestAnimationFrame(animate);
+    }
+
+    animate();
+}
+
+/* ==========================================================================
+   2. SCROLL REVEAL ANIMATIONS
+   ========================================================================== */
+function initScrollReveal() {
+    const reveals = document.querySelectorAll('.scroll-reveal');
+    if (reveals.length === 0) return;
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.15 });
+
+    reveals.forEach(el => observer.observe(el));
+}
+
+/* ==========================================================================
+   3. NAVBAR SCROLL EFFECT & ACTIVE STATE
    ========================================================================== */
 function initNavbarScroll() {
     const navbar = document.getElementById('navbar');
@@ -31,7 +141,7 @@ function initNavbarScroll() {
 }
 
 /* ==========================================================================
-   2. MOBILE DRAWER NAVIGATION
+   4. MOBILE DRAWER NAVIGATION
    ========================================================================== */
 function initMobileDrawer() {
     const toggleBtn = document.getElementById('mobile-toggle');
@@ -64,7 +174,7 @@ function initMobileDrawer() {
 }
 
 /* ==========================================================================
-   3. STATISTICS COUNTER ANIMATION
+   5. STATISTICS COUNTER ANIMATION
    ========================================================================== */
 function initStatsCounters() {
     const counters = document.querySelectorAll('.counter-num');
@@ -106,7 +216,7 @@ function initStatsCounters() {
 }
 
 /* ==========================================================================
-   4. PORTFOLIO TAB FILTERING
+   6. PORTFOLIO TAB FILTERING
    ========================================================================== */
 function initPortfolioFilters() {
     const filterBtns = document.querySelectorAll('.filter-btn');
@@ -137,7 +247,7 @@ function initPortfolioFilters() {
 }
 
 /* ==========================================================================
-   5. CLIENT TESTIMONIALS CAROUSEL SLIDER
+   7. CLIENT TESTIMONIALS CAROUSEL SLIDER
    ========================================================================== */
 function initTestimonialCarousel() {
     const quoteEl = document.getElementById('t-quote');
@@ -196,7 +306,7 @@ function initTestimonialCarousel() {
 }
 
 /* ==========================================================================
-   6. MODAL POPUP & INQUIRY FORM (WHATSAPP INTEGRATION)
+   8. MODAL POPUP & INQUIRY FORM (WHATSAPP INTEGRATION)
    ========================================================================== */
 function initModalSystem() {
     const contactModal = document.getElementById('contact-modal');
@@ -261,7 +371,7 @@ function initModalSystem() {
 }
 
 /* ==========================================================================
-   7. SERVICE DETAIL POPUP MODAL
+   9. SERVICE DETAIL POPUP MODAL
    ========================================================================== */
 function initServiceModals() {
     const serviceModal = document.getElementById('service-modal');

@@ -90,11 +90,12 @@
 
     <!-- MAIN CONTENT -->
     <main>
-        <!-- SCREEN 01 — HERO SECTION -->
+        <!-- SCREEN 01 — HERO SECTION (DYNAMIC CANVAS & CLEAR TEXT) -->
         <section id="home" class="hero-section">
+            <canvas id="hero-canvas"></canvas>
             <div class="hero-overlay"></div>
             <div class="container hero-container">
-                <div class="hero-content">
+                <div class="hero-content scroll-reveal">
                     <div class="hero-badge">
                         <i class="fa-solid fa-shield-halved"></i> TRILOK INFOTECH
                     </div>
@@ -124,7 +125,7 @@
                 </div>
 
                 <!-- Statistics Counter Bar -->
-                <div class="stats-counter-bar">
+                <div class="stats-counter-bar scroll-reveal">
                     <div class="stat-item">
                         <div class="stat-number"><span class="counter-num" data-target="100">0</span>+</div>
                         <div class="stat-label">Projects</div>
@@ -144,14 +145,14 @@
         <!-- SCREEN 02 — OUR SERVICES -->
         <section id="services" class="section services-section">
             <div class="container">
-                <div class="section-header text-center">
+                <div class="section-header text-center scroll-reveal">
                     <h2 class="main-title">Our Services</h2>
                     <p class="section-subtitle">End-to-end digital solutions for your business growth.</p>
                 </div>
 
                 <div class="services-grid">
                     <!-- Service 1 -->
-                    <div class="service-card">
+                    <div class="service-card scroll-reveal">
                         <div class="service-icon-box">
                             <i class="fa-solid fa-globe"></i>
                         </div>
@@ -163,7 +164,7 @@
                     </div>
 
                     <!-- Service 2 -->
-                    <div class="service-card">
+                    <div class="service-card scroll-reveal">
                         <div class="service-icon-box">
                             <i class="fa-solid fa-mobile-screen-button"></i>
                         </div>
@@ -175,7 +176,7 @@
                     </div>
 
                     <!-- Service 3 -->
-                    <div class="service-card">
+                    <div class="service-card scroll-reveal">
                         <div class="service-icon-box">
                             <i class="fa-solid fa-code"></i>
                         </div>
@@ -187,7 +188,7 @@
                     </div>
 
                     <!-- Service 4 -->
-                    <div class="service-card">
+                    <div class="service-card scroll-reveal">
                         <div class="service-icon-box">
                             <i class="fa-solid fa-bullhorn"></i>
                         </div>
@@ -199,7 +200,7 @@
                     </div>
 
                     <!-- Service 5 -->
-                    <div class="service-card">
+                    <div class="service-card scroll-reveal">
                         <div class="service-icon-box">
                             <i class="fa-solid fa-cloud"></i>
                         </div>
@@ -213,71 +214,59 @@
             </div>
         </section>
 
-        <!-- SCREEN 03 — FLAGSHIP PRODUCT SECTION (MEET ESALEAGREEMENT) -->
+        <!-- SCREEN 03 — FLAGSHIP PRODUCT SECTION (MEET ESALEAGREEMENT - RESTORED DUAL FLOATING PHONES) -->
         <section id="products" class="section product-section">
             <div class="container">
-                <div class="product-showcase-card">
+                <div class="product-banner-card scroll-reveal">
                     <!-- Left Content -->
-                    <div class="product-info-col">
-                        <span class="product-badge-pill">FLAGSHIP PRODUCT</span>
-                        <h2 class="product-main-title">
-                            Meet <span class="brand-esa">eSaleAgreement</span>
-                        </h2>
-                        <h3 class="product-main-subtitle">India's Digital Agreement & Verification Platform</h3>
-                        <p class="product-highlight-tags">Verify • Create • Sign • Secure</p>
-
-                        <!-- 4 Step Process Grid -->
-                        <div class="product-steps-grid">
-                            <div class="product-step-item">
-                                <div class="step-num">1</div>
-                                <div class="step-info">
-                                    <h4>Verify Parties</h4>
-                                    <p>Aadhaar eKYC & identity checks</p>
-                                </div>
+                    <div class="product-content">
+                        <div class="product-header-top">
+                            <span class="product-badge-tag">OUR FLAGSHIP PRODUCT</span>
+                            <div class="esa-official-logo-box">
+                                <img src="image copy 9.png" alt="eSaleAgreement Logo" class="esa-header-logo-png">
+                                <h2 class="product-title"><span class="title-esale">eSale</span><span class="title-agreement">Agreement</span></h2>
                             </div>
+                            <h3 class="product-subtitle">India's Trusted Digital Agreement Platform</h3>
+                        </div>
+                        <p class="product-desc">
+                            Create secure, legally valid and tamper-proof sale agreements in minutes with advanced verification and audit capabilities.
+                        </p>
 
-                            <div class="product-step-item">
-                                <div class="step-num">2</div>
-                                <div class="step-info">
-                                    <h4>Create Agreement</h4>
-                                    <p>Use smart templates</p>
-                                </div>
+                        <!-- FEATURE PILLS / ICONS GRID -->
+                        <div class="product-features-grid">
+                            <div class="feature-pill-box">
+                                <div class="pill-icon"><i class="fa-solid fa-id-card"></i></div>
+                                <span>Aadhaar eKYC</span>
                             </div>
-
-                            <div class="product-step-item">
-                                <div class="step-num">3</div>
-                                <div class="step-info">
-                                    <h4>eSign</h4>
-                                    <p>Legally compliant eSignature</p>
-                                </div>
+                            <div class="feature-pill-box">
+                                <div class="pill-icon"><i class="fa-solid fa-signature"></i></div>
+                                <span>Aadhaar eSign</span>
                             </div>
-
-                            <div class="product-step-item">
-                                <div class="step-num">4</div>
-                                <div class="step-info">
-                                    <h4>Secure Record</h4>
-                                    <p>Safe & tamper-evident storage</p>
-                                </div>
+                            <div class="feature-pill-box">
+                                <div class="pill-icon"><i class="fa-solid fa-mobile-screen-button"></i></div>
+                                <span>OTP Verification</span>
+                            </div>
+                            <div class="feature-pill-box">
+                                <div class="pill-icon"><i class="fa-solid fa-qrcode"></i></div>
+                                <span>QR Verification</span>
+                            </div>
+                            <div class="feature-pill-box">
+                                <div class="pill-icon"><i class="fa-solid fa-box-archive"></i></div>
+                                <span>Audit Trails</span>
+                            </div>
+                            <div class="feature-pill-box">
+                                <div class="pill-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                                <span>Cloud Storage</span>
                             </div>
                         </div>
 
-                        <!-- Feature Pills -->
-                        <div class="product-feature-pills">
-                            <span class="feat-pill"><i class="fa-solid fa-id-card"></i> Aadhaar eKYC</span>
-                            <span class="feat-pill"><i class="fa-solid fa-file-signature"></i> Aadhaar eSign</span>
-                            <span class="feat-pill"><i class="fa-solid fa-mobile-screen"></i> OTP Verification</span>
-                            <span class="feat-pill"><i class="fa-solid fa-qrcode"></i> QR Verification</span>
-                            <span class="feat-pill"><i class="fa-solid fa-box-archive"></i> Audit Trails</span>
-                            <span class="feat-pill"><i class="fa-solid fa-cloud-arrow-up"></i> Cloud Storage</span>
-                        </div>
-
-                        <!-- Actions & Store Links -->
-                        <div class="product-actions">
-                            <a href="https://esaleagreement.com/" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
-                                Explore eSaleAgreement <i class="fa-solid fa-arrow-right"></i>
+                        <div class="product-cta">
+                            <a href="https://esaleagreement.com/" target="_blank" rel="noopener noreferrer" class="btn btn-gradient-product">
+                                Visit eSaleAgreement <i class="fa-solid fa-arrow-right"></i>
                             </a>
-
-                            <div class="store-buttons">
+                            
+                            <!-- STORE BUTTONS -->
+                            <div class="store-buttons-wrap">
                                 <a href="https://play.google.com" target="_blank" rel="noopener noreferrer" class="store-btn">
                                     <i class="fa-brands fa-google-play"></i>
                                     <div class="store-text">
@@ -296,30 +285,72 @@
                         </div>
                     </div>
 
-                    <!-- Right Phone Mockup Visual -->
-                    <div class="product-mockup-col">
-                        <div class="phone-mockup-wrapper">
-                            <div class="phone-frame">
-                                <div class="phone-notch"></div>
-                                <div class="phone-screen">
-                                    <div class="phone-header-app">
+                    <!-- DUAL MOBILE MOCKUP DISPLAY WITH ANIMATED FLOATING PHONES -->
+                    <div class="product-mockup-wrapper">
+                        <div class="phones-container">
+                            <div class="phones-glow-aura"></div>
+
+                            <!-- PHONE 1 (FRONT / LEFT PHONE) -->
+                            <div class="mobile-mockup phone-front-hd">
+                                <div class="phone-notch-hd"></div>
+                                <div class="phone-screen-hd">
+                                    <div class="app-header-hd">
+                                        <span style="font-size:0.75rem;"><i class="fa-solid fa-chevron-left"></i></span>
                                         <img src="image copy 9.png" alt="eSaleAgreement Logo" class="esa-micro-logo">
-                                        <div>
-                                            <h5>eSaleAgreement</h5>
-                                            <span class="phone-status-badge"><i class="fa-solid fa-circle-check"></i> Verified Platform</span>
+                                        <div class="app-title-hd">
+                                            <strong>eSaleAgreement</strong>
+                                            <small>Secure Every Sale, Digitally</small>
                                         </div>
                                     </div>
 
-                                    <div class="phone-card-preview">
-                                        <img src="image copy 26.png" alt="Digital Agreement Handshake" class="phone-img">
-                                        <h6 style="font-weight:700; font-size:0.9rem; margin-bottom:4px;">Digital Sale Agreement</h6>
-                                        <p style="font-size:0.75rem; color:#64748B;">Legally valid & tamper-evident agreement document preview.</p>
+                                    <div class="handshake-hd-card">
+                                        <img src="image copy 26.png" alt="Handshake & Shield" class="handshake-hd-photo">
+                                        <div class="phone-inner-content">
+                                            <h4 class="phone-content-title">Digital Agreement Platform</h4>
+                                            <p class="phone-content-desc">Create secure, legally valid and tamper-proof sale agreements in minutes.</p>
+                                        </div>
+                                        <div class="verified-badge-anim">
+                                            <i class="fa-solid fa-circle-check"></i> Signed & Verified
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- PHONE 2 (BACK / RIGHT PHONE) -->
+                            <div class="mobile-mockup phone-back-hd">
+                                <div class="phone-notch-hd"></div>
+                                <div class="phone-screen-hd">
+                                    <div class="phone-top-bar-hd">
+                                        <i class="fa-solid fa-chevron-left"></i>
+                                        <span>Create Agreement</span>
                                     </div>
 
-                                    <div style="background:#F4F7FB; border-radius:12px; padding:10px 14px; font-size:0.78rem; display:flex; justify-content:space-between; align-items:center;">
-                                        <span><i class="fa-solid fa-lock text-blue"></i> Encrypted Storage</span>
-                                        <span style="color:#0B5ED7; font-weight:700;">Completed <i class="fa-solid fa-check"></i></span>
+                                    <div class="phone-tabs-hd">
+                                        <span class="tab-hd active">Owner Details</span>
+                                        <span class="tab-hd">Seller Details</span>
                                     </div>
+
+                                    <div class="phone-steps-hd">
+                                        <div class="step-card-hd">
+                                            <span><i class="fa-solid fa-id-card text-blue"></i> Aadhaar eKYC</span>
+                                            <span class="status-pill green">Verified <i class="fa-solid fa-check"></i></span>
+                                        </div>
+                                        <div class="step-card-hd">
+                                            <span><i class="fa-solid fa-file-signature text-blue"></i> Aadhaar eSign</span>
+                                            <span class="status-pill green">Completed <i class="fa-solid fa-check"></i></span>
+                                        </div>
+                                        <div class="step-card-hd">
+                                            <span><i class="fa-solid fa-mobile-screen text-blue"></i> OTP Verification</span>
+                                            <span class="status-pill green">Verified <i class="fa-solid fa-check"></i></span>
+                                        </div>
+                                        <div class="step-card-hd">
+                                            <span><i class="fa-solid fa-qrcode text-blue"></i> QR Verification</span>
+                                            <span class="status-pill green">Completed <i class="fa-solid fa-check"></i></span>
+                                        </div>
+                                    </div>
+
+                                    <button class="phone-btn-action">Generate Agreement</button>
+                                    <div class="phone-security-info"><i class="fa-solid fa-lock text-green"></i> Secure & Encrypted</div>
                                 </div>
                             </div>
                         </div>
@@ -331,13 +362,13 @@
         <!-- SCREEN 04 — WHY BUSINESSES CHOOSE TRILOK -->
         <section id="about" class="section why-section">
             <div class="container">
-                <div class="section-header text-center">
+                <div class="section-header text-center scroll-reveal">
                     <h2 class="main-title">Why Businesses Choose Trilok</h2>
                     <p class="section-subtitle">Your success is our priority.</p>
                 </div>
 
                 <div class="why-grid">
-                    <div class="why-card">
+                    <div class="why-card scroll-reveal">
                         <div class="why-icon">
                             <i class="fa-solid fa-indian-rupee-sign"></i>
                         </div>
@@ -345,7 +376,7 @@
                         <p class="why-desc">No hidden costs.</p>
                     </div>
 
-                    <div class="why-card">
+                    <div class="why-card scroll-reveal">
                         <div class="why-icon">
                             <i class="fa-solid fa-microchip"></i>
                         </div>
@@ -353,7 +384,7 @@
                         <p class="why-desc">Scalable & future ready.</p>
                     </div>
 
-                    <div class="why-card">
+                    <div class="why-card scroll-reveal">
                         <div class="why-icon">
                             <i class="fa-solid fa-bullseye"></i>
                         </div>
@@ -361,7 +392,7 @@
                         <p class="why-desc">Solutions built around you.</p>
                     </div>
 
-                    <div class="why-card">
+                    <div class="why-card scroll-reveal">
                         <div class="why-icon">
                             <i class="fa-solid fa-clock"></i>
                         </div>
@@ -369,7 +400,7 @@
                         <p class="why-desc">Commitment we keep.</p>
                     </div>
 
-                    <div class="why-card">
+                    <div class="why-card scroll-reveal">
                         <div class="why-icon">
                             <i class="fa-solid fa-headset"></i>
                         </div>
@@ -383,13 +414,13 @@
         <!-- SCREEN 05 — PRICING SECTION -->
         <section class="section pricing-section">
             <div class="container">
-                <div class="section-header text-center">
+                <div class="section-header text-center scroll-reveal">
                     <h2 class="main-title">Simple & Transparent Pricing</h2>
                     <p class="section-subtitle">Quality solutions for every stage of your business.</p>
                 </div>
 
                 <div class="pricing-grid">
-                    <div class="pricing-card">
+                    <div class="pricing-card scroll-reveal">
                         <div class="pricing-icon">
                             <i class="fa-solid fa-globe"></i>
                         </div>
@@ -398,7 +429,7 @@
                         <p class="text-muted" style="font-size:0.85rem;">Custom business websites & web apps.</p>
                     </div>
 
-                    <div class="pricing-card">
+                    <div class="pricing-card scroll-reveal">
                         <div class="pricing-icon">
                             <i class="fa-solid fa-mobile-screen-button"></i>
                         </div>
@@ -407,7 +438,7 @@
                         <p class="text-muted" style="font-size:0.85rem;">Android & iOS mobile solutions.</p>
                     </div>
 
-                    <div class="pricing-card">
+                    <div class="pricing-card scroll-reveal">
                         <div class="pricing-icon">
                             <i class="fa-solid fa-code"></i>
                         </div>
@@ -416,7 +447,7 @@
                         <p class="text-muted" style="font-size:0.85rem;">Enterprise automation & SaaS platforms.</p>
                     </div>
 
-                    <div class="pricing-card featured">
+                    <div class="pricing-card featured scroll-reveal">
                         <div class="pricing-icon">
                             <i class="fa-solid fa-file-signature"></i>
                         </div>
@@ -426,7 +457,7 @@
                     </div>
                 </div>
 
-                <div class="pricing-btn-container">
+                <div class="pricing-btn-container scroll-reveal">
                     <button class="btn btn-primary open-modal-btn" data-subject="Pricing Consultation Inquiry">
                         Get Free Consultation <i class="fa-solid fa-arrow-right"></i>
                     </button>
@@ -437,13 +468,13 @@
         <!-- SCREEN 06 — OUR RECENT WORK / PORTFOLIO -->
         <section class="section portfolio-section">
             <div class="container">
-                <div class="section-header text-center">
+                <div class="section-header text-center scroll-reveal">
                     <h2 class="main-title">Our Recent Work</h2>
                     <p class="section-subtitle">Real projects. Real results.</p>
                 </div>
 
                 <!-- Filter Tabs -->
-                <div class="portfolio-filter-bar">
+                <div class="portfolio-filter-bar scroll-reveal">
                     <button class="filter-btn active" data-filter="all">All</button>
                     <button class="filter-btn" data-filter="Websites">Websites</button>
                     <button class="filter-btn" data-filter="Apps">Apps</button>
@@ -453,7 +484,7 @@
                 <!-- Projects Grid -->
                 <div class="portfolio-grid" id="portfolio-grid">
                     <!-- Project 1: Flagship eSaleAgreement -->
-                    <div class="project-card" data-category="Apps Software">
+                    <div class="project-card scroll-reveal" data-category="Apps Software">
                         <div class="project-card-header">
                             <span class="project-badge">FLAGSHIP PRODUCT</span>
                             <i class="fa-solid fa-file-contract text-blue" style="font-size:1.4rem;"></i>
@@ -469,7 +500,7 @@
                     </div>
 
                     <!-- Project 2: Rockers Entertainers -->
-                    <div class="project-card" data-category="Websites">
+                    <div class="project-card scroll-reveal" data-category="Websites">
                         <div class="project-card-header">
                             <span class="project-badge">MEDIA & EVENTS</span>
                             <i class="fa-solid fa-masks-theater text-blue" style="font-size:1.4rem;"></i>
@@ -485,7 +516,7 @@
                     </div>
 
                     <!-- Project 3: Zenesix Pharmaceuticals -->
-                    <div class="project-card" data-category="Websites">
+                    <div class="project-card scroll-reveal" data-category="Websites">
                         <div class="project-card-header">
                             <span class="project-badge">HEALTHCARE</span>
                             <i class="fa-solid fa-capsules text-blue" style="font-size:1.4rem;"></i>
@@ -501,7 +532,7 @@
                     </div>
 
                     <!-- Project 4: Shees Steel Doors -->
-                    <div class="project-card" data-category="Websites">
+                    <div class="project-card scroll-reveal" data-category="Websites">
                         <div class="project-card-header">
                             <span class="project-badge">INDUSTRIAL</span>
                             <i class="fa-solid fa-door-closed text-blue" style="font-size:1.4rem;"></i>
@@ -517,7 +548,7 @@
                     </div>
 
                     <!-- Project 5: Alma's Indian Cuisine -->
-                    <div class="project-card" data-category="Websites">
+                    <div class="project-card scroll-reveal" data-category="Websites">
                         <div class="project-card-header">
                             <span class="project-badge">E-COMMERCE</span>
                             <i class="fa-solid fa-utensils text-blue" style="font-size:1.4rem;"></i>
@@ -533,7 +564,7 @@
                     </div>
 
                     <!-- Project 6: IT Bees Global -->
-                    <div class="project-card" data-category="Software Apps">
+                    <div class="project-card scroll-reveal" data-category="Software Apps">
                         <div class="project-card-header">
                             <span class="project-badge">SOFTWARE</span>
                             <i class="fa-solid fa-laptop-code text-blue" style="font-size:1.4rem;"></i>
@@ -554,11 +585,11 @@
         <!-- SCREEN 07 — TECHNOLOGIES SECTION -->
         <section class="section tech-section">
             <div class="container">
-                <div class="section-header text-center">
+                <div class="section-header text-center scroll-reveal">
                     <h2 class="main-title">Technologies We Work With</h2>
                 </div>
 
-                <div class="tech-grid">
+                <div class="tech-grid scroll-reveal">
                     <div class="tech-card">
                         <i class="fa-brands fa-react" style="color:#61DAFB;"></i>
                         <span>React</span>
@@ -591,7 +622,7 @@
                 </div>
 
                 <!-- Highlighted Banner Card -->
-                <div class="tech-highlight-card">
+                <div class="tech-highlight-card scroll-reveal">
                     <div class="tech-highlight-info">
                         <h3>Modern Technology. Better Solutions.</h3>
                         <p>We use the best tools to build scalable, secure and high-performance solutions for your business.</p>
@@ -606,38 +637,38 @@
         <!-- SCREEN 08 — INDUSTRIES WE SERVE -->
         <section id="industries" class="section industries-section">
             <div class="container">
-                <div class="section-header text-center">
+                <div class="section-header text-center scroll-reveal">
                     <h2 class="main-title">Industries We Serve</h2>
                     <p class="section-subtitle">Solutions for every business.</p>
                 </div>
 
                 <div class="industries-grid">
-                    <div class="industry-card">
+                    <div class="industry-card scroll-reveal">
                         <i class="fa-solid fa-cart-shopping"></i>
                         <h4>Retail & E-commerce</h4>
                     </div>
 
-                    <div class="industry-card">
+                    <div class="industry-card scroll-reveal">
                         <i class="fa-solid fa-graduation-cap"></i>
                         <h4>Education & EdTech</h4>
                     </div>
 
-                    <div class="industry-card">
+                    <div class="industry-card scroll-reveal">
                         <i class="fa-solid fa-heart-pulse"></i>
                         <h4>Healthcare & HealthTech</h4>
                     </div>
 
-                    <div class="industry-card">
+                    <div class="industry-card scroll-reveal">
                         <i class="fa-solid fa-landmark"></i>
                         <h4>Finance & FinTech</h4>
                     </div>
 
-                    <div class="industry-card">
+                    <div class="industry-card scroll-reveal">
                         <i class="fa-solid fa-industry"></i>
                         <h4>Manufacturing & Logistics</h4>
                     </div>
 
-                    <div class="industry-card">
+                    <div class="industry-card scroll-reveal">
                         <i class="fa-solid fa-rocket"></i>
                         <h4>Startups & SMEs</h4>
                     </div>
@@ -648,27 +679,27 @@
         <!-- CAREERS INFORMATIONAL SECTION -->
         <section id="careers" class="section" style="background:#FFFFFF;">
             <div class="container">
-                <div class="section-header text-center">
+                <div class="section-header text-center scroll-reveal">
                     <h2 class="main-title">Join Our Innovative Team</h2>
                     <p class="section-subtitle">We are always looking for passionate engineers and digital specialists.</p>
                 </div>
 
                 <div class="services-grid">
-                    <div class="service-card">
+                    <div class="service-card scroll-reveal">
                         <span class="project-badge" style="width:max-content; margin-bottom:12px;">Full Time</span>
                         <h3 class="service-title">Senior Full Stack Developer</h3>
                         <p class="service-desc"><i class="fa-solid fa-location-dot text-blue"></i> Hyderabad, India (Hybrid)<br>React, Node.js, Cloud Architectures, and scalable microservices.</p>
                         <button class="btn btn-primary open-modal-btn" data-subject="Career Application: Senior Developer">Apply Now</button>
                     </div>
 
-                    <div class="service-card">
+                    <div class="service-card scroll-reveal">
                         <span class="project-badge" style="width:max-content; margin-bottom:12px;">Full Time</span>
                         <h3 class="service-title">Cybersecurity Analyst</h3>
                         <p class="service-desc"><i class="fa-solid fa-location-dot text-blue"></i> Hyderabad, India (On-site)<br>VAPT experience, web & network security assessment.</p>
                         <button class="btn btn-primary open-modal-btn" data-subject="Career Application: Cybersecurity Analyst">Apply Now</button>
                     </div>
 
-                    <div class="service-card">
+                    <div class="service-card scroll-reveal">
                         <span class="project-badge" style="width:max-content; margin-bottom:12px;">Full Time</span>
                         <h3 class="service-title">Cloud & DevOps Engineer</h3>
                         <p class="service-desc"><i class="fa-solid fa-location-dot text-blue"></i> Hyderabad, India (Hybrid)<br>AWS certification, Kubernetes, Docker, CI/CD automation.</p>
@@ -681,13 +712,13 @@
         <!-- SCREEN 09 — CLIENT TESTIMONIALS & CTA SECTION -->
         <section class="section testimonials-section">
             <div class="container">
-                <div class="section-header text-center">
+                <div class="section-header text-center scroll-reveal">
                     <h2 class="main-title">What Our Clients Say</h2>
                     <p class="section-subtitle">Their success is our best review.</p>
                 </div>
 
                 <!-- Testimonial Slider -->
-                <div class="testimonial-slider">
+                <div class="testimonial-slider scroll-reveal">
                     <div class="testimonial-card" id="testimonial-card">
                         <img src="trilok-logo-icon.png" alt="Client Logo" class="client-avatar" id="t-avatar">
                         <p class="client-quote" id="t-quote">
@@ -705,7 +736,7 @@
                 </div>
 
                 <!-- CTA Banner (Screen 09 Bottom) -->
-                <div class="cta-banner">
+                <div class="cta-banner scroll-reveal">
                     <h2>Have an Idea?<br>Let's Build It Together.</h2>
                     <p>Turn your ideas into powerful digital solutions.</p>
 

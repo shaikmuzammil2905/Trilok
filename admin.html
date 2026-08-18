@@ -28,12 +28,12 @@
     <h2>Welcome Back</h2>
     <p class="login-sub">Sign in to manage your website content</p>
     <div class="login-error" id="login-error"><i class="fa-solid fa-circle-exclamation"></i> <span id="login-error-msg">Invalid credentials.</span></div>
-    <form id="login-form" onsubmit="return false;">
+    <form id="login-form" onsubmit="executeAdminLogin(); return false;">
       <div class="login-form-group">
         <label>Email Address</label>
         <div class="login-input-wrap">
           <i class="fa-solid fa-envelope"></i>
-          <input type="email" id="login-email" placeholder="admin@trilokinfotech.com" autocomplete="email" required>
+          <input type="email" id="login-email" value="admin@trilokinfotech.com" placeholder="admin@trilokinfotech.com" autocomplete="email" required>
         </div>
       </div>
       <div class="login-form-group">
@@ -41,10 +41,10 @@
         <div class="login-input-wrap">
           <i class="fa-solid fa-lock"></i>
           <input type="password" id="login-password" placeholder="Enter your password" autocomplete="current-password" required>
-          <i class="fa-solid fa-eye eye-toggle" id="pwd-eye"></i>
+          <i class="fa-solid fa-eye eye-toggle" id="pwd-eye" onclick="togglePasswordVisibility()"></i>
         </div>
       </div>
-      <button type="submit" class="btn-login" id="login-btn">
+      <button type="button" class="btn-login" id="login-btn" onclick="executeAdminLogin()">
         <span class="btn-text">Sign In</span>
         <span class="btn-spinner"></span>
       </button>

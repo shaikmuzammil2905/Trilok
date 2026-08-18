@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initTestimonialCarousel();
     initModalSystem();
     initServiceModals();
+    initLiveCmsSync();
 });
 
 /* ==========================================================================
@@ -412,4 +413,140 @@ function initServiceModals() {
             closeServiceModal();
         }
     });
+}
+
+/* ==========================================================================
+   LIVE SUPABASE CMS SYNC — REALTIME UPDATES FOR MAIN WEBSITE
+   ========================================================================== */
+async function initLiveCmsSync() {
+    const SUPABASE_URL = 'https://gotrpjxnrmocsrfxauyz.supabase.co';
+    const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdvdHJwanhucm1vY3NyZnhhdXl6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5MjI1MDgsImV4cCI6MjEwMTQ5ODUwOH0.h5FE6bQp6wp7DyQJaec-CT9pmhrlm1S42u4dWwKGOrU';
+    
+    let sb = null;
+    if (window.supabase) {
+        sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+    } else {
+        return;
+    }
+
+    // 1. Sync Website & Contact Information
+    try {
+        const { data: ws } = await sb.from('website_settings').select('*').limit(1).single();
+        if (ws) {
+            if (ws.contact_number) {
+                document.querySelectorAll('.footer-contact-info div:nth-child(2), .contact-phone-text').forEach(el => {
+                    el.innerHTML = `<i class="fa-solid fa-phone text-cyan"></i> ${ws.contact_number}`;
+                });
+            }
+            if (ws.email) {
+                document.querySelectorAll('.footer-contact-info div:nth-child(3), .contact-email-text').forEach(el => {
+                    el.innerHTML = `<i class="fa-solid fa-envelope text-cyan"></i> ${ws.email}`;
+                });
+            }
+            if (ws.address) {
+                document.querySelectorAll('.footer-contact-info div:nth-child(1), .contact-address-text').forEach(el => {
+                    el.innerHTML = `<i class="fa-solid fa-location-dot text-cyan"></i> ${ws.address}`;
+                });
+            }
+            if (ws.logo_url) {
+                document.querySelectorAll('.logo-header-img, .logo-footer-img').forEach(img => {
+                    img.src = ws.logo_url;
+                });
+            }
+        }
+    } catch(e) {}
+
+    // 2. Sync Hero Content
+    try {
+        const { data: hero } = await sb.from('hero_settings').select('*').limit(1).single();
+        if (hero) {
+            const hTitle = document.querySelector('.hero-title, .hero-heading');
+            if (hTitle && hero.heading) hTitle.innerHTML = hero.heading;
+            const hSub = document.querySelector('.hero-sub, .hero-subheading');
+            if (hSub && hero.subheading) hSub.innerHTML = hero.subheading;
+        }
+    } catch(e) {}
+
+    // 3. Sync Services Section
+    try {
+        const { data: services } = await sb.from('services').select('*').order('display_order');
+        if (services && services.length > 0) {
+            const sGrid = document.querySelector('.services-grid');
+            if (sGrid) {
+                sGrid.innerHTML = services.map(s => `
+                    <div class="service-card" data-service-id="${s.id}">
+                        <div class="service-icon-box">
+                            ${s.image_url ? `<img src="${s.image_url}" alt="${s.title}" style="width:36px;height:36px;object-fit:contain;">` : `<i class="${s.icon_class || 'fa-solid fa-laptop-code'}"></i>`}
+                        </div>
+                        <h3>${s.title}</h3>
+                        <p>${s.short_desc || s.description || ''}</p>
+                        <a href="detail.html?service=${s.id}" class="service-link">Learn More <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                `).join('');
+            }
+        }
+    } catch(e) {}
+
+    // 4. Sync Features / Products Section
+    try {
+        const { data: features } = await sb.from('features').select('*').order('display_order');
+        if (features && features.length > 0) {
+            const fGrid = document.querySelector('.features-grid, .products-grid');
+            if (fGrid) {
+                fGrid.innerHTML = features.map(f => `
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="${f.icon_class || 'fa-solid fa-star'}"></i></div>
+                        <h4>${f.title}</h4>
+                        <p>${f.description || ''}</p>
+                    </div>
+                `).join('');
+            }
+        }
+    } catch(e) {}
+
+    // 5. Sync Testimonials
+    try {
+        const { data: testimonials } = await sb.from('testimonials').select('*').order('created_at', { ascending: false });
+        if (testimonials && testimonials.length > 0) {
+            const tContainer = document.querySelector('.testimonial-cards-wrapper, .testimonials-grid');
+            if (tContainer) {
+                tContainer.innerHTML = testimonials.map(t => `
+                    <div class="testimonial-card">
+                        <div class="testimonial-stars">
+                            ${'★'.repeat(t.rating || 5)}${'☆'.repeat(5 - (t.rating || 5))}
+                        </div>
+                        <p class="testimonial-text">"${t.testimonial_text}"</p>
+                        <div class="testimonial-user">
+                            ${t.avatar_url ? `<img src="${t.avatar_url}" alt="${t.client_name}" class="client-avatar">` : `<div class="client-avatar-placeholder">${t.client_name ? t.client_name.charAt(0) : 'A'}</div>`}
+                            <div>
+                                <h5 class="user-name">${t.client_name}</h5>
+                                <span class="user-role">${t.client_role || ''} ${t.company ? 'at ' + t.company : ''}</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+    } catch(e) {}
+
+    // 6. Sync FAQs
+    try {
+        const { data: faqs } = await sb.from('faqs').select('*').order('display_order');
+        if (faqs && faqs.length > 0) {
+            const faqWrap = document.querySelector('.faq-accordion');
+            if (faqWrap) {
+                faqWrap.innerHTML = faqs.map(f => `
+                    <div class="faq-item">
+                        <div class="faq-header">
+                            <h4>${f.question}</h4>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-body">
+                            <p>${f.answer}</p>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+    } catch(e) {}
 }

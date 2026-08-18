@@ -90,7 +90,7 @@
 
     <!-- MAIN CONTENT -->
     <main>
-        <!-- SCREEN 01 — HERO SECTION (DYNAMIC CANVAS & CLEAR TEXT) -->
+        <!-- SCREEN 01 — HERO SECTION (BRIGHT ANIMATED DYNAMIC CANVAS & HIGH VISIBILITY) -->
         <section id="home" class="hero-section">
             <canvas id="hero-canvas"></canvas>
             <div class="hero-overlay"></div>
@@ -214,7 +214,7 @@
             </div>
         </section>
 
-        <!-- SCREEN 03 — FLAGSHIP PRODUCT SECTION (MEET ESALEAGREEMENT - RESTORED DUAL FLOATING PHONES) -->
+        <!-- SCREEN 03 — FLAGSHIP PRODUCT SECTION (IMAGE COPY 34 & 35 MOCKUPS WITH CLICK TO OPEN BACK SCREEN) -->
         <section id="products" class="section product-section">
             <div class="container">
                 <div class="product-banner-card scroll-reveal">
@@ -285,73 +285,23 @@
                         </div>
                     </div>
 
-                    <!-- DUAL MOBILE MOCKUP DISPLAY WITH ANIMATED FLOATING PHONES -->
+                    <!-- DUAL MOBILE MOCKUP DISPLAY (IMAGE COPY 34 & IMAGE COPY 35) -->
                     <div class="product-mockup-wrapper">
-                        <div class="phones-container">
+                        <div class="phones-container" id="phones-interactive-box">
                             <div class="phones-glow-aura"></div>
 
-                            <!-- PHONE 1 (FRONT / LEFT PHONE) -->
-                            <div class="mobile-mockup phone-front-hd">
-                                <div class="phone-notch-hd"></div>
-                                <div class="phone-screen-hd">
-                                    <div class="app-header-hd">
-                                        <span style="font-size:0.75rem;"><i class="fa-solid fa-chevron-left"></i></span>
-                                        <img src="image copy 9.png" alt="eSaleAgreement Logo" class="esa-micro-logo">
-                                        <div class="app-title-hd">
-                                            <strong>eSaleAgreement</strong>
-                                            <small>Secure Every Sale, Digitally</small>
-                                        </div>
-                                    </div>
-
-                                    <div class="handshake-hd-card">
-                                        <img src="image copy 26.png" alt="Handshake & Shield" class="handshake-hd-photo">
-                                        <div class="phone-inner-content">
-                                            <h4 class="phone-content-title">Digital Agreement Platform</h4>
-                                            <p class="phone-content-desc">Create secure, legally valid and tamper-proof sale agreements in minutes.</p>
-                                        </div>
-                                        <div class="verified-badge-anim">
-                                            <i class="fa-solid fa-circle-check"></i> Signed & Verified
-                                        </div>
-                                    </div>
-                                </div>
+                            <!-- PHONE 1 (FRONT SCREEN - IMAGE COPY 34.PNG) -->
+                            <div class="mobile-mockup phone-front-hd" id="phone-front">
+                                <img src="image copy 34.png" alt="eSaleAgreement Front Screen" class="phone-screen-img">
                             </div>
 
-                            <!-- PHONE 2 (BACK / RIGHT PHONE) -->
-                            <div class="mobile-mockup phone-back-hd">
-                                <div class="phone-notch-hd"></div>
-                                <div class="phone-screen-hd">
-                                    <div class="phone-top-bar-hd">
-                                        <i class="fa-solid fa-chevron-left"></i>
-                                        <span>Create Agreement</span>
-                                    </div>
+                            <!-- PHONE 2 (BACK SCREEN - IMAGE COPY 35.PNG) -->
+                            <div class="mobile-mockup phone-back-hd" id="phone-back">
+                                <img src="image copy 35.png" alt="eSaleAgreement Back Screen" class="phone-screen-img">
+                            </div>
 
-                                    <div class="phone-tabs-hd">
-                                        <span class="tab-hd active">Owner Details</span>
-                                        <span class="tab-hd">Seller Details</span>
-                                    </div>
-
-                                    <div class="phone-steps-hd">
-                                        <div class="step-card-hd">
-                                            <span><i class="fa-solid fa-id-card text-blue"></i> Aadhaar eKYC</span>
-                                            <span class="status-pill green">Verified <i class="fa-solid fa-check"></i></span>
-                                        </div>
-                                        <div class="step-card-hd">
-                                            <span><i class="fa-solid fa-file-signature text-blue"></i> Aadhaar eSign</span>
-                                            <span class="status-pill green">Completed <i class="fa-solid fa-check"></i></span>
-                                        </div>
-                                        <div class="step-card-hd">
-                                            <span><i class="fa-solid fa-mobile-screen text-blue"></i> OTP Verification</span>
-                                            <span class="status-pill green">Verified <i class="fa-solid fa-check"></i></span>
-                                        </div>
-                                        <div class="step-card-hd">
-                                            <span><i class="fa-solid fa-qrcode text-blue"></i> QR Verification</span>
-                                            <span class="status-pill green">Completed <i class="fa-solid fa-check"></i></span>
-                                        </div>
-                                    </div>
-
-                                    <button class="phone-btn-action">Generate Agreement</button>
-                                    <div class="phone-security-info"><i class="fa-solid fa-lock text-green"></i> Secure & Encrypted</div>
-                                </div>
+                            <div class="click-hint-badge">
+                                <i class="fa-solid fa-hand-pointer"></i> Click phone to switch front/back screen
                             </div>
                         </div>
                     </div>

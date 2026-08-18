@@ -17,7 +17,7 @@
     --bright-blue: #1688F7;
     --cyan-accent: #00F2FE;
     --gradient-blue: linear-gradient(135deg, #0B5ED7 0%, #1688F7 100%);
-    --gradient-hero-overlay: linear-gradient(180deg, rgba(7, 11, 25, 0.85) 0%, rgba(7, 11, 25, 0.96) 100%);
+    --gradient-hero-overlay: linear-gradient(180deg, rgba(7, 11, 25, 0.55) 0%, rgba(7, 11, 25, 0.82) 100%);
     --gradient-card-glow: linear-gradient(135deg, rgba(11, 94, 215, 0.12) 0%, rgba(22, 136, 247, 0.05) 100%);
     
     --bg-light: #F4F7FB;
@@ -49,7 +49,7 @@
     
     /* Transitions */
     --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -115,7 +115,7 @@ button {
 .text-white { color: var(--text-white); }
 
 .text-gradient-blue {
-    background: linear-gradient(135deg, #0B5ED7 0%, #00F2FE 100%);
+    background: linear-gradient(135deg, #00F2FE 0%, #1688F7 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -181,38 +181,38 @@ button {
 .btn-primary {
     background: var(--gradient-blue);
     color: var(--text-white);
-    box-shadow: 0 6px 20px rgba(11, 94, 215, 0.35);
+    box-shadow: 0 6px 20px rgba(11, 94, 215, 0.4);
 }
 
 .btn-primary:hover {
     transform: translateY(-3px);
-    box-shadow: 0 10px 28px rgba(11, 94, 215, 0.5);
-    background: linear-gradient(135deg, #094db2 0%, #0f75d8 100%);
+    box-shadow: 0 10px 28px rgba(11, 94, 215, 0.55);
+    background: linear-gradient(135deg, #094db2 0%, #00F2FE 100%);
 }
 
 .btn-outline-white {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.4);
     color: var(--text-white);
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(10px);
 }
 
 .btn-outline-white:hover {
-    background: rgba(255, 255, 255, 0.22);
-    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.28);
+    border-color: rgba(255, 255, 255, 0.6);
     transform: translateY(-3px);
 }
 
 .btn-whatsapp {
     background: #25D366;
     color: #FFFFFF;
-    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.3);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.35);
 }
 
 .btn-whatsapp:hover {
     background: #20bd5a;
     transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(37, 211, 102, 0.45);
+    box-shadow: 0 10px 25px rgba(37, 211, 102, 0.5);
 }
 
 .btn-full {
@@ -237,8 +237,8 @@ button {
     background: var(--navy-header);
     backdrop-filter: blur(16px);
     padding: 12px 0;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .nav-container {
@@ -297,7 +297,7 @@ button {
 .nav-link {
     font-size: 0.92rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.88);
+    color: rgba(255, 255, 255, 0.9);
     transition: var(--transition-fast);
     position: relative;
     padding: 6px 0;
@@ -339,9 +339,9 @@ button {
     height: 44px;
     align-items: center;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.15);
     border-radius: var(--radius-sm);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* Mobile Drawer */
@@ -435,7 +435,7 @@ button {
 }
 
 /* --------------------------------------------------------------------------
-   5. SCREEN 01 — HERO SECTION (ANIMATED DYNAMIC CANVAS & CLEAR TEXT)
+   5. SCREEN 01 — HERO SECTION (BRIGHT VIBRANT CANVAS & HIGH VISIBILITY)
    -------------------------------------------------------------------------- */
 .hero-section {
     position: relative;
@@ -448,7 +448,7 @@ button {
     overflow: hidden;
 }
 
-/* Canvas Particle Animation Layer */
+/* Bright Animated Canvas Particles */
 #hero-canvas {
     position: absolute;
     inset: 0;
@@ -482,8 +482,8 @@ button {
     align-items: center;
     gap: 8px;
     padding: 8px 20px;
-    background: rgba(11, 94, 215, 0.3);
-    border: 1px solid rgba(0, 242, 254, 0.5);
+    background: rgba(11, 94, 215, 0.35);
+    border: 1px solid rgba(0, 242, 254, 0.6);
     border-radius: var(--radius-pill);
     font-size: 0.82rem;
     font-weight: 800;
@@ -491,7 +491,7 @@ button {
     letter-spacing: 2px;
     margin-bottom: 24px;
     backdrop-filter: blur(10px);
-    box-shadow: 0 4px 20px rgba(0, 242, 254, 0.2);
+    box-shadow: 0 4px 25px rgba(0, 242, 254, 0.3);
 }
 
 .hero-title {
@@ -501,7 +501,7 @@ button {
     color: #FFFFFF;
     letter-spacing: -0.03em;
     margin-bottom: 20px;
-    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+    text-shadow: 0 4px 25px rgba(0, 0, 0, 0.8);
 }
 
 .hero-subtitle {
@@ -509,7 +509,7 @@ button {
     color: #FFFFFF;
     font-weight: 600;
     margin-bottom: 12px;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.7);
 }
 
 .hero-tech-services {
@@ -518,7 +518,7 @@ button {
     color: var(--cyan-accent);
     margin-bottom: 36px;
     letter-spacing: 0.5px;
-    text-shadow: 0 2px 10px rgba(0, 242, 254, 0.4);
+    text-shadow: 0 2px 14px rgba(0, 242, 254, 0.5);
 }
 
 .hero-buttons {
@@ -536,11 +536,11 @@ button {
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
     background: rgba(13, 21, 45, 0.85);
-    border: 1px solid rgba(0, 242, 254, 0.25);
+    border: 1px solid rgba(0, 242, 254, 0.35);
     border-radius: var(--radius-lg);
     padding: 28px 40px;
     backdrop-filter: blur(16px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
     max-width: 900px;
     margin: 0 auto;
 }
@@ -555,7 +555,7 @@ button {
     color: #FFFFFF;
     line-height: 1;
     margin-bottom: 6px;
-    text-shadow: 0 2px 10px rgba(11, 94, 215, 0.4);
+    text-shadow: 0 2px 12px rgba(11, 94, 215, 0.5);
 }
 
 .stat-label {
@@ -649,7 +649,7 @@ button {
 }
 
 /* --------------------------------------------------------------------------
-   7. SCREEN 03 — FLAGSHIP PRODUCT (RESTORED DUAL ANIMATED PHONES)
+   7. SCREEN 03 — FLAGSHIP PRODUCT (IMAGE COPY 34 & 35 INTERACTIVE MOCKUPS)
    -------------------------------------------------------------------------- */
 .product-section {
     background: var(--primary-navy);
@@ -793,216 +793,102 @@ button {
 .store-text small { font-size: 0.65rem; opacity: 0.8; }
 .store-text strong { font-size: 0.85rem; font-weight: 700; }
 
-/* Dual Floating Phones Mockup */
+/* Interactive Dual Mobile Mockup (Image Copy 34 & 35) */
 .product-mockup-wrapper {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 480px;
+    min-height: 520px;
 }
 
 .phones-container {
     position: relative;
     width: 100%;
     max-width: 440px;
-    height: 460px;
+    height: 500px;
+    perspective: 1000px;
 }
 
 .phones-glow-aura {
     position: absolute;
     inset: -20px;
-    background: radial-gradient(circle, rgba(0, 242, 254, 0.2) 0%, transparent 70%);
-    filter: blur(30px);
+    background: radial-gradient(circle, rgba(0, 242, 254, 0.25) 0%, transparent 70%);
+    filter: blur(35px);
     z-index: 1;
 }
 
 .mobile-mockup {
     position: absolute;
-    width: 240px;
-    background: #FFFFFF;
-    border-radius: 30px;
+    width: 250px;
+    background: #070B19;
+    border-radius: 32px;
     border: 6px solid #070B19;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
     overflow: hidden;
-    z-index: 2;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.phone-screen-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 24px;
+    object-fit: cover;
 }
 
 .phone-front-hd {
-    left: 0;
-    top: 20px;
+    left: 10px;
+    top: 10px;
     z-index: 3;
-    animation: floatLeft 5s ease-in-out infinite alternate;
 }
 
 .phone-back-hd {
-    right: 0;
-    top: 60px;
+    right: 10px;
+    top: 50px;
     z-index: 2;
-    animation: floatRight 5s ease-in-out infinite alternate;
+    filter: brightness(0.85);
+    transform: scale(0.95);
 }
 
-@keyframes floatLeft {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(-12px); }
+.phone-front-hd:hover,
+.phone-back-hd:hover {
+    transform: scale(1.03) translateY(-6px);
+    box-shadow: 0 30px 60px rgba(0, 242, 254, 0.35);
 }
 
-@keyframes floatRight {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(12px); }
+/* Swapped active class when clicked */
+.phone-back-hd.active-front {
+    z-index: 4 !important;
+    transform: scale(1.05) translate(-30px, -30px) !important;
+    filter: brightness(1) !important;
+    box-shadow: 0 35px 70px rgba(0, 242, 254, 0.45) !important;
 }
 
-.phone-notch-hd {
-    width: 90px;
-    height: 14px;
-    background: #070B19;
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
-    margin: 0 auto;
+.phone-front-hd.active-back {
+    z-index: 2 !important;
+    transform: scale(0.92) translate(30px, 30px) !important;
+    filter: brightness(0.8) !important;
 }
 
-.phone-screen-hd {
-    padding: 12px;
-    background: #FFFFFF;
-    color: var(--text-main);
-}
-
-.app-header-hd {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-}
-
-.esa-micro-logo {
-    height: 22px;
-    width: auto;
-}
-
-.app-title-hd strong {
-    font-size: 0.8rem;
-    display: block;
-    line-height: 1;
-}
-
-.app-title-hd small {
-    font-size: 0.6rem;
-    color: var(--text-muted);
-}
-
-.handshake-hd-card {
-    background: #F8FAFC;
-    border-radius: 12px;
-    padding: 8px;
-    text-align: center;
-}
-
-.handshake-hd-photo {
-    width: 100%;
-    height: 110px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 8px;
-}
-
-.phone-inner-content {
-    text-align: left;
-}
-
-.phone-content-title {
-    font-size: 0.82rem;
-    font-weight: 700;
-    margin-bottom: 4px;
-    color: var(--text-main);
-}
-
-.phone-content-desc {
-    font-size: 0.68rem;
-    color: var(--text-muted);
-    line-height: 1.3;
-    margin-bottom: 8px;
-}
-
-.verified-badge-anim {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 4px 8px;
-    background: #DEF7EC;
-    color: #03543F;
-    font-weight: 800;
-    font-size: 0.68rem;
-    border-radius: 12px;
-    margin-top: 4px;
-}
-
-/* Phone 2 Details */
-.phone-top-bar-hd {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.8rem;
-    font-weight: 700;
-    margin-bottom: 8px;
-}
-
-.phone-tabs-hd {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 10px;
-}
-
-.tab-hd {
-    font-size: 0.65rem;
-    padding: 3px 8px;
-    border-radius: 8px;
-    background: #E2E8F0;
-    color: var(--text-muted);
-}
-
-.tab-hd.active {
-    background: var(--primary-blue);
+.click-hint-badge {
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(11, 94, 215, 0.85);
+    border: 1px solid rgba(0, 242, 254, 0.5);
     color: #FFFFFF;
+    font-size: 0.75rem;
     font-weight: 700;
-}
-
-.phone-steps-hd {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-bottom: 10px;
-}
-
-.step-card-hd {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 6px 8px;
-    background: #F1F5F9;
-    border-radius: 8px;
-    font-size: 0.68rem;
-}
-
-.status-pill.green {
-    color: #03543F;
-    font-weight: 700;
-}
-
-.phone-btn-action {
-    width: 100%;
-    padding: 8px;
-    background: var(--primary-blue);
-    color: #FFFFFF;
-    font-weight: 700;
-    font-size: 0.72rem;
-    border-radius: 8px;
-    margin-bottom: 4px;
-}
-
-.phone-security-info {
-    font-size: 0.62rem;
-    color: var(--text-muted);
-    text-align: center;
+    padding: 4px 12px;
+    border-radius: var(--radius-pill);
+    backdrop-filter: blur(8px);
+    z-index: 5;
+    white-space: nowrap;
+    pointer-events: none;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
 }
 
 /* --------------------------------------------------------------------------
@@ -1772,7 +1658,8 @@ button {
         top: auto !important;
         width: 100%;
         max-width: 280px;
-        animation: none !important;
+        transform: none !important;
+        filter: none !important;
     }
 
     .footer-grid {

@@ -6,6 +6,8 @@
   <meta name="theme-color" content="#0a0f1e">
   <title>Admin Panel – Trilok Infotech</title>
   <meta name="robots" content="noindex, nofollow">
+  <!-- Favicon Logo -->
+  <link rel="icon" type="image/png" href="image copy 40.png">
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -65,13 +67,13 @@
 <div id="admin-layout" style="display:none;">
 
   <!-- MOBILE SIDEBAR OVERLAY -->
-  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeAdminSidebar()"></div>
 
   <!-- ====== SIDEBAR NAVIGATION ====== -->
   <aside class="admin-sidebar" id="admin-sidebar">
     <div class="sidebar-logo">
       <img src="image copy 40.png" alt="Trilok Infotech Logo" class="admin-sidebar-brand-logo">
-      <button class="sidebar-close-btn" id="sidebar-close-btn" aria-label="Close sidebar"><i class="fa-solid fa-xmark"></i></button>
+      <button class="sidebar-close-btn" id="sidebar-close-btn" onclick="closeAdminSidebar()" aria-label="Close sidebar"><i class="fa-solid fa-xmark"></i></button>
     </div>
 
     <nav class="sidebar-nav">
@@ -149,7 +151,7 @@
 
     <!-- TOP HEADER -->
     <header class="admin-header">
-      <button class="header-toggle" id="sidebar-toggle" aria-label="Toggle Navigation Drawer">
+      <button class="header-toggle" id="sidebar-toggle" onclick="toggleAdminSidebar(event)" aria-label="Toggle Navigation Drawer">
         <i class="fa-solid fa-bars"></i>
       </button>
 
@@ -267,6 +269,7 @@
         <div class="page-header">
           <div class="page-header-left"><h1>Hero Section Management</h1><p>Edit homepage headline, subtitle, buttons and background media</p></div>
           <div class="page-header-actions">
+            <button class="btn btn-outline btn-sm" onclick="navigateTo('dashboard')"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</button>
             <button class="btn btn-primary" onclick="saveHeroSettings()"><i class="fa-solid fa-save"></i> Save Hero Changes</button>
           </div>
         </div>
@@ -333,6 +336,7 @@
         <div class="page-header">
           <div class="page-header-left"><h1>About Us Management</h1><p>Edit company about overview, mission, vision and core values</p></div>
           <div class="page-header-actions">
+            <button class="btn btn-outline btn-sm" onclick="navigateTo('dashboard')"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</button>
             <button class="btn btn-primary" onclick="saveAboutSettings()"><i class="fa-solid fa-save"></i> Save About Changes</button>
           </div>
         </div>
@@ -389,6 +393,7 @@
         <div class="page-header">
           <div class="page-header-left"><h1>Services Management</h1><p>View, Add, Edit, Delete, Hide/Show and Reorder Services</p></div>
           <div class="page-header-actions">
+            <button class="btn btn-outline btn-sm" onclick="navigateTo('dashboard')"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</button>
             <button class="btn btn-primary" onclick="openServiceModal()"><i class="fa-solid fa-plus"></i> Add New Service</button>
           </div>
         </div>
@@ -413,6 +418,7 @@
         <div class="page-header">
           <div class="page-header-left"><h1>Key Features & Highlights</h1><p>Manage key website features, highlights and value propositions</p></div>
           <div class="page-header-actions">
+            <button class="btn btn-outline btn-sm" onclick="navigateTo('dashboard')"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</button>
             <button class="btn btn-primary" onclick="openFeatureModal()"><i class="fa-solid fa-plus"></i> Add New Feature</button>
           </div>
         </div>
@@ -437,6 +443,7 @@
         <div class="page-header">
           <div class="page-header-left"><h1>View Our Work (Projects) Management</h1><p>Manage website and application portfolio projects</p></div>
           <div class="page-header-actions">
+            <button class="btn btn-outline btn-sm" onclick="navigateTo('dashboard')"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</button>
             <button class="btn btn-primary" onclick="openProjectModal()"><i class="fa-solid fa-plus"></i> Add New Project</button>
           </div>
         </div>
@@ -461,6 +468,7 @@
         <div class="page-header">
           <div class="page-header-left"><h1>Products Management</h1><p>Manage flagship software products and SaaS tools</p></div>
           <div class="page-header-actions">
+            <button class="btn btn-outline btn-sm" onclick="navigateTo('dashboard')"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</button>
             <button class="btn btn-primary" onclick="openProductModal()"><i class="fa-solid fa-plus"></i> Add New Product</button>
           </div>
         </div>
@@ -485,6 +493,7 @@
         <div class="page-header">
           <div class="page-header-left"><h1>Industries We Serve</h1><p>Manage industry categories and descriptions</p></div>
           <div class="page-header-actions">
+            <button class="btn btn-outline btn-sm" onclick="navigateTo('dashboard')"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</button>
             <button class="btn btn-primary" onclick="openIndustryModal()"><i class="fa-solid fa-plus"></i> Add Industry</button>
           </div>
         </div>
@@ -504,6 +513,7 @@
         <div class="page-header">
           <div class="page-header-left"><h1>Careers & Job Openings</h1><p>Manage open technical positions and career opportunities</p></div>
           <div class="page-header-actions">
+            <button class="btn btn-outline btn-sm" onclick="navigateTo('dashboard')"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</button>
             <button class="btn btn-primary" onclick="openCareerModal()"><i class="fa-solid fa-plus"></i> Add Job Opening</button>
           </div>
         </div>
@@ -523,6 +533,7 @@
         <div class="page-header">
           <div class="page-header-left"><h1>Testimonials Management</h1><p>Manage client reviews and star ratings</p></div>
           <div class="page-header-actions">
+            <button class="btn btn-outline btn-sm" onclick="navigateTo('dashboard')"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</button>
             <button class="btn btn-primary" onclick="openTestimonialModal()"><i class="fa-solid fa-plus"></i> Add Testimonial</button>
           </div>
         </div>
@@ -542,6 +553,7 @@
         <div class="page-header">
           <div class="page-header-left"><h1>FAQs Management</h1><p>Manage frequently asked questions and answers</p></div>
           <div class="page-header-actions">
+            <button class="btn btn-outline btn-sm" onclick="navigateTo('dashboard')"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</button>
             <button class="btn btn-primary" onclick="openFaqModal()"><i class="fa-solid fa-plus"></i> Add New FAQ</button>
           </div>
         </div>
@@ -561,6 +573,7 @@
         <div class="page-header">
           <div class="page-header-left"><h1>Gallery & Media Library</h1><p>Upload, manage and preview website images</p></div>
           <div class="page-header-actions">
+            <button class="btn btn-outline btn-sm" onclick="navigateTo('dashboard')"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</button>
             <button class="btn btn-primary" onclick="document.getElementById('gallery-file-input').click()"><i class="fa-solid fa-upload"></i> Upload Media</button>
             <input type="file" id="gallery-file-input" accept="image/*" multiple style="display:none" onchange="handleGalleryUpload(event)">
           </div>
@@ -580,6 +593,7 @@
         <div class="page-header">
           <div class="page-header-left"><h1>Contact Requests & Leads</h1><p>View and manage website contact submissions</p></div>
           <div class="page-header-actions">
+            <button class="btn btn-outline btn-sm" onclick="navigateTo('dashboard')"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</button>
             <button class="btn btn-secondary btn-sm" onclick="loadContacts()"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
           </div>
         </div>
@@ -604,6 +618,7 @@
         <div class="page-header">
           <div class="page-header-left"><h1>Website Settings</h1><p>Manage company details, contact info, social links and footer text</p></div>
           <div class="page-header-actions">
+            <button class="btn btn-outline btn-sm" onclick="navigateTo('dashboard')"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</button>
             <button class="btn btn-primary" onclick="saveWebsiteSettings()"><i class="fa-solid fa-save"></i> Save Website Settings</button>
           </div>
         </div>
@@ -638,6 +653,7 @@
         <div class="page-header">
           <div class="page-header-left"><h1>SEO Settings</h1><p>Optimize meta titles, descriptions and social share metadata</p></div>
           <div class="page-header-actions">
+            <button class="btn btn-outline btn-sm" onclick="navigateTo('dashboard')"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</button>
             <button class="btn btn-primary" onclick="saveSeoSettings()"><i class="fa-solid fa-save"></i> Save SEO Settings</button>
           </div>
         </div>
@@ -656,6 +672,9 @@
       <section class="page-section" id="page-profile">
         <div class="page-header">
           <div class="page-header-left"><h1>Admin Profile</h1><p>Manage your account info and security password</p></div>
+          <div class="page-header-actions">
+            <button class="btn btn-outline btn-sm" onclick="navigateTo('dashboard')"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</button>
+          </div>
         </div>
         <div class="grid-2">
           <div class="card">

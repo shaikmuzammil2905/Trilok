@@ -38,33 +38,52 @@ function initUIListeners() {
   const eye = document.getElementById('pwd-eye');
   if (eye) eye.addEventListener('click', togglePasswordVisibility);
 
-  // Mobile sidebar drawer
-  const toggleBtn = document.getElementById('sidebar-toggle');
-  const closeBtn = document.getElementById('sidebar-close-btn');
-  const overlay = document.getElementById('sidebar-overlay');
-  const sidebar = document.getElementById('admin-sidebar');
+  // Global Mobile sidebar drawer helpers
+  window.toggleAdminSidebar = function(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const sidebar = document.getElementById('admin-sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    if (sidebar) {
+      const isOpen = sidebar.classList.contains('open') || sidebar.classList.contains('mobile-open');
+      if (isOpen) {
+        sidebar.classList.remove('open');
+        sidebar.classList.remove('mobile-open');
+        if (overlay) overlay.classList.remove('open');
+        document.body.style.overflow = '';
+      } else {
+        sidebar.classList.add('open');
+        sidebar.classList.add('mobile-open');
+        if (overlay) overlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+  };
 
-  function openSidebar() {
+  window.openAdminSidebar = function() {
+    const sidebar = document.getElementById('admin-sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
     if (sidebar) {
       sidebar.classList.add('open');
       sidebar.classList.add('mobile-open');
     }
     if (overlay) overlay.classList.add('open');
     document.body.style.overflow = 'hidden';
-  }
+  };
 
-  function closeSidebar() {
+  window.closeAdminSidebar = function() {
+    const sidebar = document.getElementById('admin-sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
     if (sidebar) {
       sidebar.classList.remove('open');
       sidebar.classList.remove('mobile-open');
     }
     if (overlay) overlay.classList.remove('open');
     document.body.style.overflow = '';
-  }
+  };
 
-  if (toggleBtn) toggleBtn.addEventListener('click', openSidebar);
-  if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
-  if (overlay) overlay.addEventListener('click', closeSidebar);
+  if (toggleBtn) toggleBtn.addEventListener('click', window.toggleAdminSidebar);
+  if (closeBtn) closeBtn.addEventListener('click', window.closeAdminSidebar);
+  if (overlay) overlay.addEventListener('click', window.closeAdminSidebar);
 
   // Sidebar navigation click handlers
   document.querySelectorAll('.sidebar-nav .nav-item').forEach(item => {

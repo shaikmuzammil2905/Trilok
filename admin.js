@@ -45,13 +45,21 @@ function initUIListeners() {
   const sidebar = document.getElementById('admin-sidebar');
 
   function openSidebar() {
-    if (sidebar) sidebar.classList.add('open');
+    if (sidebar) {
+      sidebar.classList.add('open');
+      sidebar.classList.add('mobile-open');
+    }
     if (overlay) overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
   }
 
   function closeSidebar() {
-    if (sidebar) sidebar.classList.remove('open');
+    if (sidebar) {
+      sidebar.classList.remove('open');
+      sidebar.classList.remove('mobile-open');
+    }
     if (overlay) overlay.classList.remove('open');
+    document.body.style.overflow = '';
   }
 
   if (toggleBtn) toggleBtn.addEventListener('click', openSidebar);
@@ -214,6 +222,18 @@ function navigateTo(pageId) {
     };
     titleEl.textContent = titles[pageId] || 'Admin Dashboard';
   }
+
+  // Auto-close mobile sidebar drawer and restore scroll
+  const sidebar = document.getElementById('admin-sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  if (sidebar) {
+    sidebar.classList.remove('open');
+    sidebar.classList.remove('mobile-open');
+  }
+  if (overlay) overlay.classList.remove('open');
+  document.body.style.overflow = '';
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // ============================================================

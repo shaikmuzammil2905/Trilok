@@ -1,11 +1,10 @@
 /**
- * TRILOK INFOTECH ADMIN PANEL – JavaScript Engine
- * Supabase Backend + Cloudinary Media Uploads
- * All CMS operations: Auth, CRUD, Upload, Activity Logs
+ * TRILOK INFOTECH ADMIN CMS — CONTROLLER ENGINE
+ * Production-grade Supabase Auth, Row Level Security, Cloudinary Uploads & Complete CRUD
  */
 
 // ============================================================
-// CONFIGURATION
+// CONFIGURATION & INITIALIZATION
 // ============================================================
 const SUPABASE_URL    = 'https://gotrpjxnrmocsrfxauyz.supabase.co';
 const SUPABASE_ANON   = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdvdHJwanhucm1vY3NyZnhhdXl6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5MjI1MDgsImV4cCI6MjEwMTQ5ODUwOH0.h5FE6bQp6wp7DyQJaec-CT9pmhrlm1S42u4dWwKGOrU';
@@ -17,131 +16,99 @@ try {
   if (typeof supabase !== 'undefined' && supabase.createClient) {
     sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
   }
-} catch(e) {}
+} catch(e) {
+  console.error("Supabase client init error:", e);
+}
 
-// ============================================================
-// STATE
-// ============================================================
+// Global State
 let currentUser = null;
 let currentPage = 'dashboard';
-let contactsData = [];
-let contactsPage = 1;
-const contactsPerPage = 10;
-let contactsFilter = { search: '', status: 'all' };
+let currentConfirmCallback = null;
 
 // ============================================================
-// INIT
+// DOM READY & AUTHENTICATION STATE CHECK
 // ============================================================
 document.addEventListener('DOMContentLoaded', async () => {
-  initLoginForm();
-  initSidebarToggle();
-  initNavItems();
-  initSearchBox();
-  initPasswordEye();
-  initStarRating();
-  initSidebarOverlay();
-
-  // Check if already logged in
-  if (sb && sb.auth) {
-    try {
-      const { data: { session } } = await sb.auth.getSession();
-      if (session) {
-        currentUser = session.user;
-        await showAdminLayout();
-      }
-      sb.auth.onAuthStateChange(async (event, session) => {
-        if (event === 'SIGNED_IN' && session) {
-          currentUser = session.user;
-          await showAdminLayout();
-        } else if (event === 'SIGNED_OUT') {
-          currentUser = null;
-          showLoginPage();
-        }
-      });
-    } catch(e) {}
-  }
+  initUIListeners();
+  await checkAuthState();
 });
 
-// ============================================================
-// AUTH
-// ============================================================
-function initLoginForm() {
-  const form = document.getElementById('login-form');
-  if (form) form.addEventListener('submit', executeAdminLogin);
+function initUIListeners() {
+  // Password eye toggle
+  const eye = document.getElementById('pwd-eye');
+  if (eye) eye.addEventListener('click', togglePasswordVisibility);
+
+  // Mobile sidebar drawer
+  const toggleBtn = document.getElementById('sidebar-toggle');
+  const closeBtn = document.getElementById('sidebar-close-btn');
+  const overlay = document.getElementById('sidebar-overlay');
+  const sidebar = document.getElementById('admin-sidebar');
+
+  function openSidebar() {
+    if (sidebar) sidebar.classList.add('open');
+    if (overlay) overlay.classList.add('open');
+  }
+
+  function closeSidebar() {
+    if (sidebar) sidebar.classList.remove('open');
+    if (overlay) overlay.classList.remove('open');
+  }
+
+  if (toggleBtn) toggleBtn.addEventListener('click', openSidebar);
+  if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
+  if (overlay) overlay.addEventListener('click', closeSidebar);
+
+  // Sidebar navigation click handlers
+  document.querySelectorAll('.sidebar-nav .nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const page = item.getAttribute('data-page');
+      if (page) {
+        navigateTo(page);
+        closeSidebar();
+      }
+    });
+  });
 }
 
 function togglePasswordVisibility() {
-  const input = document.getElementById('login-password');
-  const eye = document.getElementById('pwd-eye');
-  if (!input) return;
-  const isPwd = input.type === 'password';
-  input.type = isPwd ? 'text' : 'password';
-  if (eye) {
-    eye.className = isPwd ? 'fa-solid fa-eye-slash eye-toggle' : 'fa-solid fa-eye eye-toggle';
+  const pwdInput = document.getElementById('login-password');
+  const eyeIcon = document.getElementById('pwd-eye');
+  if (!pwdInput) return;
+  const isPassword = pwdInput.type === 'password';
+  pwdInput.type = isPassword ? 'text' : 'password';
+  if (eyeIcon) {
+    eyeIcon.className = isPassword ? 'fa-solid fa-eye-slash eye-toggle' : 'fa-solid fa-eye eye-toggle';
   }
 }
 
-async function executeAdminLogin(e) {
-  if (e) e.preventDefault();
-  const emailEl = document.getElementById('login-email');
-  const pwdEl = document.getElementById('login-password');
-  const btn = document.getElementById('login-btn');
-  const errEl = document.getElementById('login-error');
-
-  const email = emailEl ? emailEl.value.trim() : '';
-  const password = pwdEl ? pwdEl.value : '';
-
-  if (!email || !password) {
-    showLoginError('Please enter email and password.');
+async function checkAuthState() {
+  if (!sb || !sb.auth) {
+    showLoginPage();
     return;
   }
 
-  const customPwd = localStorage.getItem('trilok_admin_pwd');
-  const expectedPwd = customPwd || 'Admin@Trilok2024';
+  try {
+    const { data: { session } } = await sb.auth.getSession();
+    if (session && session.user) {
+      currentUser = session.user;
+      await showAdminLayout();
+    } else {
+      showLoginPage();
+    }
 
-  if (password !== expectedPwd && password !== 'Admin@Trilok2024') {
-    showLoginError(customPwd ? 'Invalid credentials. Password has been updated.' : 'Invalid email or password.');
-    return;
+    sb.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_IN' && session) {
+        currentUser = session.user;
+        await showAdminLayout();
+      } else if (event === 'SIGNED_OUT') {
+        currentUser = null;
+        showLoginPage();
+      }
+    });
+  } catch (err) {
+    console.error("Auth check failed:", err);
+    showLoginPage();
   }
-
-  if (errEl) errEl.classList.remove('show');
-  if (btn) { btn.classList.add('loading'); btn.disabled = true; }
-
-  currentUser = { id: 'admin-local', email: email, user_metadata: { full_name: 'Admin User' } };
-
-  if (sb && sb.auth) {
-    try {
-      const { data } = await sb.auth.signInWithPassword({ email, password });
-      if (data?.user) currentUser = data.user;
-    } catch(err) {}
-  }
-
-  if (btn) { btn.classList.remove('loading'); btn.disabled = false; }
-  await showAdminLayout();
-}
-
-async function handleLogin(e) {
-  return executeAdminLogin(e);
-}
-
-function showLoginError(msg) {
-  const el = document.getElementById('login-error-msg');
-  const box = document.getElementById('login-error');
-  if (el) el.textContent = msg;
-  if (box) box.classList.add('show');
-}
-
-function initPasswordEye() {
-  const eye = document.getElementById('pwd-eye');
-  if (!eye) return;
-  eye.onclick = togglePasswordVisibility;
-}
-
-async function confirmLogout() {
-  showConfirm('Logout?', 'Are you sure you want to sign out?', async () => {
-    await logActivity('logout', 'auth', 'Admin Logout', 'Admin signed out');
-    await sb.auth.signOut();
-  });
 }
 
 function showLoginPage() {
@@ -152,1269 +119,1259 @@ function showLoginPage() {
 async function showAdminLayout() {
   document.getElementById('login-page').style.display = 'none';
   document.getElementById('admin-layout').style.display = 'flex';
-  await loadAdminProfile();
-  await seedInitialDataIfEmpty();
-  navigateTo('dashboard');
+  
+  if (currentUser) {
+    const emailEl = document.getElementById('profile-email');
+    const nameEl = document.getElementById('header-admin-name');
+    if (emailEl) emailEl.value = currentUser.email || '';
+    if (nameEl) nameEl.textContent = currentUser.user_metadata?.full_name || currentUser.email || 'Admin';
+  }
+
+  await loadAllCmsData();
 }
 
-async function seedInitialDataIfEmpty() {
-  try {
-    const { data: existingSvc } = await sb.from('services').select('id');
-    if (!existingSvc || existingSvc.length === 0) {
-      await sb.from('services').insert([
-        { title: 'Custom Software Development', category: 'Software', short_desc: 'Tailored enterprise software & web platforms.', description: 'End-to-end custom web and enterprise software development using modern cloud architectures.', icon_class: 'fa-solid fa-laptop-code', status: 'active', display_order: 1 },
-        { title: 'Mobile App Development', category: 'Mobile', short_desc: 'High-performance iOS & Android applications.', description: 'Native and cross-platform mobile applications engineered for high performance and scaling.', icon_class: 'fa-solid fa-mobile-screen-button', status: 'active', display_order: 2 },
-        { title: 'Cloud Architecture & DevOps', category: 'Cloud', short_desc: 'Scalable AWS/Azure infrastructure & CI/CD.', description: 'Scalable cloud infrastructure design, CI/CD pipeline automation, and server management.', icon_class: 'fa-solid fa-cloud', status: 'active', display_order: 3 },
-        { title: 'AI & Machine Learning Solutions', category: 'AI', short_desc: 'Automation, predictive analytics & chatbots.', description: 'Artificial Intelligence solutions including predictive modeling, NLP chatbots, and workflow automation.', icon_class: 'fa-solid fa-brain', status: 'active', display_order: 4 },
-        { title: 'Cybersecurity & Data Privacy', category: 'Security', short_desc: 'Security audits & compliance protocols.', description: 'Comprehensive cybersecurity audits, threat prevention, vulnerability testing, and data privacy.', icon_class: 'fa-solid fa-shield-halved', status: 'active', display_order: 5 },
-        { title: 'UI/UX Design & Digital Products', category: 'Design', short_desc: 'Intuitive user interface & experience design.', description: 'User-centered intuitive design systems, wireframing, and interactive digital product design.', icon_class: 'fa-solid fa-palette', status: 'active', display_order: 6 }
-      ]);
-    }
-  } catch(e) {}
+async function executeAdminLogin(e) {
+  if (e) e.preventDefault();
+  const emailInput = document.getElementById('login-email');
+  const pwdInput = document.getElementById('login-password');
+  const btn = document.getElementById('login-btn');
+  const errBox = document.getElementById('login-error');
+  const errMsg = document.getElementById('login-error-msg');
+
+  const email = emailInput ? emailInput.value.trim() : '';
+  const password = pwdInput ? pwdInput.value : '';
+
+  if (!email || !password) {
+    if (errMsg) errMsg.textContent = 'Please enter email and password.';
+    if (errBox) errBox.classList.add('show');
+    return;
+  }
+
+  if (errBox) errBox.classList.remove('show');
+  if (btn) { btn.classList.add('loading'); btn.disabled = true; }
 
   try {
-    const { data: existingFeat } = await sb.from('features').select('id');
-    if (!existingFeat || existingFeat.length === 0) {
-      await sb.from('features').insert([
-        { title: 'eSaleAgreement Digital Platform', subtitle: 'PropTech Solution', badge_tag: 'Featured Product', description: 'Automated real estate & legal agreement digital workflows.', icon_class: 'fa-solid fa-file-signature', status: 'active', display_order: 1 },
-        { title: 'Enterprise ERP Suite', subtitle: 'SaaS Business Platform', badge_tag: 'Enterprise', description: 'Unified enterprise resource management, inventory, and analytics system.', icon_class: 'fa-solid fa-building-columns', status: 'active', display_order: 2 },
-        { title: 'Smart Analytics & BI Engine', subtitle: 'Real-time Intelligence', badge_tag: 'Analytics', description: 'Interactive dashboard analytics and automated business executive reporting.', icon_class: 'fa-solid fa-chart-pie', status: 'active', display_order: 3 }
-      ]);
+    const { data, error } = await sb.auth.signInWithPassword({ email, password });
+    if (error) {
+      if (errMsg) errMsg.textContent = error.message || 'Invalid authentication credentials.';
+      if (errBox) errBox.classList.add('show');
+    } else if (data?.user) {
+      currentUser = data.user;
+      await showAdminLayout();
+      showToast('Successfully logged in!', 'success');
     }
-  } catch(e) {}
+  } catch (err) {
+    if (errMsg) errMsg.textContent = err.message || 'Authentication failed.';
+    if (errBox) errBox.classList.add('show');
+  } finally {
+    if (btn) { btn.classList.remove('loading'); btn.disabled = false; }
+  }
+}
 
-  try {
-    const { data: existingTest } = await sb.from('testimonials').select('id');
-    if (!existingTest || existingTest.length === 0) {
-      await sb.from('testimonials').insert([
-        { client_name: 'Rajesh Kumar', client_role: 'Chief Technology Officer', company: 'Apex Solutions', rating: 5, testimonial_text: 'Trilok Infotech transformed our legacy enterprise systems into a high-speed cloud platform. Flawless execution!', status: 'published' },
-        { client_name: 'Ananya Sharma', client_role: 'Head of Digital Product', company: 'FinTech India', rating: 5, testimonial_text: 'Highly professional mobile application developers! Delivered our iOS and Android app ahead of deadline.', status: 'published' }
-      ]);
+async function executeLogout() {
+  showConfirm('Logout Admin Session?', 'Are you sure you want to log out of the admin panel?', async () => {
+    if (sb && sb.auth) {
+      await sb.auth.signOut();
     }
-  } catch(e) {}
-
-  try {
-    const { data: existingFaq } = await sb.from('faqs').select('id');
-    if (!existingFaq || existingFaq.length === 0) {
-      await sb.from('faqs').insert([
-        { question: 'What core technologies and services does Trilok Infotech offer?', answer: 'We specialize in Custom Web & Software Engineering, Mobile App Development, Cloud Architecture, AI Automation, and Cybersecurity.', status: 'active', display_order: 1 },
-        { question: 'How can I request a consultation or project estimate?', answer: 'You can submit your requirements via our website contact form or contact us directly at info@trilokinfotech.com.', status: 'active', display_order: 2 }
-      ]);
-    }
-  } catch(e) {}
+    currentUser = null;
+    showLoginPage();
+    showToast('Signed out successfully', 'info');
+  });
 }
 
 // ============================================================
-// NAVIGATION
+// PAGE NAVIGATION CONTROLLER
 // ============================================================
-function initNavItems() {
-  document.querySelectorAll('.nav-item[data-page]').forEach(item => {
-    item.addEventListener('click', () => {
-      const page = item.getAttribute('data-page');
-      navigateTo(page);
-      closeMobileSidebar();
-    });
+function navigateTo(pageId) {
+  currentPage = pageId;
+  document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
+  document.querySelectorAll('.sidebar-nav .nav-item').forEach(item => {
+    item.classList.toggle('active', item.getAttribute('data-page') === pageId);
   });
-  document.querySelectorAll('.quick-action[data-page]').forEach(item => {
-    item.addEventListener('click', () => navigateTo(item.getAttribute('data-page')));
-  });
-  document.getElementById('header-avatar')?.addEventListener('click', () => navigateTo('profile'));
-  document.getElementById('logout-btn')?.addEventListener('click', confirmLogout);
-}
 
-function navigateTo(page) {
-  currentPage = page;
-  // Update sidebar nav items
-  document.querySelectorAll('.nav-item[data-page]').forEach(el => el.classList.remove('active'));
-  const active = document.querySelector(`.nav-item[data-page="${page}"]`);
-  if (active) active.classList.add('active');
+  const pageSec = document.getElementById(`page-${pageId}`);
+  if (pageSec) pageSec.classList.add('active');
 
-  // Update mobile bottom nav
-  document.querySelectorAll('.mob-nav-item[data-page]').forEach(el => el.classList.remove('active'));
-  const mobActive = document.querySelector(`.mob-nav-item[data-page="${page}"]`);
-  if (mobActive) mobActive.classList.add('active');
-
-  // Show correct section
-  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
-  const section = document.getElementById(`page-${page}`);
-  if (section) section.classList.add('active');
-
-  // Load page data
-  loadPageData(page);
-}
-
-// Mobile bottom nav click — also closes sidebar overlay
-function mobileNavClick(page) {
-  navigateTo(page);
-  closeMobileSidebar();
-  // Scroll to top on page change
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-
-
-function loadPageData(page) {
-  switch(page) {
-    case 'dashboard':    refreshDashboard(); break;
-    case 'hero':         loadHeroSettings(); break;
-    case 'about':        loadAboutSettings(); break;
-    case 'services':     loadServices(); break;
-    case 'features':     loadFeatures(); break;
-    case 'testimonials': loadTestimonials(); break;
-    case 'faqs':         loadFaqs(); break;
-    case 'gallery':      loadGallery(); break;
-    case 'contacts':     loadContacts(); break;
-    case 'settings':     loadWebsiteSettings(); break;
-    case 'seo':          loadSeoSettings(); break;
-    case 'profile':      loadProfilePage(); break;
+  const titleEl = document.getElementById('header-page-title');
+  if (titleEl) {
+    const titles = {
+      dashboard: 'Dashboard Overview',
+      hero: 'Hero Section Management',
+      about: 'About Us Management',
+      services: 'Services Management',
+      projects: 'View Our Work (Projects)',
+      products: 'Products Management',
+      industries: 'Industries We Serve',
+      careers: 'Careers & Job Openings',
+      testimonials: 'Testimonials Management',
+      faqs: 'FAQs Management',
+      gallery: 'Gallery & Media Library',
+      contacts: 'Contact Requests & Leads',
+      settings: 'Website Settings',
+      seo: 'SEO Settings',
+      profile: 'Admin Profile'
+    };
+    titleEl.textContent = titles[pageId] || 'Admin Dashboard';
   }
 }
 
 // ============================================================
-// SIDEBAR TOGGLE
+// CMS DATA LOADER & STATISTICS
 // ============================================================
-function initSidebarToggle() {
-  const btn = document.getElementById('sidebar-toggle');
-  const sidebar = document.getElementById('admin-sidebar');
-  const main = document.getElementById('admin-main');
-  if (!btn) return;
-  btn.addEventListener('click', () => {
-    if (window.innerWidth <= 768) {
-      sidebar.classList.toggle('mobile-open');
-      document.getElementById('sidebar-overlay').classList.toggle('show');
-    } else {
-      sidebar.classList.toggle('collapsed');
-      main.classList.toggle('sidebar-collapsed');
-    }
-  });
-}
-
-function initSidebarOverlay() {
-  document.getElementById('sidebar-overlay')?.addEventListener('click', closeMobileSidebar);
-}
-
-function closeMobileSidebar() {
-  document.getElementById('admin-sidebar')?.classList.remove('mobile-open');
-  document.getElementById('sidebar-overlay')?.classList.remove('show');
-}
-
-// ============================================================
-// HEADER SEARCH
-// ============================================================
-function initSearchBox() {
-  const pages = ['dashboard','hero','about','services','features','testimonials','faqs','gallery','contacts','settings','seo','profile'];
-  const input = document.getElementById('admin-search');
-  if (!input) return;
-  input.addEventListener('input', (e) => {
-    const val = e.target.value.toLowerCase();
-    if (!val) return;
-    const match = pages.find(p => p.includes(val));
-    if (match) navigateTo(match);
-  });
-  input.addEventListener('keydown', e => { if (e.key === 'Enter') e.target.blur(); });
-}
-
-// ============================================================
-// DASHBOARD
-// ============================================================
-async function refreshDashboard() {
-  // Load stats
-  const [svc, test, faq, gal, contacts, unread, logs] = await Promise.all([
-    sb.from('services').select('id', { count: 'exact', head: true }),
-    sb.from('testimonials').select('id', { count: 'exact', head: true }),
-    sb.from('faqs').select('id', { count: 'exact', head: true }),
-    sb.from('gallery').select('id', { count: 'exact', head: true }),
-    sb.from('contact_requests').select('id', { count: 'exact', head: true }),
-    sb.from('contact_requests').select('id', { count: 'exact', head: true }).eq('is_read', false),
-    sb.from('activity_logs').select('*').order('created_at', { ascending: false }).limit(10),
+async function loadAllCmsData() {
+  await Promise.all([
+    loadDashboardStats(),
+    loadHeroSettings(),
+    loadAboutSettings(),
+    loadServices(),
+    loadProjects(),
+    loadProducts(),
+    loadIndustries(),
+    loadCareers(),
+    loadTestimonials(),
+    loadFaqs(),
+    loadGallery(),
+    loadContacts(),
+    loadWebsiteSettings(),
+    loadSeoSettings()
   ]);
-
-  setEl('stat-services',     svc.count ?? 0);
-  setEl('stat-testimonials', test.count ?? 0);
-  setEl('stat-faqs',         faq.count ?? 0);
-  setEl('stat-gallery',      gal.count ?? 0);
-  setEl('stat-contacts',     contacts.count ?? 0);
-  setEl('stat-unread',       unread.count ?? 0);
-
-  updateUnreadBadge(unread.count ?? 0);
-
-  // Activity list
-  renderActivityList(logs.data || []);
-
-  // Recent contacts
-  const recent = await sb.from('contact_requests').select('*').order('created_at', { ascending: false }).limit(5);
-  renderRecentContacts(recent.data || []);
 }
 
-function renderActivityList(logs) {
-  const container = document.getElementById('activity-list');
-  if (!container) return;
-  if (!logs.length) {
-    container.innerHTML = '<div class="empty-state"><i class="fa-solid fa-clock-rotate-left"></i><h4>No activity yet</h4><p>Actions will appear here</p></div>';
-    return;
-  }
-  const icons = { create: 'fa-plus', update: 'fa-pen', delete: 'fa-trash', login: 'fa-right-to-bracket', logout: 'fa-right-from-bracket' };
-  container.innerHTML = logs.map(l => {
-    const type = l.action?.split(' ')[0]?.toLowerCase() || 'update';
-    const icon = icons[type] || 'fa-circle-dot';
-    return `
-    <div class="activity-item">
-      <div class="activity-dot ${type}"><i class="fa-solid ${icon}"></i></div>
-      <div class="activity-info">
-        <div class="activity-action">${esc(l.action)}</div>
-        <div class="activity-meta">${esc(l.entity_type)} ${l.entity_name ? '· ' + esc(l.entity_name) : ''} · ${timeAgo(l.created_at)}</div>
-      </div>
-    </div>`;
-  }).join('');
-}
+async function loadDashboardStats() {
+  if (!sb) return;
+  try {
+    const counts = {};
+    const tables = ['services', 'projects', 'products', 'industries', 'careers', 'testimonials', 'faqs', 'gallery', 'contact_requests'];
+    
+    for (const tbl of tables) {
+      try {
+        const { count, error } = await sb.from(tbl).select('*', { count: 'exact', head: true });
+        counts[tbl] = error ? 0 : (count || 0);
+      } catch(e) { counts[tbl] = 0; }
+    }
 
-function renderRecentContacts(data) {
-  const tbody = document.getElementById('recent-contacts-tbody');
-  if (!tbody) return;
-  if (!data.length) {
-    tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state" style="padding:24px"><i class="fa-solid fa-envelope" style="font-size:28px"></i><p>No contact requests yet</p></div></td></tr>`;
-    return;
+    const setVal = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+    setVal('stat-services', counts['services'] || 0);
+    setVal('stat-projects', counts['projects'] || 0);
+    setVal('stat-products', counts['products'] || 0);
+    setVal('stat-industries', counts['industries'] || 0);
+    setVal('stat-careers', counts['careers'] || 0);
+    setVal('stat-testimonials', counts['testimonials'] || 0);
+    setVal('stat-faqs', counts['faqs'] || 0);
+    setVal('stat-gallery', counts['gallery'] || 0);
+    setVal('stat-contacts', counts['contact_requests'] || 0);
+  } catch(err) {
+    console.error("Failed to load dashboard stats:", err);
   }
-  tbody.innerHTML = data.map(c => `
-    <tr>
-      <td><strong>${esc(c.name)}</strong></td>
-      <td>${esc(c.email)}</td>
-      <td>${esc(c.phone)}</td>
-      <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(c.message)}</td>
-      <td>${formatDate(c.created_at)}</td>
-      <td><span class="badge ${c.is_read ? 'badge-read' : 'badge-unread'}">${c.is_read ? 'Read' : 'Unread'}</span></td>
-    </tr>`).join('');
 }
 
 // ============================================================
-// HERO SETTINGS
+// 1. HERO CMS MANAGEMENT
 // ============================================================
 async function loadHeroSettings() {
-  const { data } = await sb.from('hero_settings').select('*').limit(1).single();
-  if (!data) return;
-  setVal('hero-heading', data.heading || '');
-  setVal('hero-subheading', data.sub_heading || '');
-  setVal('hero-cta-primary', data.cta_primary_text || '');
-  setVal('hero-cta-secondary', data.cta_secondary_text || '');
-  document.getElementById('hero-visible').checked = data.is_visible !== false;
-  setVal('hero-bg-url', data.bg_image_url || '');
-  if (data.bg_image_url) showPreviewImage('hero-bg-preview', 'hero-bg-preview-img', data.bg_image_url);
-  updateHeroPreview();
-}
+  if (!sb) return;
+  try {
+    const { data } = await sb.from('hero_settings').select('*').limit(1).single();
+    if (data) {
+      const setV = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+      setV('hero-heading', data.heading);
+      setV('hero-subheading', data.sub_heading || data.subheading);
+      setV('hero-cta-primary', data.cta_primary_text);
+      setV('hero-cta-primary-url', data.cta_primary_url);
+      setV('hero-cta-secondary', data.cta_secondary_text);
+      setV('hero-cta-secondary-url', data.cta_secondary_url);
+      setV('hero-bg-url', data.bg_image_url);
+      const chk = document.getElementById('hero-visible');
+      if (chk) chk.checked = data.is_visible !== false;
 
-function updateHeroPreview() {
-  setEl('preview-heading', getVal('hero-heading') || 'Hero Heading');
-  setEl('preview-sub', getVal('hero-subheading') || 'Sub heading text will appear here...');
-  setEl('preview-cta1', getVal('hero-cta-primary') || 'CTA Button');
-  setEl('preview-cta2', getVal('hero-cta-secondary') || 'Secondary');
+      if (data.bg_image_url) {
+        showImagePreview('hero-bg-url', 'hero-bg-preview', data.bg_image_url);
+      }
+    }
+  } catch(e) {}
 }
 
 async function saveHeroSettings() {
-  const btn = document.getElementById('save-hero-btn');
-  btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving…';
-
+  if (!sb) return;
   const payload = {
-    heading: getVal('hero-heading'),
-    sub_heading: getVal('hero-subheading'),
-    cta_primary_text: getVal('hero-cta-primary'),
-    cta_secondary_text: getVal('hero-cta-secondary'),
-    is_visible: document.getElementById('hero-visible').checked,
-    bg_image_url: getVal('hero-bg-url'),
-    updated_at: new Date().toISOString()
+    heading: document.getElementById('hero-heading')?.value || '',
+    sub_heading: document.getElementById('hero-subheading')?.value || '',
+    cta_primary_text: document.getElementById('hero-cta-primary')?.value || '',
+    cta_primary_url: document.getElementById('hero-cta-primary-url')?.value || '',
+    cta_secondary_text: document.getElementById('hero-cta-secondary')?.value || '',
+    cta_secondary_url: document.getElementById('hero-cta-secondary-url')?.value || '',
+    bg_image_url: document.getElementById('hero-bg-url')?.value || '',
+    is_visible: document.getElementById('hero-visible')?.checked !== false
   };
 
-  const { data: existing } = await sb.from('hero_settings').select('id').limit(1).single();
-  let err;
-  if (existing) {
-    ({ error: err } = await sb.from('hero_settings').update(payload).eq('id', existing.id));
-  } else {
-    ({ error: err } = await sb.from('hero_settings').insert(payload));
+  try {
+    const { data: existing } = await sb.from('hero_settings').select('id').limit(1);
+    if (existing && existing.length > 0) {
+      await sb.from('hero_settings').update(payload).eq('id', existing[0].id);
+    } else {
+      await sb.from('hero_settings').insert([payload]);
+    }
+    showToast('Hero settings saved successfully!', 'success');
+  } catch(e) {
+    showToast('Error saving hero settings: ' + e.message, 'error');
   }
-
-  btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-save"></i> Save Changes';
-
-  if (err) { toast('error', 'Failed to save: ' + err.message); return; }
-  toast('success', 'Hero settings saved!');
-  logActivity('update', 'hero_settings', 'Hero Section', 'Hero content updated');
 }
-
-async function handleHeroBgUpload(e) {
-  const file = e.target.files[0]; if (!file) return;
-  toast('info', 'Uploading image…');
-  const url = await cloudinaryUpload(file);
-  if (url) { setVal('hero-bg-url', url); showPreviewImage('hero-bg-preview', 'hero-bg-preview-img', url); toast('success', 'Image uploaded!'); }
-}
-
-function removeHeroBg() { setVal('hero-bg-url', ''); hidePreview('hero-bg-preview'); }
 
 // ============================================================
-// ABOUT SETTINGS
+// 2. ABOUT US CMS MANAGEMENT
 // ============================================================
 async function loadAboutSettings() {
-  const { data } = await sb.from('about_settings').select('*').limit(1).single();
-  if (!data) return;
-  setVal('about-heading', data.heading || '');
-  setVal('about-content', data.content || '');
-  document.getElementById('about-visible').checked = data.is_visible !== false;
-  setVal('about-img-url', data.image_url || '');
-  if (data.image_url) showPreviewImage('about-img-preview', 'about-img-preview-img', data.image_url);
+  if (!sb) return;
+  try {
+    const { data } = await sb.from('about_settings').select('*').limit(1).single();
+    if (data) {
+      const setV = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+      setV('about-heading', data.heading);
+      setV('about-content', data.content);
+      setV('about-mission', data.mission);
+      setV('about-vision', data.vision);
+      setV('about-values', data.values);
+      setV('about-img-url', data.image_url);
+      const chk = document.getElementById('about-visible');
+      if (chk) chk.checked = data.is_visible !== false;
+
+      if (data.image_url) {
+        showImagePreview('about-img-url', 'about-img-preview', data.image_url);
+      }
+    }
+  } catch(e) {}
 }
 
 async function saveAboutSettings() {
+  if (!sb) return;
   const payload = {
-    heading: getVal('about-heading'),
-    content: getVal('about-content'),
-    is_visible: document.getElementById('about-visible').checked,
-    image_url: getVal('about-img-url'),
-    updated_at: new Date().toISOString()
+    heading: document.getElementById('about-heading')?.value || '',
+    content: document.getElementById('about-content')?.value || '',
+    mission: document.getElementById('about-mission')?.value || '',
+    vision: document.getElementById('about-vision')?.value || '',
+    values: document.getElementById('about-values')?.value || '',
+    image_url: document.getElementById('about-img-url')?.value || '',
+    is_visible: document.getElementById('about-visible')?.checked !== false
   };
-  const { data: existing } = await sb.from('about_settings').select('id').limit(1).single();
-  let err;
-  if (existing) {
-    ({ error: err } = await sb.from('about_settings').update(payload).eq('id', existing.id));
-  } else {
-    ({ error: err } = await sb.from('about_settings').insert(payload));
+
+  try {
+    const { data: existing } = await sb.from('about_settings').select('id').limit(1);
+    if (existing && existing.length > 0) {
+      await sb.from('about_settings').update(payload).eq('id', existing[0].id);
+    } else {
+      await sb.from('about_settings').insert([payload]);
+    }
+    showToast('About Us settings saved successfully!', 'success');
+  } catch(e) {
+    showToast('Error saving about settings: ' + e.message, 'error');
   }
-  if (err) { toast('error', 'Save failed: ' + err.message); return; }
-  toast('success', 'About section saved!');
-  logActivity('update', 'about_settings', 'About Section', 'About content updated');
 }
 
-async function handleAboutImageUpload(e) {
-  const file = e.target.files[0]; if (!file) return;
-  toast('info', 'Uploading…');
-  const url = await cloudinaryUpload(file);
-  if (url) { setVal('about-img-url', url); showPreviewImage('about-img-preview', 'about-img-preview-img', url); toast('success', 'Image uploaded!'); }
-}
-
-function removeAboutImg() { setVal('about-img-url', ''); hidePreview('about-img-preview'); }
-
 // ============================================================
-// DEFAULT PRESETS FOR VISIBLE PAST DATA
+// 3. SERVICES CMS MANAGEMENT
 // ============================================================
-const DEFAULT_PRESET_SERVICES = [
-  { id: 'svc-1', title: 'Custom Software & Web Platforms', category: 'Software', short_desc: 'Tailored enterprise software & web portals.', description: 'End-to-end custom web and enterprise software development using modern cloud architectures.', icon_class: 'fa-solid fa-laptop-code', status: 'active', display_order: 1 },
-  { id: 'svc-2', title: 'Mobile App Development (iOS & Android)', category: 'Mobile', short_desc: 'High-performance mobile applications.', description: 'Native and cross-platform mobile applications engineered for high performance and scaling.', icon_class: 'fa-solid fa-mobile-screen-button', status: 'active', display_order: 2 },
-  { id: 'svc-3', title: 'Cloud Architecture & IT Solutions', category: 'Cloud', short_desc: 'Hosting, deployment & 24/7 IT support.', description: 'Scalable cloud hosting infrastructure on AWS/Azure, server migration, cybersecurity audits, and 24/7 technical assistance.', icon_class: 'fa-solid fa-cloud', status: 'active', display_order: 3 },
-  { id: 'svc-4', title: 'AI & Machine Learning Solutions', category: 'AI', short_desc: 'Automation, predictive analytics & chatbots.', description: 'Artificial Intelligence solutions including predictive modeling, NLP chatbots, and workflow automation.', icon_class: 'fa-solid fa-brain', status: 'active', display_order: 4 },
-  { id: 'svc-5', title: 'Cybersecurity & Data Auditing', category: 'Security', short_desc: 'Security audits & compliance protocols.', description: 'Comprehensive cybersecurity audits, threat prevention, vulnerability testing, and data privacy.', icon_class: 'fa-solid fa-shield-halved', status: 'active', display_order: 5 },
-  { id: 'svc-6', title: 'UI/UX & Product Design', category: 'Design', short_desc: 'Intuitive user interface & digital design.', description: 'User-centered intuitive design systems, wireframing, and interactive digital product design.', icon_class: 'fa-solid fa-palette', status: 'active', display_order: 6 }
-];
-
-const DEFAULT_PRESET_FEATURES = [
-  { id: 'feat-1', title: 'eSaleAgreement Digital Platform', subtitle: 'PropTech Solution', badge_tag: 'Featured Product', description: 'Create secure, legally valid and tamper-proof sale agreements in minutes with advanced verification and audit capabilities.', icon_class: 'fa-solid fa-file-signature', status: 'active', display_order: 1 },
-  { id: 'feat-2', title: 'Aadhaar eKYC Verification', subtitle: 'Identity System', badge_tag: 'eKYC', description: 'Instant Aadhaar identity verification & biometrics authentication for digital onboarding.', icon_class: 'fa-solid fa-id-card', status: 'active', display_order: 2 },
-  { id: 'feat-3', title: 'Aadhaar eSign Integration', subtitle: 'Digital Signatures', badge_tag: 'eSign', description: 'Legally binding Aadhaar electronic signatures with automated audit logs.', icon_class: 'fa-solid fa-signature', status: 'active', display_order: 3 },
-  { id: 'feat-4', title: 'OTP & QR Code Verification', subtitle: 'Dual Security', badge_tag: 'Security', description: 'Phone OTP 2-factor verification and tamper-evident QR code scanning.', icon_class: 'fa-solid fa-qrcode', status: 'active', display_order: 4 },
-  { id: 'feat-5', title: 'Enterprise ERP Suite', subtitle: 'SaaS Business Platform', badge_tag: 'Enterprise', description: 'Unified enterprise resource management, inventory, and automated workflow system.', icon_class: 'fa-solid fa-building-columns', status: 'active', display_order: 5 },
-  { id: 'feat-6', title: 'Smart Analytics & BI Dashboard', subtitle: 'Real-time Intelligence', badge_tag: 'Analytics', description: 'Interactive dashboard analytics and automated business executive reporting.', icon_class: 'fa-solid fa-chart-pie', status: 'active', display_order: 6 }
-];
-
-const DEFAULT_PRESET_TESTIMONIALS = [
-  { id: 'test-1', client_name: 'Rajesh Kumar', client_role: 'Chief Technology Officer', company: 'Apex Solutions', rating: 5, testimonial_text: 'Trilok Infotech transformed our legacy enterprise systems into a high-speed cloud platform. Flawless execution and support!', status: 'published' },
-  { id: 'test-2', client_name: 'Ananya Sharma', client_role: 'Head of Digital Product', company: 'FinTech India', rating: 5, testimonial_text: 'Highly professional mobile application developers! Delivered our iOS and Android app ahead of deadline.', status: 'published' }
-];
-
-const DEFAULT_PRESET_FAQS = [
-  { id: 'faq-1', question: 'What core technologies and services does Trilok Infotech offer?', answer: 'We specialize in Custom Web & Software Engineering, Mobile App Development, Cloud Architecture, AI Automation, and Cybersecurity.', status: 'active', display_order: 1 },
-  { id: 'faq-2', question: 'How can I request a consultation or project estimate?', answer: 'You can submit your requirements via our website contact form or contact us directly at info@trilokinfotech.com.', status: 'active', display_order: 2 }
-];
-
-// ============================================================
-// SERVICES
-// ============================================================
-let allServices = [];
-
 async function loadServices() {
+  if (!sb) return;
   const tbody = document.getElementById('services-tbody');
-  if (tbody) tbody.innerHTML = '<tr><td colspan="6"><div class="spinner"></div></td></tr>';
-  
-  let data = null;
+  if (!tbody) return;
+  tbody.innerHTML = `<tr><td colspan="6" class="text-center" style="padding:20px"><i class="fa-solid fa-spinner fa-spin"></i> Loading services...</td></tr>`;
+
   try {
-    const res = await sb.from('services').select('*').order('display_order');
-    data = res.data;
-  } catch(e) {}
+    const { data, error } = await sb.from('services').select('*').order('display_order', { ascending: true });
+    if (error || !data || data.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="6" class="text-center" style="padding:24px">No services found. Click "Add New Service" above.</td></tr>`;
+      return;
+    }
 
-  if (!data || data.length === 0) {
-    allServices = JSON.parse(localStorage.getItem('trilok_services_cache')) || DEFAULT_PRESET_SERVICES;
-  } else {
-    allServices = data;
+    tbody.innerHTML = data.map(item => `
+      <tr>
+        <td><strong>${item.display_order || 0}</strong></td>
+        <td><i class="${item.icon_class || 'fa-solid fa-code'}" style="font-size:20px;color:var(--cyan)"></i></td>
+        <td><strong>${escapeHtml(item.title)}</strong></td>
+        <td class="text-muted" style="max-width:260px">${escapeHtml(item.short_desc || item.description || '')}</td>
+        <td><span class="status-badge ${item.status === 'active' ? 'active' : 'inactive'}">${item.status || 'active'}</span></td>
+        <td>
+          <div class="table-actions">
+            <button class="action-btn edit" onclick="editService('${item.id}')" title="Edit"><i class="fa-solid fa-pen"></i></button>
+            <button class="action-btn toggle" onclick="toggleServiceStatus('${item.id}', '${item.status}')" title="Toggle Status"><i class="fa-solid fa-eye"></i></button>
+            <button class="action-btn delete" onclick="confirmDeleteService('${item.id}')" title="Delete"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  } catch(e) {
+    tbody.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Error loading services: ${e.message}</td></tr>`;
   }
-  localStorage.setItem('trilok_services_cache', JSON.stringify(allServices));
-  renderServicesTable(allServices);
-}
-
-// ============================================================
-// FEATURES
-// ============================================================
-let allFeatures = [];
-
-async function loadFeatures() {
-  const tbody = document.getElementById('features-tbody');
-  if (tbody) tbody.innerHTML = '<tr><td colspan="6"><div class="spinner"></div></td></tr>';
-  
-  let data = null;
-  try {
-    const res = await sb.from('features').select('*').order('display_order');
-    data = res.data;
-  } catch(e) {}
-
-  if (!data || data.length === 0) {
-    allFeatures = JSON.parse(localStorage.getItem('trilok_features_cache')) || DEFAULT_PRESET_FEATURES;
-  } else {
-    allFeatures = data;
-  }
-  localStorage.setItem('trilok_features_cache', JSON.stringify(allFeatures));
-  renderFeaturesTable(allFeatures);
-}
-
-function renderServicesTable(data) {
-  const tbody = document.getElementById('services-tbody');
-  const empty = document.getElementById('services-empty');
-  if (!data.length) {
-    tbody.innerHTML = '';
-    empty.style.display = 'block';
-    return;
-  }
-  empty.style.display = 'none';
-  tbody.innerHTML = data.map(s => `
-    <tr>
-      <td><span style="color:var(--text-muted)">#${s.display_order}</span></td>
-      <td>${s.image_url ? `<img src="${esc(s.image_url)}" style="width:40px;height:40px;object-fit:cover;border-radius:6px">` : `<div class="table-avatar"><i class="${esc(s.icon_class||'fa-solid fa-code')}"></i></div>`}</td>
-      <td><strong>${esc(s.title)}</strong></td>
-      <td style="max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(s.description)}</td>
-      <td><span class="badge ${s.status === 'active' ? 'badge-active' : 'badge-inactive'}">${s.status}</span></td>
-      <td>
-        <div class="table-actions">
-          <button class="btn btn-sm btn-secondary btn-icon" onclick="editService('${s.id}')" title="Edit"><i class="fa-solid fa-pen"></i></button>
-          <button class="btn btn-sm btn-danger btn-icon" onclick="deleteService('${s.id}','${esc(s.title)}')" title="Delete"><i class="fa-solid fa-trash"></i></button>
-        </div>
-      </td>
-    </tr>`).join('');
-}
-
-function filterServices(val) {
-  const filtered = allServices.filter(s => s.title.toLowerCase().includes(val.toLowerCase()) || (s.description||'').toLowerCase().includes(val.toLowerCase()));
-  renderServicesTable(filtered);
 }
 
 function openServiceModal(id = null) {
-  document.getElementById('service-edit-id').value = '';
-  document.getElementById('service-modal-title').textContent = 'Add Service';
+  document.getElementById('svc-edit-id').value = id || '';
   document.getElementById('svc-title').value = '';
+  document.getElementById('svc-short-desc').value = '';
   document.getElementById('svc-desc').value = '';
   document.getElementById('svc-icon').value = 'fa-solid fa-code';
   document.getElementById('svc-order').value = '0';
   document.getElementById('svc-status').value = 'active';
-  document.getElementById('svc-img-url').value = '';
-  hidePreview('svc-img-preview');
+
+  document.getElementById('svc-modal-title').textContent = id ? 'Edit Service' : 'Add Service';
   openModal('service-modal');
 }
 
 async function editService(id) {
-  const svc = allServices.find(s => s.id === id);
-  if (!svc) return;
-  document.getElementById('service-edit-id').value = id;
-  document.getElementById('service-modal-title').textContent = 'Edit Service';
-  document.getElementById('svc-title').value = svc.title || '';
-  document.getElementById('svc-desc').value = svc.description || '';
-  document.getElementById('svc-icon').value = svc.icon_class || '';
-  document.getElementById('svc-order').value = svc.display_order || 0;
-  document.getElementById('svc-status').value = svc.status || 'active';
-  document.getElementById('svc-img-url').value = svc.image_url || '';
-  if (svc.image_url) showPreviewImage('svc-img-preview', 'svc-img-preview-img', svc.image_url);
-  else hidePreview('svc-img-preview');
-  openModal('service-modal');
+  try {
+    const { data } = await sb.from('services').select('*').eq('id', id).single();
+    if (data) {
+      document.getElementById('svc-edit-id').value = data.id;
+      document.getElementById('svc-title').value = data.title || '';
+      document.getElementById('svc-short-desc').value = data.short_desc || '';
+      document.getElementById('svc-desc').value = data.description || '';
+      document.getElementById('svc-icon').value = data.icon_class || 'fa-solid fa-code';
+      document.getElementById('svc-order').value = data.display_order || 0;
+      document.getElementById('svc-status').value = data.status || 'active';
+      document.getElementById('svc-modal-title').textContent = 'Edit Service';
+      openModal('service-modal');
+    }
+  } catch(e) {}
 }
 
 async function saveService() {
-  const id = getVal('service-edit-id');
-  const title = getVal('svc-title').trim();
-  if (!title) { toast('warning', 'Service title is required.'); return; }
+  const id = document.getElementById('svc-edit-id')?.value;
+  const title = document.getElementById('svc-title')?.value.trim();
+  if (!title) { showToast('Service Title is required', 'error'); return; }
 
-  const item = {
-    id: id || ('svc-' + Date.now()),
+  const payload = {
     title,
-    description: getVal('svc-desc'),
-    icon_class: getVal('svc-icon') || 'fa-solid fa-code',
-    display_order: parseInt(getVal('svc-order')) || 0,
-    status: getVal('svc-status'),
-    image_url: getVal('svc-img-url'),
-    updated_at: new Date().toISOString()
+    short_desc: document.getElementById('svc-short-desc')?.value || '',
+    description: document.getElementById('svc-desc')?.value || '',
+    icon_class: document.getElementById('svc-icon')?.value || 'fa-solid fa-code',
+    display_order: parseInt(document.getElementById('svc-order')?.value || '0', 10),
+    status: document.getElementById('svc-status')?.value || 'active'
   };
 
   try {
-    if (id) { await sb.from('services').update(item).eq('id', id); }
-    else { await sb.from('services').insert(item); }
-  } catch(e) {}
-
-  if (id) {
-    const idx = allServices.findIndex(x => x.id === id);
-    if (idx !== -1) allServices[idx] = item;
-  } else {
-    allServices.push(item);
+    if (id) {
+      await sb.from('services').update(payload).eq('id', id);
+      showToast('Service updated successfully', 'success');
+    } else {
+      await sb.from('services').insert([payload]);
+      showToast('New service added successfully', 'success');
+    }
+    closeModal('service-modal');
+    await loadServices();
+    await loadDashboardStats();
+  } catch(e) {
+    showToast('Error saving service: ' + e.message, 'error');
   }
-
-  localStorage.setItem('trilok_services_cache', JSON.stringify(allServices));
-  toast('success', id ? 'Service updated!' : 'Service added!');
-  logActivity(id ? 'update' : 'create', 'services', title);
-  closeModal('service-modal');
-  renderServicesTable(allServices);
 }
 
-function deleteService(id, name) {
-  showConfirm('Delete Service?', `Are you sure you want to delete "${name}"? This cannot be undone.`, async () => {
-    try { await sb.from('services').delete().eq('id', id); } catch(e) {}
-    allServices = allServices.filter(x => x.id !== id);
-    localStorage.setItem('trilok_services_cache', JSON.stringify(allServices));
-    toast('success', 'Service deleted!');
-    logActivity('delete', 'services', name);
-    renderServicesTable(allServices);
+function confirmDeleteService(id) {
+  showConfirm('Delete Service?', 'Are you sure you want to permanently delete this service?', async () => {
+    try {
+      await sb.from('services').delete().eq('id', id);
+      showToast('Service deleted successfully', 'success');
+      await loadServices();
+      await loadDashboardStats();
+    } catch(e) { showToast('Delete failed: ' + e.message, 'error'); }
   });
 }
 
-async function handleServiceImageUpload(e) {
-  const file = e.target.files[0]; if (!file) return;
-  toast('info', 'Uploading…');
-  const url = await cloudinaryUpload(file);
-  if (url) { setVal('svc-img-url', url); showPreviewImage('svc-img-preview', 'svc-img-preview-img', url); toast('success', 'Uploaded!'); }
+async function toggleServiceStatus(id, currentStatus) {
+  const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+  try {
+    await sb.from('services').update({ status: newStatus }).eq('id', id);
+    showToast(`Service set to ${newStatus}`, 'info');
+    await loadServices();
+  } catch(e) {}
 }
 
 // ============================================================
-// FEATURES
+// 4. VIEW OUR WORK / PROJECTS CMS MANAGEMENT
 // ============================================================
-let allFeatures = [];
+async function loadProjects() {
+  if (!sb) return;
+  const tbody = document.getElementById('projects-tbody');
+  if (!tbody) return;
 
-async function loadFeatures() {
-  const tbody = document.getElementById('features-tbody');
-  tbody.innerHTML = '<tr><td colspan="6"><div class="spinner"></div></td></tr>';
-  const { data } = await sb.from('features').select('*').order('display_order');
-  allFeatures = data || [];
-  renderFeaturesTable(allFeatures);
+  try {
+    const { data, error } = await sb.from('projects').select('*').order('display_order', { ascending: true });
+    if (error || !data || data.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="7" class="text-center" style="padding:24px">No projects found. Click "Add New Project" above.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = data.map(item => `
+      <tr>
+        <td><strong>${item.display_order || 0}</strong></td>
+        <td>${item.image_url ? `<img src="${item.image_url}" style="width:36px;height:36px;object-fit:cover;border-radius:6px">` : `<i class="fa-solid fa-globe" style="font-size:20px;color:var(--accent)"></i>`}</td>
+        <td><strong>${escapeHtml(item.title)}</strong></td>
+        <td><span class="category-badge">${escapeHtml(item.category || 'General')}</span></td>
+        <td>${item.project_link ? `<a href="${item.project_link}" target="_blank" class="table-link">${escapeHtml(item.project_link)}</a>` : '—'}</td>
+        <td><span class="status-badge ${item.status === 'active' ? 'active' : 'inactive'}">${item.status || 'active'}</span></td>
+        <td>
+          <div class="table-actions">
+            <button class="action-btn edit" onclick="editProject('${item.id}')" title="Edit"><i class="fa-solid fa-pen"></i></button>
+            <button class="action-btn toggle" onclick="toggleProjectStatus('${item.id}', '${item.status}')" title="Toggle Status"><i class="fa-solid fa-eye"></i></button>
+            <button class="action-btn delete" onclick="confirmDeleteProject('${item.id}')" title="Delete"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  } catch(e) {
+    tbody.innerHTML = `<tr><td colspan="7" class="text-center text-danger">Error loading projects: ${e.message}</td></tr>`;
+  }
 }
 
-function renderFeaturesTable(data) {
-  const tbody = document.getElementById('features-tbody');
-  const empty = document.getElementById('features-empty');
-  if (!data.length) { tbody.innerHTML = ''; empty.style.display = 'block'; return; }
-  empty.style.display = 'none';
-  tbody.innerHTML = data.map(f => `
-    <tr>
-      <td><span style="color:var(--text-muted)">#${f.display_order}</span></td>
-      <td><div class="table-avatar" style="width:32px;height:32px"><i class="${esc(f.icon_class||'fa-solid fa-star')}"></i></div></td>
-      <td><strong>${esc(f.title)}</strong></td>
-      <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(f.description)}</td>
-      <td><span class="badge ${f.status === 'active' ? 'badge-active' : 'badge-inactive'}">${f.status}</span></td>
-      <td>
-        <div class="table-actions">
-          <button class="btn btn-sm btn-secondary btn-icon" onclick="editFeature('${f.id}')" title="Edit"><i class="fa-solid fa-pen"></i></button>
-          <button class="btn btn-sm btn-danger btn-icon" onclick="deleteFeature('${f.id}','${esc(f.title)}')" title="Delete"><i class="fa-solid fa-trash"></i></button>
-        </div>
-      </td>
-    </tr>`).join('');
+function openProjectModal(id = null) {
+  document.getElementById('project-edit-id').value = id || '';
+  document.getElementById('project-title').value = '';
+  document.getElementById('project-desc').value = '';
+  document.getElementById('project-category').value = 'Websites';
+  document.getElementById('project-link').value = '';
+  document.getElementById('project-order').value = '0';
+  document.getElementById('project-status').value = 'active';
+  document.getElementById('project-modal-title').textContent = id ? 'Edit Project' : 'Add Project';
+  openModal('project-modal');
 }
 
-function openFeatureModal() {
-  document.getElementById('feature-edit-id').value = '';
-  document.getElementById('feature-modal-title').textContent = 'Add Feature';
-  ['feat-title','feat-desc','feat-icon'].forEach(id => setVal(id, ''));
-  setVal('feat-order', '0'); setVal('feat-status', 'active');
-  openModal('feature-modal');
+async function editProject(id) {
+  try {
+    const { data } = await sb.from('projects').select('*').eq('id', id).single();
+    if (data) {
+      document.getElementById('project-edit-id').value = data.id;
+      document.getElementById('project-title').value = data.title || '';
+      document.getElementById('project-desc').value = data.description || '';
+      document.getElementById('project-category').value = data.category || 'Websites';
+      document.getElementById('project-link').value = data.project_link || '';
+      document.getElementById('project-order').value = data.display_order || 0;
+      document.getElementById('project-status').value = data.status || 'active';
+      openModal('project-modal');
+    }
+  } catch(e) {}
 }
 
-function editFeature(id) {
-  const f = allFeatures.find(x => x.id === id); if (!f) return;
-  document.getElementById('feature-edit-id').value = id;
-  document.getElementById('feature-modal-title').textContent = 'Edit Feature';
-  setVal('feat-title', f.title || '');
-  setVal('feat-desc', f.description || '');
-  setVal('feat-icon', f.icon_class || '');
-  setVal('feat-order', f.display_order || 0);
-  setVal('feat-status', f.status || 'active');
-  openModal('feature-modal');
-}
+async function saveProject() {
+  const id = document.getElementById('project-edit-id')?.value;
+  const title = document.getElementById('project-title')?.value.trim();
+  if (!title) { showToast('Project Title is required', 'error'); return; }
 
-async function saveFeature() {
-  const id = getVal('feature-edit-id');
-  const title = getVal('feat-title').trim();
-  if (!title) { toast('warning', 'Feature title required.'); return; }
-  const item = {
-    id: id || ('feat-' + Date.now()),
+  const payload = {
     title,
-    description: getVal('feat-desc'),
-    icon_class: getVal('feat-icon') || 'fa-solid fa-star',
-    display_order: parseInt(getVal('feat-order')) || 0,
-    status: getVal('feat-status'),
-    updated_at: new Date().toISOString()
+    description: document.getElementById('project-desc')?.value || '',
+    category: document.getElementById('project-category')?.value || 'Websites',
+    project_link: document.getElementById('project-link')?.value || '',
+    display_order: parseInt(document.getElementById('project-order')?.value || '0', 10),
+    status: document.getElementById('project-status')?.value || 'active'
   };
 
   try {
-    if (id) { await sb.from('features').update(item).eq('id', id); }
-    else { await sb.from('features').insert(item); }
-  } catch(e) {}
-
-  if (id) {
-    const idx = allFeatures.findIndex(x => x.id === id);
-    if (idx !== -1) allFeatures[idx] = item;
-  } else {
-    allFeatures.push(item);
-  }
-
-  localStorage.setItem('trilok_features_cache', JSON.stringify(allFeatures));
-  toast('success', id ? 'Feature updated!' : 'Feature added!');
-  logActivity(id ? 'update' : 'create', 'features', title);
-  closeModal('feature-modal');
-  renderFeaturesTable(allFeatures);
+    if (id) {
+      await sb.from('projects').update(payload).eq('id', id);
+      showToast('Project updated successfully', 'success');
+    } else {
+      await sb.from('projects').insert([payload]);
+      showToast('New project added successfully', 'success');
+    }
+    closeModal('project-modal');
+    await loadProjects();
+    await loadDashboardStats();
+  } catch(e) { showToast('Error saving project: ' + e.message, 'error'); }
 }
 
-function deleteFeature(id, name) {
-  showConfirm('Delete Feature?', `Delete "${name}"?`, async () => {
-    try { await sb.from('features').delete().eq('id', id); } catch(e) {}
-    allFeatures = allFeatures.filter(x => x.id !== id);
-    localStorage.setItem('trilok_features_cache', JSON.stringify(allFeatures));
-    toast('success', 'Feature deleted!');
-    logActivity('delete', 'features', name);
-    renderFeaturesTable(allFeatures);
+function confirmDeleteProject(id) {
+  showConfirm('Delete Project?', 'Are you sure you want to delete this project?', async () => {
+    try {
+      await sb.from('projects').delete().eq('id', id);
+      showToast('Project deleted successfully', 'success');
+      await loadProjects();
+      await loadDashboardStats();
+    } catch(e) { showToast('Delete failed: ' + e.message, 'error'); }
+  });
+}
+
+async function toggleProjectStatus(id, currentStatus) {
+  const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+  try {
+    await sb.from('projects').update({ status: newStatus }).eq('id', id);
+    showToast(`Project status set to ${newStatus}`, 'info');
+    await loadProjects();
+  } catch(e) {}
+}
+
+// ============================================================
+// 5. PRODUCTS CMS MANAGEMENT
+// ============================================================
+async function loadProducts() {
+  if (!sb) return;
+  const tbody = document.getElementById('products-tbody');
+  if (!tbody) return;
+
+  try {
+    const { data, error } = await sb.from('products').select('*').order('display_order', { ascending: true });
+    if (error || !data || data.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="7" class="text-center" style="padding:24px">No products found. Click "Add New Product" above.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = data.map(item => `
+      <tr>
+        <td><strong>${item.display_order || 0}</strong></td>
+        <td><i class="fa-solid fa-box-open" style="font-size:20px;color:var(--cyan)"></i></td>
+        <td><strong>${escapeHtml(item.name)}</strong></td>
+        <td><span class="category-badge">${escapeHtml(item.category || 'SaaS Product')}</span></td>
+        <td class="text-muted" style="max-width:240px">${escapeHtml(item.features || '')}</td>
+        <td><span class="status-badge ${item.status === 'active' ? 'active' : 'inactive'}">${item.status || 'active'}</span></td>
+        <td>
+          <div class="table-actions">
+            <button class="action-btn edit" onclick="editProduct('${item.id}')" title="Edit"><i class="fa-solid fa-pen"></i></button>
+            <button class="action-btn delete" onclick="confirmDeleteProduct('${item.id}')" title="Delete"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  } catch(e) {
+    tbody.innerHTML = `<tr><td colspan="7" class="text-center text-danger">Error loading products: ${e.message}</td></tr>`;
+  }
+}
+
+function openProductModal(id = null) {
+  document.getElementById('product-edit-id').value = id || '';
+  document.getElementById('product-name').value = '';
+  document.getElementById('product-desc').value = '';
+  document.getElementById('product-features').value = '';
+  document.getElementById('product-link').value = '';
+  document.getElementById('product-status').value = 'active';
+  openModal('product-modal');
+}
+
+async function editProduct(id) {
+  try {
+    const { data } = await sb.from('products').select('*').eq('id', id).single();
+    if (data) {
+      document.getElementById('product-edit-id').value = data.id;
+      document.getElementById('product-name').value = data.name || '';
+      document.getElementById('product-desc').value = data.description || '';
+      document.getElementById('product-features').value = data.features || '';
+      document.getElementById('product-link').value = data.product_link || '';
+      document.getElementById('product-status').value = data.status || 'active';
+      openModal('product-modal');
+    }
+  } catch(e) {}
+}
+
+async function saveProduct() {
+  const id = document.getElementById('product-edit-id')?.value;
+  const name = document.getElementById('product-name')?.value.trim();
+  if (!name) { showToast('Product Name is required', 'error'); return; }
+
+  const payload = {
+    name,
+    description: document.getElementById('product-desc')?.value || '',
+    features: document.getElementById('product-features')?.value || '',
+    product_link: document.getElementById('product-link')?.value || '',
+    status: document.getElementById('product-status')?.value || 'active'
+  };
+
+  try {
+    if (id) {
+      await sb.from('products').update(payload).eq('id', id);
+      showToast('Product updated successfully', 'success');
+    } else {
+      await sb.from('products').insert([payload]);
+      showToast('New product added successfully', 'success');
+    }
+    closeModal('product-modal');
+    await loadProducts();
+    await loadDashboardStats();
+  } catch(e) { showToast('Error saving product: ' + e.message, 'error'); }
+}
+
+function confirmDeleteProduct(id) {
+  showConfirm('Delete Product?', 'Are you sure you want to delete this product?', async () => {
+    try {
+      await sb.from('products').delete().eq('id', id);
+      showToast('Product deleted', 'success');
+      await loadProducts();
+      await loadDashboardStats();
+    } catch(e) { showToast('Delete failed: ' + e.message, 'error'); }
   });
 }
 
 // ============================================================
-// TESTIMONIALS
+// 6. INDUSTRIES CMS MANAGEMENT
 // ============================================================
-let allTestimonials = [];
+async function loadIndustries() {
+  if (!sb) return;
+  const tbody = document.getElementById('industries-tbody');
+  if (!tbody) return;
 
+  try {
+    const { data } = await sb.from('industries').select('*').order('display_order', { ascending: true });
+    if (!data || data.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="6" class="text-center" style="padding:24px">No industries recorded.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = data.map(item => `
+      <tr>
+        <td><strong>${item.display_order || 0}</strong></td>
+        <td><i class="${item.icon_class || 'fa-solid fa-industry'}" style="font-size:20px;color:var(--accent)"></i></td>
+        <td><strong>${escapeHtml(item.title)}</strong></td>
+        <td class="text-muted">${escapeHtml(item.description || '')}</td>
+        <td><span class="status-badge ${item.status === 'active' ? 'active' : 'inactive'}">${item.status || 'active'}</span></td>
+        <td>
+          <div class="table-actions">
+            <button class="action-btn edit" onclick="editIndustry('${item.id}')"><i class="fa-solid fa-pen"></i></button>
+            <button class="action-btn delete" onclick="confirmDeleteIndustry('${item.id}')"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  } catch(e) {}
+}
+
+function openIndustryModal(id = null) {
+  document.getElementById('industry-edit-id').value = id || '';
+  document.getElementById('ind-title').value = '';
+  document.getElementById('ind-desc').value = '';
+  document.getElementById('ind-icon').value = 'fa-solid fa-industry';
+  document.getElementById('ind-status').value = 'active';
+  openModal('industry-modal');
+}
+
+async function editIndustry(id) {
+  try {
+    const { data } = await sb.from('industries').select('*').eq('id', id).single();
+    if (data) {
+      document.getElementById('industry-edit-id').value = data.id;
+      document.getElementById('ind-title').value = data.title || '';
+      document.getElementById('ind-desc').value = data.description || '';
+      document.getElementById('ind-icon').value = data.icon_class || 'fa-solid fa-industry';
+      document.getElementById('ind-status').value = data.status || 'active';
+      openModal('industry-modal');
+    }
+  } catch(e) {}
+}
+
+async function saveIndustry() {
+  const id = document.getElementById('industry-edit-id')?.value;
+  const title = document.getElementById('ind-title')?.value.trim();
+  if (!title) { showToast('Industry Title is required', 'error'); return; }
+
+  const payload = {
+    title,
+    description: document.getElementById('ind-desc')?.value || '',
+    icon_class: document.getElementById('ind-icon')?.value || 'fa-solid fa-industry',
+    status: document.getElementById('ind-status')?.value || 'active'
+  };
+
+  try {
+    if (id) {
+      await sb.from('industries').update(payload).eq('id', id);
+    } else {
+      await sb.from('industries').insert([payload]);
+    }
+    showToast('Industry saved successfully', 'success');
+    closeModal('industry-modal');
+    await loadIndustries();
+    await loadDashboardStats();
+  } catch(e) { showToast('Error: ' + e.message, 'error'); }
+}
+
+function confirmDeleteIndustry(id) {
+  showConfirm('Delete Industry?', 'Are you sure you want to delete this industry?', async () => {
+    try {
+      await sb.from('industries').delete().eq('id', id);
+      showToast('Industry deleted', 'success');
+      await loadIndustries();
+      await loadDashboardStats();
+    } catch(e) {}
+  });
+}
+
+// ============================================================
+// 7. CAREERS CMS MANAGEMENT
+// ============================================================
+async function loadCareers() {
+  if (!sb) return;
+  const tbody = document.getElementById('careers-tbody');
+  if (!tbody) return;
+
+  try {
+    const { data } = await sb.from('careers').select('*').order('display_order', { ascending: true });
+    if (!data || data.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="7" class="text-center" style="padding:24px">No job openings available.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = data.map(item => `
+      <tr>
+        <td><strong>${item.display_order || 0}</strong></td>
+        <td><strong>${escapeHtml(item.job_title)}</strong></td>
+        <td>${escapeHtml(item.department || 'Engineering')}</td>
+        <td>${escapeHtml(item.location || 'Remote')}</td>
+        <td><span class="category-badge">${escapeHtml(item.employment_type || 'Full Time')}</span></td>
+        <td><span class="status-badge ${item.status === 'active' ? 'active' : 'inactive'}">${item.status || 'active'}</span></td>
+        <td>
+          <div class="table-actions">
+            <button class="action-btn edit" onclick="editCareer('${item.id}')"><i class="fa-solid fa-pen"></i></button>
+            <button class="action-btn delete" onclick="confirmDeleteCareer('${item.id}')"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  } catch(e) {}
+}
+
+function openCareerModal(id = null) {
+  document.getElementById('career-edit-id').value = id || '';
+  document.getElementById('career-title').value = '';
+  document.getElementById('career-dept').value = '';
+  document.getElementById('career-loc').value = '';
+  document.getElementById('career-type').value = 'Full Time';
+  document.getElementById('career-exp').value = '';
+  document.getElementById('career-desc').value = '';
+  document.getElementById('career-status').value = 'active';
+  openModal('career-modal');
+}
+
+async function editCareer(id) {
+  try {
+    const { data } = await sb.from('careers').select('*').eq('id', id).single();
+    if (data) {
+      document.getElementById('career-edit-id').value = data.id;
+      document.getElementById('career-title').value = data.job_title || '';
+      document.getElementById('career-dept').value = data.department || '';
+      document.getElementById('career-loc').value = data.location || '';
+      document.getElementById('career-type').value = data.employment_type || 'Full Time';
+      document.getElementById('career-exp').value = data.experience || '';
+      document.getElementById('career-desc').value = data.description || '';
+      document.getElementById('career-status').value = data.status || 'active';
+      openModal('career-modal');
+    }
+  } catch(e) {}
+}
+
+async function saveCareer() {
+  const id = document.getElementById('career-edit-id')?.value;
+  const job_title = document.getElementById('career-title')?.value.trim();
+  if (!job_title) { showToast('Job Title is required', 'error'); return; }
+
+  const payload = {
+    job_title,
+    department: document.getElementById('career-dept')?.value || '',
+    location: document.getElementById('career-loc')?.value || '',
+    employment_type: document.getElementById('career-type')?.value || 'Full Time',
+    experience: document.getElementById('career-exp')?.value || '',
+    description: document.getElementById('career-desc')?.value || '',
+    status: document.getElementById('career-status')?.value || 'active'
+  };
+
+  try {
+    if (id) {
+      await sb.from('careers').update(payload).eq('id', id);
+    } else {
+      await sb.from('careers').insert([payload]);
+    }
+    showToast('Job opening saved', 'success');
+    closeModal('career-modal');
+    await loadCareers();
+    await loadDashboardStats();
+  } catch(e) { showToast('Error: ' + e.message, 'error'); }
+}
+
+function confirmDeleteCareer(id) {
+  showConfirm('Delete Job Opening?', 'Are you sure you want to delete this job opening?', async () => {
+    try {
+      await sb.from('careers').delete().eq('id', id);
+      showToast('Career opening deleted', 'success');
+      await loadCareers();
+      await loadDashboardStats();
+    } catch(e) {}
+  });
+}
+
+// ============================================================
+// 8. TESTIMONIALS CMS MANAGEMENT
+// ============================================================
 async function loadTestimonials() {
+  if (!sb) return;
   const tbody = document.getElementById('testimonials-tbody');
-  if (tbody) tbody.innerHTML = '<tr><td colspan="6"><div class="spinner"></div></td></tr>';
-  
-  let data = null;
+  if (!tbody) return;
+
   try {
-    const res = await sb.from('testimonials').select('*').order('created_at', { ascending: false });
-    data = res.data;
+    const { data } = await sb.from('testimonials').select('*').order('created_at', { ascending: false });
+    if (!data || data.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="6" class="text-center" style="padding:24px">No testimonials found.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = data.map(item => `
+      <tr>
+        <td><i class="fa-solid fa-user-circle" style="font-size:24px;color:var(--cyan)"></i></td>
+        <td><strong>${escapeHtml(item.customer_name)}</strong></td>
+        <td>${escapeHtml(item.position_company || 'Client')}</td>
+        <td><span style="color:#f59e0b">${'★'.repeat(item.rating || 5)}</span></td>
+        <td><span class="status-badge ${item.status === 'active' ? 'active' : 'inactive'}">${item.status || 'active'}</span></td>
+        <td>
+          <div class="table-actions">
+            <button class="action-btn edit" onclick="editTestimonial('${item.id}')"><i class="fa-solid fa-pen"></i></button>
+            <button class="action-btn delete" onclick="confirmDeleteTestimonial('${item.id}')"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
   } catch(e) {}
-
-  if (!data || data.length === 0) {
-    allTestimonials = JSON.parse(localStorage.getItem('trilok_testimonials_cache')) || DEFAULT_PRESET_TESTIMONIALS.map(t => ({...t, customer_name: t.client_name, review_message: t.testimonial_text}));
-  } else {
-    allTestimonials = data.map(t => ({...t, customer_name: t.customer_name || t.client_name, review_message: t.review_message || t.testimonial_text}));
-  }
-  localStorage.setItem('trilok_testimonials_cache', JSON.stringify(allTestimonials));
-  renderTestimonialsTable(allTestimonials);
 }
 
-function renderTestimonialsTable(data) {
-  const tbody = document.getElementById('testimonials-tbody');
-  const empty = document.getElementById('testimonials-empty');
-  if (!data.length) { tbody.innerHTML = ''; empty.style.display = 'block'; return; }
-  empty.style.display = 'none';
-  tbody.innerHTML = data.map(t => {
-    const stars = '★'.repeat(t.rating || 5) + '☆'.repeat(5 - (t.rating || 5));
-    return `
-    <tr>
-      <td>
-        <div class="table-avatar">
-          ${t.profile_image_url ? `<img src="${esc(t.profile_image_url)}" alt="">` : (t.customer_name?.[0]?.toUpperCase() || '?')}
-        </div>
-      </td>
-      <td><strong>${esc(t.customer_name)}</strong></td>
-      <td><span style="color:var(--yellow)">${stars}</span></td>
-      <td style="max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(t.review_message)}</td>
-      <td><span class="badge ${t.status === 'active' ? 'badge-active' : 'badge-inactive'}">${t.status}</span></td>
-      <td>
-        <div class="table-actions">
-          <button class="btn btn-sm btn-secondary btn-icon" onclick="editTestimonial('${t.id}')" title="Edit"><i class="fa-solid fa-pen"></i></button>
-          <button class="btn btn-sm btn-danger btn-icon" onclick="deleteTestimonial('${t.id}','${esc(t.customer_name)}')" title="Delete"><i class="fa-solid fa-trash"></i></button>
-        </div>
-      </td>
-    </tr>`;
-  }).join('');
-}
-
-function initStarRating() {
-  const stars = document.querySelectorAll('#rating-stars i');
-  stars.forEach(star => {
-    star.addEventListener('click', () => {
-      const val = parseInt(star.getAttribute('data-val'));
-      document.getElementById('test-rating').value = val;
-      stars.forEach(s => {
-        s.classList.toggle('active', parseInt(s.getAttribute('data-val')) <= val);
-      });
-    });
-  });
-}
-
-function openTestimonialModal() {
-  document.getElementById('testimonial-edit-id').value = '';
-  document.getElementById('testimonial-modal-title').textContent = 'Add Testimonial';
-  ['test-name','test-message'].forEach(id => setVal(id, ''));
-  setVal('test-status', 'active'); setVal('test-rating', '5');
-  document.querySelectorAll('#rating-stars i').forEach(s => s.classList.add('active'));
-  setVal('test-img-url', ''); hidePreview('test-img-preview');
+function openTestimonialModal(id = null) {
+  document.getElementById('test-edit-id').value = id || '';
+  document.getElementById('test-name').value = '';
+  document.getElementById('test-pos').value = '';
+  document.getElementById('test-rating').value = '5';
+  document.getElementById('test-message').value = '';
+  document.getElementById('test-status').value = 'active';
   openModal('testimonial-modal');
 }
 
-function editTestimonial(id) {
-  const t = allTestimonials.find(x => x.id === id); if (!t) return;
-  document.getElementById('testimonial-edit-id').value = id;
-  document.getElementById('testimonial-modal-title').textContent = 'Edit Testimonial';
-  setVal('test-name', t.customer_name || '');
-  setVal('test-message', t.review_message || '');
-  setVal('test-status', t.status || 'active');
-  setVal('test-rating', t.rating || 5);
-  const ratingVal = t.rating || 5;
-  document.querySelectorAll('#rating-stars i').forEach(s => {
-    s.classList.toggle('active', parseInt(s.getAttribute('data-val')) <= ratingVal);
-  });
-  setVal('test-img-url', t.profile_image_url || '');
-  if (t.profile_image_url) showPreviewImage('test-img-preview', 'test-img-preview-img', t.profile_image_url);
-  else hidePreview('test-img-preview');
-  openModal('testimonial-modal');
+async function editTestimonial(id) {
+  try {
+    const { data } = await sb.from('testimonials').select('*').eq('id', id).single();
+    if (data) {
+      document.getElementById('test-edit-id').value = data.id;
+      document.getElementById('test-name').value = data.customer_name || '';
+      document.getElementById('test-pos').value = data.position_company || '';
+      document.getElementById('test-rating').value = data.rating || 5;
+      document.getElementById('test-message').value = data.review_message || '';
+      document.getElementById('test-status').value = data.status || 'active';
+      openModal('testimonial-modal');
+    }
+  } catch(e) {}
 }
 
 async function saveTestimonial() {
-  const id = getVal('testimonial-edit-id');
-  const name = getVal('test-name').trim();
-  if (!name) { toast('warning', 'Customer name required.'); return; }
+  const id = document.getElementById('test-edit-id')?.value;
+  const customer_name = document.getElementById('test-name')?.value.trim();
+  if (!customer_name) { showToast('Customer Name is required', 'error'); return; }
+
   const payload = {
-    customer_name: name, review_message: getVal('test-message'),
-    rating: parseInt(getVal('test-rating')) || 5,
-    status: getVal('test-status'),
-    profile_image_url: getVal('test-img-url'),
-    updated_at: new Date().toISOString()
+    customer_name,
+    position_company: document.getElementById('test-pos')?.value || '',
+    rating: parseInt(document.getElementById('test-rating')?.value || '5', 10),
+    review_message: document.getElementById('test-message')?.value || '',
+    status: document.getElementById('test-status')?.value || 'active'
   };
-  let err;
-  if (id) { ({ error: err } = await sb.from('testimonials').update(payload).eq('id', id)); }
-  else { ({ error: err } = await sb.from('testimonials').insert(payload)); }
-  if (err) { toast('error', err.message); return; }
-  toast('success', id ? 'Testimonial updated!' : 'Testimonial added!');
-  logActivity(id ? 'update' : 'create', 'testimonials', name);
-  closeModal('testimonial-modal'); loadTestimonials();
+
+  try {
+    if (id) {
+      await sb.from('testimonials').update(payload).eq('id', id);
+    } else {
+      await sb.from('testimonials').insert([payload]);
+    }
+    showToast('Testimonial saved successfully', 'success');
+    closeModal('testimonial-modal');
+    await loadTestimonials();
+    await loadDashboardStats();
+  } catch(e) { showToast('Error: ' + e.message, 'error'); }
 }
 
-function deleteTestimonial(id, name) {
-  showConfirm('Delete Testimonial?', `Delete review by "${name}"?`, async () => {
-    await sb.from('testimonials').delete().eq('id', id);
-    toast('success', 'Testimonial deleted!');
-    logActivity('delete', 'testimonials', name);
-    loadTestimonials();
+function confirmDeleteTestimonial(id) {
+  showConfirm('Delete Testimonial?', 'Are you sure you want to delete this review?', async () => {
+    try {
+      await sb.from('testimonials').delete().eq('id', id);
+      showToast('Testimonial deleted', 'success');
+      await loadTestimonials();
+      await loadDashboardStats();
+    } catch(e) {}
   });
 }
 
-async function handleTestimonialImageUpload(e) {
-  const file = e.target.files[0]; if (!file) return;
-  toast('info', 'Uploading…');
-  const url = await cloudinaryUpload(file);
-  if (url) { setVal('test-img-url', url); showPreviewImage('test-img-preview', 'test-img-preview-img', url); toast('success', 'Uploaded!'); }
-}
-
 // ============================================================
-// FAQS
+// 9. FAQS CMS MANAGEMENT
 // ============================================================
 async function loadFaqs() {
+  if (!sb) return;
   const tbody = document.getElementById('faqs-tbody');
-  if (tbody) tbody.innerHTML = '<tr><td colspan="5"><div class="spinner"></div></td></tr>';
-  
-  let data = null;
+  if (!tbody) return;
+
   try {
-    const res = await sb.from('faqs').select('*').order('display_order');
-    data = res.data;
+    const { data } = await sb.from('faqs').select('*').order('display_order', { ascending: true });
+    if (!data || data.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="5" class="text-center" style="padding:24px">No FAQs recorded.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = data.map(item => `
+      <tr>
+        <td><strong>${item.display_order || 0}</strong></td>
+        <td><strong>${escapeHtml(item.question)}</strong></td>
+        <td class="text-muted" style="max-width:320px">${escapeHtml(item.answer)}</td>
+        <td><span class="status-badge ${item.status === 'active' ? 'active' : 'inactive'}">${item.status || 'active'}</span></td>
+        <td>
+          <div class="table-actions">
+            <button class="action-btn edit" onclick="editFaq('${item.id}')"><i class="fa-solid fa-pen"></i></button>
+            <button class="action-btn delete" onclick="confirmDeleteFaq('${item.id}')"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
   } catch(e) {}
-
-  if (!data || data.length === 0) {
-    allFaqs = JSON.parse(localStorage.getItem('trilok_faqs_cache')) || DEFAULT_PRESET_FAQS;
-  } else {
-    allFaqs = data;
-  }
-  localStorage.setItem('trilok_faqs_cache', JSON.stringify(allFaqs));
-  renderFaqsTable(allFaqs);
 }
 
-function renderFaqsTable(data) {
-  const tbody = document.getElementById('faqs-tbody');
-  const empty = document.getElementById('faqs-empty');
-  if (!data.length) { tbody.innerHTML = ''; empty.style.display = 'block'; return; }
-  empty.style.display = 'none';
-  tbody.innerHTML = data.map(f => `
-    <tr>
-      <td><span style="color:var(--text-muted)">#${f.display_order}</span></td>
-      <td style="max-width:240px;"><strong>${esc(f.question)}</strong></td>
-      <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text-secondary)">${esc(f.answer)}</td>
-      <td><span class="badge ${f.status === 'active' ? 'badge-active' : 'badge-inactive'}">${f.status}</span></td>
-      <td>
-        <div class="table-actions">
-          <button class="btn btn-sm btn-secondary btn-icon" onclick="editFaq('${f.id}')" title="Edit"><i class="fa-solid fa-pen"></i></button>
-          <button class="btn btn-sm btn-danger btn-icon" onclick="deleteFaq('${f.id}','${esc(f.question).slice(0,30)}')" title="Delete"><i class="fa-solid fa-trash"></i></button>
-        </div>
-      </td>
-    </tr>`).join('');
-}
-
-function openFaqModal() {
-  document.getElementById('faq-edit-id').value = '';
-  document.getElementById('faq-modal-title').textContent = 'Add FAQ';
-  ['faq-question','faq-answer'].forEach(id => setVal(id, ''));
-  setVal('faq-order', '0'); setVal('faq-status', 'active');
+function openFaqModal(id = null) {
+  document.getElementById('faq-edit-id').value = id || '';
+  document.getElementById('faq-question').value = '';
+  document.getElementById('faq-answer').value = '';
+  document.getElementById('faq-status').value = 'active';
   openModal('faq-modal');
 }
 
-function editFaq(id) {
-  const f = allFaqs.find(x => x.id === id); if (!f) return;
-  document.getElementById('faq-edit-id').value = id;
-  document.getElementById('faq-modal-title').textContent = 'Edit FAQ';
-  setVal('faq-question', f.question || '');
-  setVal('faq-answer', f.answer || '');
-  setVal('faq-order', f.display_order || 0);
-  setVal('faq-status', f.status || 'active');
-  openModal('faq-modal');
+async function editFaq(id) {
+  try {
+    const { data } = await sb.from('faqs').select('*').eq('id', id).single();
+    if (data) {
+      document.getElementById('faq-edit-id').value = data.id;
+      document.getElementById('faq-question').value = data.question || '';
+      document.getElementById('faq-answer').value = data.answer || '';
+      document.getElementById('faq-status').value = data.status || 'active';
+      openModal('faq-modal');
+    }
+  } catch(e) {}
 }
 
 async function saveFaq() {
-  const id = getVal('faq-edit-id');
-  const question = getVal('faq-question').trim();
-  const answer = getVal('faq-answer').trim();
-  if (!question || !answer) { toast('warning', 'Question and answer are required.'); return; }
-  const payload = { question, answer, display_order: parseInt(getVal('faq-order')) || 0, status: getVal('faq-status'), updated_at: new Date().toISOString() };
-  let err;
-  if (id) { ({ error: err } = await sb.from('faqs').update(payload).eq('id', id)); }
-  else { ({ error: err } = await sb.from('faqs').insert(payload)); }
-  if (err) { toast('error', err.message); return; }
-  toast('success', id ? 'FAQ updated!' : 'FAQ added!');
-  logActivity(id ? 'update' : 'create', 'faqs', question.slice(0,50));
-  closeModal('faq-modal'); loadFaqs();
+  const id = document.getElementById('faq-edit-id')?.value;
+  const question = document.getElementById('faq-question')?.value.trim();
+  const answer = document.getElementById('faq-answer')?.value.trim();
+
+  if (!question || !answer) { showToast('Question and Answer are required', 'error'); return; }
+
+  const payload = { question, answer, status: document.getElementById('faq-status')?.value || 'active' };
+
+  try {
+    if (id) {
+      await sb.from('faqs').update(payload).eq('id', id);
+    } else {
+      await sb.from('faqs').insert([payload]);
+    }
+    showToast('FAQ saved successfully', 'success');
+    closeModal('faq-modal');
+    await loadFaqs();
+    await loadDashboardStats();
+  } catch(e) { showToast('Error: ' + e.message, 'error'); }
 }
 
-function deleteFaq(id, name) {
-  showConfirm('Delete FAQ?', `Delete this FAQ?`, async () => {
-    await sb.from('faqs').delete().eq('id', id);
-    toast('success', 'FAQ deleted!');
-    logActivity('delete', 'faqs', name);
-    loadFaqs();
+function confirmDeleteFaq(id) {
+  showConfirm('Delete FAQ?', 'Are you sure you want to delete this FAQ?', async () => {
+    try {
+      await sb.from('faqs').delete().eq('id', id);
+      showToast('FAQ deleted', 'success');
+      await loadFaqs();
+      await loadDashboardStats();
+    } catch(e) {}
   });
 }
 
 // ============================================================
-// GALLERY
+// 10. GALLERY & MEDIA MANAGEMENT
 // ============================================================
-let galleryData = [];
-
 async function loadGallery() {
-  const { data } = await sb.from('gallery').select('*').order('created_at', { ascending: false });
-  galleryData = data || [];
-  renderGalleryGrid(galleryData);
-  setEl('gallery-count', `${galleryData.length} image${galleryData.length !== 1 ? 's' : ''}`);
-}
-
-function renderGalleryGrid(data) {
+  if (!sb) return;
   const grid = document.getElementById('gallery-grid');
-  const empty = document.getElementById('gallery-empty');
-  if (!data.length) { grid.innerHTML = ''; empty.style.display = 'block'; return; }
-  empty.style.display = 'none';
-  grid.innerHTML = data.map(img => `
-    <div class="gallery-item">
-      <img src="${esc(img.image_url)}" alt="${esc(img.name)}" loading="lazy" onerror="this.src='data:image/svg+xml,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'100\\'><rect fill=\\'%23111827\\'/><text x=\\'50%\\' y=\\'50%\\' fill=\\'%2364748b\\' text-anchor=\\'middle\\' dominant-baseline=\\'middle\\'>No img</text></svg>'">
-      <div class="gallery-item-overlay">
-        <button class="btn btn-sm btn-secondary btn-icon" onclick="previewGalleryImage('${esc(img.image_url)}')" title="Preview"><i class="fa-solid fa-eye"></i></button>
-        <button class="btn btn-sm btn-danger btn-icon" onclick="deleteGalleryImage('${img.id}','${esc(img.name)}')" title="Delete"><i class="fa-solid fa-trash"></i></button>
+  if (!grid) return;
+
+  try {
+    const { data } = await sb.from('gallery').select('*').order('created_at', { ascending: false });
+    if (!data || data.length === 0) {
+      grid.innerHTML = `<div class="empty-state" style="padding:32px"><i class="fa-solid fa-images" style="font-size:32px"></i><h4>No gallery media uploaded</h4></div>`;
+      return;
+    }
+
+    grid.innerHTML = data.map(item => `
+      <div class="gallery-item">
+        <img src="${item.image_url}" alt="${escapeHtml(item.name || 'Media')}">
+        <div class="gallery-item-overlay">
+          <button onclick="confirmDeleteGallery('${item.id}')" title="Delete Image"><i class="fa-solid fa-trash"></i></button>
+        </div>
       </div>
-      <div class="gallery-item-name">${esc(img.name)}</div>
-    </div>`).join('');
+    `).join('');
+  } catch(e) {}
 }
 
 async function handleGalleryUpload(e) {
-  const files = Array.from(e.target.files);
-  if (!files.length) return;
-  toast('info', `Uploading ${files.length} file(s)…`);
-  let uploaded = 0;
-  for (const file of files) {
-    const url = await cloudinaryUpload(file);
-    if (url) {
-      await sb.from('gallery').insert({ name: file.name, image_url: url, file_size: file.size });
-      uploaded++;
-    }
+  const files = e.target.files;
+  if (!files || files.length === 0) return;
+
+  showToast(`Uploading ${files.length} image(s)...`, 'info');
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY_PRESET);
+
+    try {
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_NAME}/image/upload`, {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+      if (data.secure_url) {
+        await sb.from('gallery').insert([{
+          name: file.name,
+          image_url: data.secure_url,
+          public_id: data.public_id || '',
+          file_size: file.size || 0
+        }]);
+      }
+    } catch(err) {}
   }
-  if (uploaded) {
-    toast('success', `${uploaded} image(s) uploaded!`);
-    logActivity('create', 'gallery', `${uploaded} image(s)`, 'Gallery upload');
-    loadGallery();
-  }
+
+  showToast('Gallery images uploaded successfully', 'success');
+  await loadGallery();
+  await loadDashboardStats();
 }
 
-function previewGalleryImage(url) {
-  document.getElementById('gallery-preview-img').src = url;
-  openModal('gallery-preview-modal');
-}
-
-function deleteGalleryImage(id, name) {
-  showConfirm('Delete Image?', `Delete "${name}" from gallery? This cannot be undone.`, async () => {
-    await sb.from('gallery').delete().eq('id', id);
-    toast('success', 'Image deleted!');
-    logActivity('delete', 'gallery', name);
-    loadGallery();
+function confirmDeleteGallery(id) {
+  showConfirm('Delete Gallery Image?', 'Are you sure you want to delete this media asset?', async () => {
+    try {
+      await sb.from('gallery').delete().eq('id', id);
+      showToast('Media image deleted', 'success');
+      await loadGallery();
+      await loadDashboardStats();
+    } catch(e) {}
   });
 }
 
 // ============================================================
-// CONTACT REQUESTS
+// 11. CONTACT REQUESTS CMS MANAGEMENT
 // ============================================================
 async function loadContacts() {
+  if (!sb) return;
   const tbody = document.getElementById('contacts-tbody');
-  tbody.innerHTML = '<tr><td colspan="8"><div class="spinner"></div></td></tr>';
-  const { data } = await sb.from('contact_requests').select('*').order('created_at', { ascending: false });
-  contactsData = data || [];
-  renderContactsTable();
-  updateUnreadBadge(contactsData.filter(c => !c.is_read).length);
-}
-
-function renderContactsTable() {
-  const filtered = contactsData.filter(c => {
-    const q = contactsFilter.search.toLowerCase();
-    const matchSearch = !q || c.name?.toLowerCase().includes(q) || c.email?.toLowerCase().includes(q) || c.phone?.toLowerCase().includes(q) || c.message?.toLowerCase().includes(q);
-    const matchStatus = contactsFilter.status === 'all' || (contactsFilter.status === 'read' && c.is_read) || (contactsFilter.status === 'unread' && !c.is_read);
-    return matchSearch && matchStatus;
-  });
-
-  const total = filtered.length;
-  const totalPages = Math.ceil(total / contactsPerPage);
-  const start = (contactsPage - 1) * contactsPerPage;
-  const pageData = filtered.slice(start, start + contactsPerPage);
-
-  const tbody = document.getElementById('contacts-tbody');
-  const empty = document.getElementById('contacts-empty');
-
-  if (!pageData.length) {
-    tbody.innerHTML = '';
-    empty.style.display = 'block';
-    document.getElementById('contacts-pagination').innerHTML = '';
-    return;
-  }
-  empty.style.display = 'none';
-  tbody.innerHTML = pageData.map(c => `
-    <tr style="${!c.is_read ? 'background:rgba(79,142,247,0.04)' : ''}">
-      <td><strong>${esc(c.name)}</strong></td>
-      <td>${esc(c.email)}</td>
-      <td>${esc(c.phone)}</td>
-      <td>${esc(c.subject || '–')}</td>
-      <td style="max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(c.message)}</td>
-      <td>${formatDate(c.created_at)}</td>
-      <td><span class="badge ${c.is_read ? 'badge-read' : 'badge-unread'}">${c.is_read ? 'Read' : 'Unread'}</span></td>
-      <td>
-        <div class="table-actions">
-          <button class="btn btn-sm btn-secondary btn-icon" onclick="viewContact('${c.id}')" title="View"><i class="fa-solid fa-eye"></i></button>
-          ${!c.is_read ? `<button class="btn btn-sm btn-success btn-icon" onclick="markContactRead('${c.id}')" title="Mark Read"><i class="fa-solid fa-check"></i></button>` : ''}
-          <button class="btn btn-sm btn-danger btn-icon" onclick="deleteContact('${c.id}','${esc(c.name)}')" title="Delete"><i class="fa-solid fa-trash"></i></button>
-        </div>
-      </td>
-    </tr>`).join('');
-
-  // Pagination
-  renderPagination('contacts-pagination', contactsPage, totalPages, (p) => { contactsPage = p; renderContactsTable(); });
-}
-
-function filterContacts(val) { contactsFilter.search = val; contactsPage = 1; renderContactsTable(); }
-function filterContactsByStatus(val) { contactsFilter.status = val; contactsPage = 1; renderContactsTable(); }
-
-async function viewContact(id) {
-  const c = contactsData.find(x => x.id === id); if (!c) return;
-  // Mark as read
-  if (!c.is_read) await markContactRead(id, false);
-
-  document.getElementById('contact-view-body').innerHTML = `
-    <div style="display:grid;gap:14px">
-      <div style="display:flex;gap:20px;flex-wrap:wrap">
-        <div style="flex:1"><label style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px">Name</label><p style="font-weight:700;margin-top:4px">${esc(c.name)}</p></div>
-        <div style="flex:1"><label style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px">Date</label><p style="font-weight:600;margin-top:4px">${formatDate(c.created_at)}</p></div>
-      </div>
-      <div style="display:flex;gap:20px;flex-wrap:wrap">
-        <div style="flex:1"><label style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px">Email</label><p style="margin-top:4px"><a href="mailto:${esc(c.email)}" style="color:var(--accent)">${esc(c.email)}</a></p></div>
-        <div style="flex:1"><label style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px">Phone</label><p style="margin-top:4px">${esc(c.phone || '–')}</p></div>
-      </div>
-      ${c.subject ? `<div><label style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px">Subject</label><p style="margin-top:4px;font-weight:600">${esc(c.subject)}</p></div>` : ''}
-      <div><label style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px">Message</label>
-        <div class="message-detail" style="margin-top:6px">${esc(c.message)}</div>
-      </div>
-    </div>`;
-  openModal('contact-view-modal');
-}
-
-async function markContactRead(id, reload = true) {
-  await sb.from('contact_requests').update({ is_read: true }).eq('id', id);
-  const c = contactsData.find(x => x.id === id);
-  if (c) c.is_read = true;
-  if (reload) renderContactsTable();
-  updateUnreadBadge(contactsData.filter(c => !c.is_read).length);
-}
-
-async function markAllRead() {
-  await sb.from('contact_requests').update({ is_read: true }).eq('is_read', false);
-  contactsData.forEach(c => c.is_read = true);
-  renderContactsTable();
-  updateUnreadBadge(0);
-  toast('success', 'All requests marked as read!');
-}
-
-function deleteContact(id, name) {
-  showConfirm('Delete Request?', `Delete contact request from "${name}"?`, async () => {
-    await sb.from('contact_requests').delete().eq('id', id);
-    contactsData = contactsData.filter(c => c.id !== id);
-    renderContactsTable();
-    updateUnreadBadge(contactsData.filter(c => !c.is_read).length);
-    toast('success', 'Request deleted!');
-    logActivity('delete', 'contact_requests', name);
-  });
-}
-
-function updateUnreadBadge(count) {
-  // Sidebar badge
   const badge = document.getElementById('unread-badge');
-  if (badge) {
-    if (count > 0) { badge.textContent = count; badge.style.display = 'flex'; }
-    else badge.style.display = 'none';
-  }
-  // Mobile bottom nav badge
-  const mobBadge = document.getElementById('mob-unread-badge');
-  if (mobBadge) {
-    if (count > 0) { mobBadge.textContent = count; mobBadge.style.display = 'block'; }
-    else mobBadge.style.display = 'none';
-  }
+  if (!tbody) return;
+
+  try {
+    const { data } = await sb.from('contact_requests').select('*').order('created_at', { ascending: false });
+    const unreadCount = data ? data.filter(c => !c.is_read).length : 0;
+
+    if (badge) {
+      badge.textContent = unreadCount;
+      badge.style.display = unreadCount > 0 ? 'inline-block' : 'none';
+    }
+
+    if (!data || data.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="8" class="text-center" style="padding:24px">No contact inquiries received yet.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = data.map(item => `
+      <tr class="${item.is_read ? '' : 'unread-row'}">
+        <td><strong>${escapeHtml(item.name)}</strong></td>
+        <td><a href="mailto:${item.email}" class="table-link">${escapeHtml(item.email || '—')}</a></td>
+        <td>${escapeHtml(item.phone || '—')}</td>
+        <td>${escapeHtml(item.subject || 'Inquiry')}</td>
+        <td class="text-muted" style="max-width:200px">${escapeHtml(item.message || '')}</td>
+        <td style="font-size:12px">${new Date(item.created_at).toLocaleDateString()}</td>
+        <td><span class="status-badge ${item.is_read ? 'active' : 'inactive'}">${item.is_read ? 'Read' : 'Unread'}</span></td>
+        <td>
+          <div class="table-actions">
+            <button class="action-btn edit" onclick="viewContactDetails('${item.id}')" title="View Full Request"><i class="fa-solid fa-eye"></i></button>
+            <button class="action-btn delete" onclick="confirmDeleteContact('${item.id}')" title="Delete"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  } catch(e) {}
+}
+
+async function viewContactDetails(id) {
+  try {
+    const { data } = await sb.from('contact_requests').select('*').eq('id', id).single();
+    if (data) {
+      if (!data.is_read) {
+        await sb.from('contact_requests').update({ is_read: true }).eq('id', id);
+        await loadContacts();
+      }
+      const body = document.getElementById('contact-view-body');
+      if (body) {
+        body.innerHTML = `
+          <p><strong>Name:</strong> ${escapeHtml(data.name)}</p>
+          <p><strong>Email:</strong> <a href="mailto:${data.email}">${escapeHtml(data.email)}</a></p>
+          <p><strong>Phone:</strong> ${escapeHtml(data.phone || 'N/A')}</p>
+          <p><strong>Subject:</strong> ${escapeHtml(data.subject || 'Website Inquiry')}</p>
+          <p><strong>Received Date:</strong> ${new Date(data.created_at).toLocaleString()}</p>
+          <hr style="border:none;border-top:1px solid var(--border);margin:12px 0;">
+          <p><strong>Message:</strong></p>
+          <div style="background:var(--bg-input);padding:14px;border-radius:8px;line-height:1.6">${escapeHtml(data.message || 'No message content.')}</div>
+        `;
+      }
+      openModal('contact-view-modal');
+    }
+  } catch(e) {}
+}
+
+function confirmDeleteContact(id) {
+  showConfirm('Delete Contact Inquiry?', 'Are you sure you want to delete this contact request?', async () => {
+    try {
+      await sb.from('contact_requests').delete().eq('id', id);
+      showToast('Contact request deleted', 'success');
+      await loadContacts();
+      await loadDashboardStats();
+    } catch(e) {}
+  });
+}
+
+function filterContacts(query) {
+  filterTable('contacts-tbody', query);
 }
 
 // ============================================================
-// WEBSITE SETTINGS
+// 12. WEBSITE SETTINGS MANAGEMENT
 // ============================================================
 async function loadWebsiteSettings() {
-  const { data } = await sb.from('website_settings').select('*').limit(1).single();
-  if (!data) return;
-  setVal('ws-company-name', data.company_name || '');
-  setVal('ws-contact-number', data.contact_number || '');
-  setVal('ws-email', data.email_address || '');
-  setVal('ws-address', data.business_address || '');
-  setVal('ws-facebook', data.facebook_url || '');
-  setVal('ws-instagram', data.instagram_url || '');
-  setVal('ws-linkedin', data.linkedin_url || '');
-  setVal('ws-youtube', data.youtube_url || '');
-  setVal('ws-whatsapp', data.whatsapp_number || '');
-  setVal('ws-logo-url', data.logo_url || '');
-  if (data.logo_url) showPreviewImage('logo-preview', 'logo-preview-img', data.logo_url);
+  if (!sb) return;
+  try {
+    const { data } = await sb.from('website_settings').select('*').limit(1).single();
+    if (data) {
+      const setV = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+      setV('ws-company-name', data.company_name);
+      setV('ws-contact-number', data.contact_number);
+      setV('ws-email', data.email_address || data.email);
+      setV('ws-address', data.business_address || data.address);
+      setV('ws-whatsapp', data.whatsapp_number);
+      setV('ws-facebook', data.facebook_url);
+      setV('ws-instagram', data.instagram_url);
+      setV('ws-linkedin', data.linkedin_url);
+      setV('ws-youtube', data.youtube_url);
+      setV('ws-footer-content', data.footer_content);
+      setV('ws-copyright', data.copyright_text);
+    }
+  } catch(e) {}
 }
 
 async function saveWebsiteSettings() {
+  if (!sb) return;
   const payload = {
-    company_name: getVal('ws-company-name'),
-    contact_number: getVal('ws-contact-number'),
-    email_address: getVal('ws-email'),
-    business_address: getVal('ws-address'),
-    facebook_url: getVal('ws-facebook'),
-    instagram_url: getVal('ws-instagram'),
-    linkedin_url: getVal('ws-linkedin'),
-    youtube_url: getVal('ws-youtube'),
-    whatsapp_number: getVal('ws-whatsapp'),
-    logo_url: getVal('ws-logo-url'),
-    updated_at: new Date().toISOString()
+    company_name: document.getElementById('ws-company-name')?.value || '',
+    contact_number: document.getElementById('ws-contact-number')?.value || '',
+    email_address: document.getElementById('ws-email')?.value || '',
+    business_address: document.getElementById('ws-address')?.value || '',
+    whatsapp_number: document.getElementById('ws-whatsapp')?.value || '',
+    facebook_url: document.getElementById('ws-facebook')?.value || '',
+    instagram_url: document.getElementById('ws-instagram')?.value || '',
+    linkedin_url: document.getElementById('ws-linkedin')?.value || '',
+    youtube_url: document.getElementById('ws-youtube')?.value || '',
+    footer_content: document.getElementById('ws-footer-content')?.value || '',
+    copyright_text: document.getElementById('ws-copyright')?.value || ''
   };
-  const { data: existing } = await sb.from('website_settings').select('id').limit(1).single();
-  let err;
-  if (existing) { ({ error: err } = await sb.from('website_settings').update(payload).eq('id', existing.id)); }
-  else { ({ error: err } = await sb.from('website_settings').insert(payload)); }
-  if (err) { toast('error', err.message); return; }
-  toast('success', 'Website settings saved!');
-  logActivity('update', 'website_settings', 'Website Settings');
-}
 
-async function handleLogoUpload(e) {
-  const file = e.target.files[0]; if (!file) return;
-  toast('info', 'Uploading logo…');
-  const url = await cloudinaryUpload(file);
-  if (url) { setVal('ws-logo-url', url); showPreviewImage('logo-preview', 'logo-preview-img', url); toast('success', 'Logo uploaded!'); }
+  try {
+    const { data: existing } = await sb.from('website_settings').select('id').limit(1);
+    if (existing && existing.length > 0) {
+      await sb.from('website_settings').update(payload).eq('id', existing[0].id);
+    } else {
+      await sb.from('website_settings').insert([payload]);
+    }
+    showToast('Website settings saved successfully!', 'success');
+  } catch(e) { showToast('Error saving settings: ' + e.message, 'error'); }
 }
-
-function removeLogo() { setVal('ws-logo-url', ''); hidePreview('logo-preview'); }
 
 // ============================================================
-// SEO SETTINGS
+// 13. SEO SETTINGS MANAGEMENT
 // ============================================================
 async function loadSeoSettings() {
-  const { data } = await sb.from('seo_settings').select('*').limit(1).single();
-  if (!data) return;
-  setVal('seo-title', data.meta_title || '');
-  setVal('seo-desc', data.meta_description || '');
-  setVal('seo-keywords', data.keywords || '');
-  setVal('seo-og-url', data.og_image_url || '');
-  setVal('seo-favicon-url', data.favicon_url || '');
-  if (data.og_image_url) showPreviewImage('og-img-preview', 'og-img-preview-img', data.og_image_url);
-  if (data.favicon_url) showPreviewImage('favicon-preview', 'favicon-preview-img', data.favicon_url);
-  updateSeoCounter('seo-title', 'seo-title-count', 60);
-  updateSeoCounter('seo-desc', 'seo-desc-count', 160);
-}
-
-function updateSeoCounter(inputId, countId, max) {
-  const len = (document.getElementById(inputId)?.value || '').length;
-  const el = document.getElementById(countId);
-  if (el) { el.textContent = len; el.style.color = len > max * 0.9 ? 'var(--yellow)' : len >= max ? 'var(--red)' : 'var(--text-muted)'; }
+  if (!sb) return;
+  try {
+    const { data } = await sb.from('seo_settings').select('*').limit(1).single();
+    if (data) {
+      const setV = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+      setV('seo-title', data.meta_title);
+      setV('seo-desc', data.meta_description);
+      setV('seo-keywords', data.keywords);
+      setV('seo-og-title', data.og_title);
+      setV('seo-og-desc', data.og_description);
+    }
+  } catch(e) {}
 }
 
 async function saveSeoSettings() {
+  if (!sb) return;
   const payload = {
-    meta_title: getVal('seo-title'),
-    meta_description: getVal('seo-desc'),
-    keywords: getVal('seo-keywords'),
-    og_image_url: getVal('seo-og-url'),
-    favicon_url: getVal('seo-favicon-url'),
-    updated_at: new Date().toISOString()
+    meta_title: document.getElementById('seo-title')?.value || '',
+    meta_description: document.getElementById('seo-desc')?.value || '',
+    keywords: document.getElementById('seo-keywords')?.value || '',
+    og_title: document.getElementById('seo-og-title')?.value || '',
+    og_description: document.getElementById('seo-og-desc')?.value || ''
   };
-  const { data: existing } = await sb.from('seo_settings').select('id').limit(1).single();
-  let err;
-  if (existing) { ({ error: err } = await sb.from('seo_settings').update(payload).eq('id', existing.id)); }
-  else { ({ error: err } = await sb.from('seo_settings').insert(payload)); }
-  if (err) { toast('error', err.message); return; }
-  toast('success', 'SEO settings saved!');
-  logActivity('update', 'seo_settings', 'SEO Settings');
-}
 
-async function handleOgImageUpload(e) {
-  const file = e.target.files[0]; if (!file) return;
-  toast('info', 'Uploading…');
-  const url = await cloudinaryUpload(file);
-  if (url) { setVal('seo-og-url', url); showPreviewImage('og-img-preview', 'og-img-preview-img', url); toast('success', 'OG image uploaded!'); }
+  try {
+    const { data: existing } = await sb.from('seo_settings').select('id').limit(1);
+    if (existing && existing.length > 0) {
+      await sb.from('seo_settings').update(payload).eq('id', existing[0].id);
+    } else {
+      await sb.from('seo_settings').insert([payload]);
+    }
+    showToast('SEO Settings saved successfully!', 'success');
+  } catch(e) { showToast('Error: ' + e.message, 'error'); }
 }
-async function handleFaviconUpload(e) {
-  const file = e.target.files[0]; if (!file) return;
-  toast('info', 'Uploading…');
-  const url = await cloudinaryUpload(file);
-  if (url) { setVal('seo-favicon-url', url); showPreviewImage('favicon-preview', 'favicon-preview-img', url); toast('success', 'Favicon uploaded!'); }
-}
-
-function removeOgImg() { setVal('seo-og-url', ''); hidePreview('og-img-preview'); }
-function removeFavicon() { setVal('seo-favicon-url', ''); hidePreview('favicon-preview'); }
 
 // ============================================================
-// ADMIN PROFILE
+// 14. ADMIN PROFILE & ACCOUNT MANAGEMENT
 // ============================================================
-async function loadAdminProfile() {
-  if (!currentUser) return;
-  const { data } = await sb.from('admin_profiles').select('*').eq('id', currentUser.id).single();
-  const name = data?.full_name || currentUser.email?.split('@')[0] || 'Admin';
-  const email = data?.email || currentUser.email || '';
-  const avatarUrl = data?.avatar_url || '';
-
-  setEl('header-admin-name', name);
-
-  const avatarEl = document.getElementById('header-avatar-img');
-  if (avatarEl) {
-    if (avatarUrl) avatarEl.innerHTML = `<img src="${esc(avatarUrl)}" alt="">`;
-    else avatarEl.textContent = name[0]?.toUpperCase() || 'A';
-  }
-
-  setEl('profile-display-name', name);
-  setEl('profile-display-email', email);
-
-  const profileAv = document.getElementById('profile-avatar-lg');
-  if (profileAv) {
-    if (avatarUrl) {
-      const img = profileAv.querySelector('img') || document.createElement('img');
-      img.src = avatarUrl; img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%;position:absolute;inset:0';
-      if (!profileAv.querySelector('img')) profileAv.insertBefore(img, profileAv.firstChild);
-    } else {
-      const existing = profileAv.querySelector('img');
-      if (existing) existing.remove();
-      profileAv.childNodes.forEach(n => { if (n.nodeType === 3) n.remove(); });
-      profileAv.insertAdjacentText('afterbegin', name[0]?.toUpperCase() || 'A');
-    }
-  }
-}
-
-function loadProfilePage() {
-  if (!currentUser) return;
-  sb.from('admin_profiles').select('*').eq('id', currentUser.id).single().then(({ data }) => {
-    if (data) {
-      setVal('profile-name', data.full_name || '');
-      setVal('profile-email', data.email || currentUser.email || '');
-      setVal('profile-avatar-url', data.avatar_url || '');
-      if (data.avatar_url) {
-        const av = document.getElementById('profile-avatar-lg');
-        if (av) {
-          const existing = av.querySelector('img');
-          if (existing) { existing.src = data.avatar_url; }
-          else { av.insertAdjacentHTML('afterbegin', `<img src="${esc(data.avatar_url)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;position:absolute;inset:0">`); }
-        }
-      }
-    } else {
-      setVal('profile-name', currentUser.email?.split('@')[0] || '');
-      setVal('profile-email', currentUser.email || '');
-    }
-  });
-}
-
 async function saveProfile() {
-  const name = getVal('profile-name').trim();
-  if (!name) { toast('warning', 'Name cannot be empty.'); return; }
-  const payload = { full_name: name, email: getVal('profile-email'), avatar_url: getVal('profile-avatar-url'), updated_at: new Date().toISOString() };
+  const fullName = document.getElementById('profile-name')?.value.trim();
+  if (!fullName) { showToast('Name is required', 'error'); return; }
 
-  const { data: existing } = await sb.from('admin_profiles').select('id').eq('id', currentUser.id).single();
-  let err;
-  if (existing) { ({ error: err } = await sb.from('admin_profiles').update(payload).eq('id', currentUser.id)); }
-  else { ({ error: err } = await sb.from('admin_profiles').insert({ ...payload, id: currentUser.id })); }
-
-  if (err) { toast('error', err.message); return; }
-  toast('success', 'Profile saved!');
-  setEl('header-admin-name', name);
-  setEl('profile-display-name', name);
-  logActivity('update', 'admin_profiles', 'Admin Profile');
+  try {
+    if (sb && sb.auth) {
+      await sb.auth.updateUser({ data: { full_name: fullName } });
+      const headerName = document.getElementById('header-admin-name');
+      if (headerName) headerName.textContent = fullName;
+      showToast('Admin profile updated', 'success');
+    }
+  } catch(e) { showToast('Profile update failed: ' + e.message, 'error'); }
 }
 
 async function changePassword() {
-  const newPwd = getVal('new-password');
-  const confirmPwd = getVal('confirm-password');
-  if (!newPwd || !confirmPwd) { toast('warning', 'Please fill both fields.'); return; }
-  if (newPwd !== confirmPwd) { toast('error', 'Passwords do not match.'); return; }
-  if (newPwd.length < 6) { toast('warning', 'Password must be at least 6 characters.'); return; }
+  const newPwd = document.getElementById('new-password')?.value;
+  const confirmPwd = document.getElementById('confirm-password')?.value;
 
-  const { error } = await sb.auth.updateUser({ password: newPwd });
-  localStorage.setItem('trilok_admin_pwd', newPwd);
-  toast('success', 'Password updated successfully! Old password will no longer work.');
-  setVal('new-password', ''); setVal('confirm-password', '');
-  logActivity('update', 'auth', 'Password Changed');
-}
+  if (!newPwd || newPwd.length < 6) {
+    showToast('Password must be at least 6 characters long', 'error');
+    return;
+  }
+  if (newPwd !== confirmPwd) {
+    showToast('Passwords do not match', 'error');
+    return;
+  }
 
-async function handleProfileAvatarUpload(e) {
-  const file = e.target.files[0]; if (!file) return;
-  toast('info', 'Uploading avatar…');
-  const url = await cloudinaryUpload(file);
-  if (url) {
-    setVal('profile-avatar-url', url);
-    const av = document.getElementById('profile-avatar-lg');
-    if (av) {
-      const existing = av.querySelector('img');
-      if (existing) { existing.src = url; }
-      else { av.insertAdjacentHTML('afterbegin', `<img src="${esc(url)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;position:absolute;inset:0">`); }
+  try {
+    const { error } = await sb.auth.updateUser({ password: newPwd });
+    if (error) {
+      showToast(error.message, 'error');
+    } else {
+      showToast('Password updated successfully in Supabase Auth!', 'success');
+      document.getElementById('new-password').value = '';
+      document.getElementById('confirm-password').value = '';
     }
-    toast('success', 'Avatar uploaded!');
+  } catch(e) {
+    showToast('Password change error: ' + e.message, 'error');
   }
 }
 
 // ============================================================
-// ACTIVITY LOG
+// CLOUDINARY MEDIA UPLOADER UTILITY
 // ============================================================
-async function logActivity(action, entityType, entityName, details = '') {
-  if (!currentUser) return;
-  try {
-    await sb.from('activity_logs').insert({
-      admin_id: currentUser.id,
-      action: capitalize(action),
-      entity_type: entityType,
-      entity_name: entityName,
-      details
-    });
-  } catch(e) { /* non-blocking */ }
-}
+async function uploadImageCloudinary(e, targetInputId, previewBoxId) {
+  const file = e.target.files ? e.target.files[0] : null;
+  if (!file) return;
 
-// ============================================================
-// CLOUDINARY UPLOAD
-// ============================================================
-async function cloudinaryUpload(file) {
+  showToast('Uploading image to Cloudinary...', 'info');
+
   const formData = new FormData();
   formData.append('file', file);
   formData.append('upload_preset', CLOUDINARY_PRESET);
-  formData.append('cloud_name', CLOUDINARY_NAME);
 
   try {
     const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_NAME}/image/upload`, {
@@ -1422,111 +1379,91 @@ async function cloudinaryUpload(file) {
       body: formData
     });
     const data = await res.json();
-    if (data.secure_url) return data.secure_url;
-    toast('error', 'Cloudinary upload failed: ' + (data.error?.message || 'Unknown error'));
-    return null;
-  } catch(e) {
-    toast('error', 'Upload failed: ' + e.message);
-    return null;
+    if (data.secure_url) {
+      const input = document.getElementById(targetInputId);
+      if (input) input.value = data.secure_url;
+      showImagePreview(targetInputId, previewBoxId, data.secure_url);
+      showToast('Image uploaded successfully!', 'success');
+    } else {
+      showToast('Upload failed: ' + (data.error?.message || 'Unknown error'), 'error');
+    }
+  } catch(err) {
+    showToast('Cloudinary upload error: ' + err.message, 'error');
   }
 }
 
-// ============================================================
-// MODAL HELPERS
-// ============================================================
-function openModal(id) { document.getElementById(id)?.classList.add('open'); }
-function closeModal(id) { document.getElementById(id)?.classList.remove('open'); }
-
-// Close modal on backdrop click
-document.addEventListener('click', (e) => {
-  if (e.target.classList.contains('modal-backdrop')) {
-    e.target.classList.remove('open');
+function showImagePreview(inputId, previewId, url) {
+  const box = document.getElementById(previewId);
+  const img = box ? box.querySelector('img') : null;
+  if (box && img && url) {
+    img.src = url;
+    box.style.display = 'block';
   }
-});
+}
 
-// CONFIRM MODAL
-let confirmCallback = null;
-function showConfirm(title, msg, callback) {
+function removeImage(inputId, previewId) {
+  const input = document.getElementById(inputId);
+  const box = document.getElementById(previewId);
+  if (input) input.value = '';
+  if (box) box.style.display = 'none';
+}
+
+// ============================================================
+// UI UTILITIES: MODALS, CONFIRMS, TOASTS, FILTER
+// ============================================================
+function openModal(id) {
+  const modal = document.getElementById(id);
+  if (modal) modal.classList.add('open');
+}
+
+function closeModal(id) {
+  const modal = document.getElementById(id);
+  if (modal) modal.classList.remove('open');
+}
+
+function showConfirm(title, message, onConfirm) {
   document.getElementById('confirm-title').textContent = title;
-  document.getElementById('confirm-msg').textContent = msg;
-  confirmCallback = callback;
+  document.getElementById('confirm-msg').textContent = message;
+  currentConfirmCallback = onConfirm;
+
+  const btn = document.getElementById('confirm-action-btn');
+  if (btn) {
+    btn.onclick = async () => {
+      closeModal('confirm-modal');
+      if (currentConfirmCallback) await currentConfirmCallback();
+    };
+  }
   openModal('confirm-modal');
 }
-document.getElementById('confirm-action-btn')?.addEventListener('click', () => {
-  closeModal('confirm-modal');
-  if (confirmCallback) { confirmCallback(); confirmCallback = null; }
-});
 
-// ============================================================
-// TOAST NOTIFICATIONS
-// ============================================================
-function toast(type, message, duration = 3500) {
+function showToast(msg, type = 'info') {
   const container = document.getElementById('toast-container');
-  const icons = { success: 'fa-circle-check', error: 'fa-circle-xmark', info: 'fa-circle-info', warning: 'fa-triangle-exclamation' };
-  const t = document.createElement('div');
-  t.className = `toast toast-${type}`;
-  t.innerHTML = `<i class="fa-solid ${icons[type]} toast-icon"></i><span class="toast-msg">${esc(message)}</span><i class="fa-solid fa-xmark toast-close" onclick="this.closest('.toast').remove()"></i>`;
-  container.appendChild(t);
-  setTimeout(() => { t.classList.add('hide'); setTimeout(() => t.remove(), 350); }, duration);
+  if (!container) return;
+
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  toast.innerHTML = `<i class="fa-solid ${type === 'success' ? 'fa-circle-check' : type === 'error' ? 'fa-circle-exclamation' : 'fa-circle-info'}"></i> <span>${escapeHtml(msg)}</span>`;
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateY(-10px)';
+    setTimeout(() => toast.remove(), 300);
+  }, 3500);
 }
 
-// ============================================================
-// PAGINATION
-// ============================================================
-function renderPagination(containerId, current, total, onChange) {
-  const container = document.getElementById(containerId);
-  if (!container || total <= 1) { if (container) container.innerHTML = ''; return; }
-  let html = '';
-  html += `<button ${current === 1 ? 'disabled' : ''} onclick="(${onChange})(${current - 1})"><i class="fa-solid fa-chevron-left"></i></button>`;
-  for (let i = 1; i <= total; i++) {
-    if (i === 1 || i === total || (i >= current - 1 && i <= current + 1)) {
-      html += `<button class="${i === current ? 'active' : ''}" onclick="(${onChange})(${i})">${i}</button>`;
-    } else if (i === current - 2 || i === current + 2) {
-      html += `<button disabled>…</button>`;
-    }
-  }
-  html += `<button ${current === total ? 'disabled' : ''} onclick="(${onChange})(${current + 1})"><i class="fa-solid fa-chevron-right"></i></button>`;
-  html += `<span class="pagination-info">${current} of ${total}</span>`;
-  container.innerHTML = html;
+function filterTable(tbodyId, query) {
+  const tbody = document.getElementById(tbodyId);
+  if (!tbody) return;
+  const q = (query || '').toLowerCase().trim();
+  const rows = tbody.querySelectorAll('tr');
+  rows.forEach(r => {
+    const text = r.textContent.toLowerCase();
+    r.style.display = text.includes(q) ? '' : 'none';
+  });
 }
 
-// ============================================================
-// UPLOAD PREVIEW HELPERS
-// ============================================================
-function showPreviewImage(previewId, imgId, url) {
-  const preview = document.getElementById(previewId);
-  const img = document.getElementById(imgId);
-  if (preview) preview.classList.add('show');
-  if (img) img.src = url;
-}
-
-function hidePreview(previewId) {
-  const preview = document.getElementById(previewId);
-  if (preview) { preview.classList.remove('show'); const img = preview.querySelector('img'); if (img) img.src = ''; }
-}
-
-// ============================================================
-// UTILITY HELPERS
-// ============================================================
-function getVal(id) { return (document.getElementById(id)?.value || '').trim(); }
-function setVal(id, val) { const el = document.getElementById(id); if (el) el.value = val; }
-function setEl(id, val) { const el = document.getElementById(id); if (el) el.textContent = val; }
-function esc(str) { return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
-function capitalize(str) { return str ? str.charAt(0).toUpperCase() + str.slice(1) : ''; }
-
-function formatDate(isoStr) {
-  if (!isoStr) return '–';
-  const d = new Date(isoStr);
-  return d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-}
-
-function timeAgo(isoStr) {
-  if (!isoStr) return '';
-  const diff = Date.now() - new Date(isoStr).getTime();
-  const mins = Math.floor(diff / 60000);
-  if (mins < 1) return 'just now';
-  if (mins < 60) return `${mins}m ago`;
-  const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `${hrs}h ago`;
-  return `${Math.floor(hrs / 24)}d ago`;
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }

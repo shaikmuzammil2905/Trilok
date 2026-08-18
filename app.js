@@ -3,6 +3,7 @@
  * Handles animated hero canvas particles, scroll reveals, navbar scroll,
  * mobile drawer navigation, portfolio tab filtering, statistics counters,
  * testimonial carousel slider, modals, and WhatsApp inquiry.
+ * Live Supabase Database Sync for single source of truth website CMS data.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -223,7 +224,7 @@ function initPortfolioFilters() {
     const filterBtns = document.querySelectorAll('.filter-btn');
     const projectCards = document.querySelectorAll('.project-card');
 
-    if (filterBtns.length === 0 || projectCards.length === 0) return;
+    if (filterBtns.length === 0) return;
 
     filterBtns.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -232,7 +233,7 @@ function initPortfolioFilters() {
 
             const filter = btn.getAttribute('data-filter') || 'all';
 
-            projectCards.forEach(card => {
+            document.querySelectorAll('.project-card').forEach(card => {
                 const category = card.getAttribute('data-category') || '';
                 
                 if (filter === 'all' || category.toLowerCase().includes(filter.toLowerCase())) {
@@ -258,56 +259,43 @@ function initTestimonialCarousel() {
 
     if (!quoteEl || !nameEl) return;
 
-    const testimonials = [
-        {
-            quote: '"Trilok Infotech delivered our corporate website and web platform beyond expectations. Great team, excellent support!"',
-            name: 'Srinivas P',
-            role: 'Business Owner & Founder'
-        },
-        {
-            quote: '"The eSaleAgreement platform completely transformed our legal documentation process. Aadhaar eKYC and eSign are seamless!"',
-            name: 'Rajesh Kumar',
-            role: 'Real Estate Developer'
-        },
-        {
-            quote: '"Exceptional mobile app development service. Clean code, beautiful UI, and 24/7 technical support from Trilok Infotech."',
-            name: 'Anusha Rao',
-            role: 'Tech Lead & Client'
+    window.updateTestimonialsCarousel = function(testimonials) {
+        if (!testimonials || testimonials.length === 0) return;
+        let currentIndex = 0;
+
+        function showTestimonial(index) {
+            currentIndex = index % testimonials.length;
+            const item = testimonials[currentIndex];
+
+            quoteEl.style.opacity = '0';
+            setTimeout(() => {
+                quoteEl.textContent = `"${item.review_message || item.quote || ''}"`;
+                nameEl.textContent = item.customer_name || item.name || '';
+                roleEl.textContent = item.position_company || item.role || '';
+                quoteEl.style.opacity = '1';
+            }, 150);
+
+            dots.forEach((d, idx) => {
+                if (idx === currentIndex) d.classList.add('active');
+                else d.classList.remove('active');
+            });
         }
-    ];
 
-    let currentIndex = 0;
-
-    function showTestimonial(index) {
-        currentIndex = index;
-        const item = testimonials[currentIndex];
-
-        quoteEl.style.opacity = '0';
-        setTimeout(() => {
-            quoteEl.textContent = item.quote;
-            nameEl.textContent = item.name;
-            roleEl.textContent = item.role;
-            quoteEl.style.opacity = '1';
-        }, 150);
-
-        dots.forEach((d, idx) => {
-            if (idx === currentIndex) d.classList.add('active');
-            else d.classList.remove('active');
+        dots.forEach((dot, idx) => {
+            dot.onclick = () => showTestimonial(idx);
         });
-    }
 
-    dots.forEach((dot, idx) => {
-        dot.addEventListener('click', () => showTestimonial(idx));
-    });
+        if (window.tCarouselInterval) clearInterval(window.tCarouselInterval);
+        window.tCarouselInterval = setInterval(() => {
+            showTestimonial(currentIndex + 1);
+        }, 6000);
 
-    setInterval(() => {
-        let nextIdx = (currentIndex + 1) % testimonials.length;
-        showTestimonial(nextIdx);
-    }, 6000);
+        showTestimonial(0);
+    };
 }
 
 /* ==========================================================================
-   8. MODAL POPUP & INQUIRY FORM (WHATSAPP INTEGRATION)
+   8. MODAL POPUP & INQUIRY FORM (SUPABASE + WHATSAPP INTEGRATION)
    ========================================================================== */
 function initModalSystem() {
     const contactModal = document.getElementById('contact-modal');
@@ -350,7 +338,7 @@ function initModalSystem() {
     });
 
     if (form) {
-        form.addEventListener('submit', (e) => {
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
             const name = document.getElementById('cust-name')?.value || '';
@@ -360,11 +348,21 @@ function initModalSystem() {
             const message = document.getElementById('cust-message')?.value || '';
             const subject = subjectInput?.value || 'Website Inquiry';
 
-            const whatsappText = `Hello Trilok Infotech,\n\nInquiry: ${subject}\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\nService: ${service}\nMessage: ${message}`;
+            // Insert into Supabase contact_requests table
+            if (window.sbClient) {
+                try {
+                    await window.sbClient.from('contact_requests').insert([{
+                        name, phone, email, subject: `${subject} - ${service}`, message, is_read: false
+                    }]);
+                } catch(err) {
+                    console.error("Failed to save contact request to database:", err);
+                }
+            }
 
+            const whatsappText = `Hello Trilok Infotech,\n\nInquiry: ${subject}\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\nService: ${service}\nMessage: ${message}`;
             window.open(`https://wa.me/918639833447?text=${encodeURIComponent(whatsappText)}`, '_blank');
 
-            alert('Thank you! Your inquiry details have been captured and opened on WhatsApp (+91 8639833447).');
+            alert('Thank you! Your inquiry has been sent. Our team will contact you shortly.');
             closeModal();
             form.reset();
         });
@@ -416,20 +414,21 @@ function initServiceModals() {
 }
 
 /* ==========================================================================
-   LIVE SUPABASE CMS SYNC — REALTIME UPDATES FOR MAIN WEBSITE
+   LIVE SUPABASE CMS SYNC — SINGLE SOURCE OF TRUTH FOR MAIN WEBSITE
    ========================================================================== */
 async function initLiveCmsSync() {
     const SUPABASE_URL = 'https://gotrpjxnrmocsrfxauyz.supabase.co';
     const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdvdHJwanhucm1vY3NyZnhhdXl6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5MjI1MDgsImV4cCI6MjEwMTQ5ODUwOH0.h5FE6bQp6wp7DyQJaec-CT9pmhrlm1S42u4dWwKGOrU';
     
     let sb = null;
-    if (window.supabase) {
-        sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+    if (typeof supabase !== 'undefined' && supabase.createClient) {
+        sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+        window.sbClient = sb;
     } else {
         return;
     }
 
-    // 1. Sync Website & Contact Information
+    // 1. Website Settings & SEO
     try {
         const { data: ws } = await sb.from('website_settings').select('*').limit(1).single();
         if (ws) {
@@ -438,14 +437,16 @@ async function initLiveCmsSync() {
                     el.innerHTML = `<i class="fa-solid fa-phone text-cyan"></i> ${ws.contact_number}`;
                 });
             }
-            if (ws.email) {
+            if (ws.email_address || ws.email) {
+                const em = ws.email_address || ws.email;
                 document.querySelectorAll('.footer-contact-info div:nth-child(3), .contact-email-text').forEach(el => {
-                    el.innerHTML = `<i class="fa-solid fa-envelope text-cyan"></i> ${ws.email}`;
+                    el.innerHTML = `<i class="fa-solid fa-envelope text-cyan"></i> ${em}`;
                 });
             }
-            if (ws.address) {
+            if (ws.business_address || ws.address) {
+                const addr = ws.business_address || ws.address;
                 document.querySelectorAll('.footer-contact-info div:nth-child(1), .contact-address-text').forEach(el => {
-                    el.innerHTML = `<i class="fa-solid fa-location-dot text-cyan"></i> ${ws.address}`;
+                    el.innerHTML = `<i class="fa-solid fa-location-dot text-cyan"></i> ${addr}`;
                 });
             }
             if (ws.logo_url) {
@@ -453,99 +454,171 @@ async function initLiveCmsSync() {
                     img.src = ws.logo_url;
                 });
             }
+            if (ws.footer_content) {
+                const fDesc = document.querySelector('.footer-brand-desc');
+                if (fDesc) fDesc.textContent = ws.footer_content;
+            }
+            if (ws.copyright_text) {
+                const copyEl = document.querySelector('.footer-bottom p');
+                if (copyEl) copyEl.textContent = ws.copyright_text;
+            }
         }
     } catch(e) {}
 
-    // 2. Sync Hero Content
+    // 2. SEO Settings
+    try {
+        const { data: seo } = await sb.from('seo_settings').select('*').limit(1).single();
+        if (seo) {
+            if (seo.meta_title) document.title = seo.meta_title;
+            if (seo.meta_description) {
+                const metaDesc = document.querySelector('meta[name="description"]');
+                if (metaDesc) metaDesc.setAttribute('content', seo.meta_description);
+            }
+        }
+    } catch(e) {}
+
+    // 3. Hero Section
     try {
         const { data: hero } = await sb.from('hero_settings').select('*').limit(1).single();
         if (hero) {
-            const hTitle = document.querySelector('.hero-title, .hero-heading');
-            if (hTitle && hero.heading) hTitle.innerHTML = hero.heading;
-            const hSub = document.querySelector('.hero-sub, .hero-subheading');
-            if (hSub && hero.subheading) hSub.innerHTML = hero.subheading;
+            const hSec = document.querySelector('.hero-section');
+            if (hSec && hero.is_visible === false) {
+                hSec.style.display = 'none';
+            } else if (hSec) {
+                hSec.style.display = 'block';
+                const hTitle = document.querySelector('.hero-title');
+                if (hTitle && hero.heading) hTitle.innerHTML = hero.heading.replace(/\n/g, '<br>');
+                const hSub = document.querySelector('.hero-subtitle');
+                if (hSub && (hero.sub_heading || hero.subheading)) hSub.innerHTML = `"${hero.sub_heading || hero.subheading}"`;
+                const cta1 = document.querySelector('.hero-buttons .btn-primary');
+                if (cta1 && hero.cta_primary_text) cta1.innerHTML = `${hero.cta_primary_text} <i class="fa-solid fa-arrow-right"></i>`;
+                const cta2 = document.querySelector('.hero-buttons .btn-outline-white');
+                if (cta2 && hero.cta_secondary_text) cta2.innerHTML = `${hero.cta_secondary_text} <i class="fa-solid fa-desktop"></i>`;
+            }
         }
     } catch(e) {}
 
-    // 3. Sync Services Section
+    // 4. About Us Section
     try {
-        let services = null;
-        if (sb) {
-            const { data } = await sb.from('services').select('*').order('display_order');
-            if (data && data.length > 0) services = data;
+        const { data: about } = await sb.from('about_settings').select('*').limit(1).single();
+        if (about) {
+            const whySec = document.querySelector('.why-section');
+            if (whySec && about.is_visible === false) {
+                whySec.style.display = 'none';
+            } else if (whySec) {
+                const titleEl = whySec.querySelector('.main-title');
+                if (titleEl && about.heading) titleEl.textContent = about.heading;
+                const subEl = whySec.querySelector('.section-subtitle');
+                if (subEl && about.content) subEl.textContent = about.content;
+            }
         }
-        if (!services) {
-            try { services = JSON.parse(localStorage.getItem('trilok_services_cache')); } catch(e) {}
-        }
+    } catch(e) {}
+
+    // 5. Services Section
+    try {
+        const { data: services } = await sb.from('services').select('*').eq('status', 'active').order('display_order');
         if (services && services.length > 0) {
             const sGrid = document.querySelector('.services-grid');
             if (sGrid) {
                 sGrid.innerHTML = services.map(s => `
-                    <div class="service-card" data-service-id="${s.id}">
+                    <div class="service-card scroll-reveal visible" data-service-id="${s.id}">
                         <div class="service-icon-box">
                             ${s.image_url ? `<img src="${s.image_url}" alt="${s.title}" style="width:36px;height:36px;object-fit:contain;">` : `<i class="${s.icon_class || 'fa-solid fa-laptop-code'}"></i>`}
                         </div>
-                        <h3>${s.title}</h3>
-                        <p>${s.short_desc || s.description || ''}</p>
-                        <a href="detail.html?service=${s.id}" class="service-link">Learn More <i class="fa-solid fa-arrow-right"></i></a>
+                        <h3 class="service-title">${s.title}</h3>
+                        <p class="service-desc">${s.short_desc || s.description || ''}</p>
+                        <button class="service-card-btn open-service-modal" data-title="${s.title}" data-desc="${s.description || s.short_desc || ''}">
+                            Learn More <i class="fa-solid fa-arrow-right"></i>
+                        </button>
                     </div>
                 `).join('');
+                initServiceModals();
             }
         }
     } catch(e) {}
 
-    // 4. Sync Features / Products Section
+    // 6. View Our Work / Projects Section
     try {
-        let features = null;
-        if (sb) {
-            const { data } = await sb.from('features').select('*').order('display_order');
-            if (data && data.length > 0) features = data;
-        }
-        if (!features) {
-            try { features = JSON.parse(localStorage.getItem('trilok_features_cache')); } catch(e) {}
-        }
-        if (features && features.length > 0) {
-            const fGrid = document.querySelector('.features-grid, .products-grid');
-            if (fGrid) {
-                fGrid.innerHTML = features.map(f => `
-                    <div class="feature-card">
-                        <div class="feature-icon"><i class="${f.icon_class || 'fa-solid fa-star'}"></i></div>
-                        <h4>${f.title}</h4>
-                        <p>${f.description || ''}</p>
-                    </div>
-                `).join('');
-            }
-        }
-    } catch(e) {}
-
-    // 5. Sync Testimonials
-    try {
-        const { data: testimonials } = await sb.from('testimonials').select('*').order('created_at', { ascending: false });
-        if (testimonials && testimonials.length > 0) {
-            const tContainer = document.querySelector('.testimonial-cards-wrapper, .testimonials-grid');
-            if (tContainer) {
-                tContainer.innerHTML = testimonials.map(t => `
-                    <div class="testimonial-card">
-                        <div class="testimonial-stars">
-                            ${'★'.repeat(t.rating || 5)}${'☆'.repeat(5 - (t.rating || 5))}
+        const { data: projects } = await sb.from('projects').select('*').eq('status', 'active').order('display_order');
+        if (projects && projects.length > 0) {
+            const pGrids = document.querySelectorAll('.portfolio-grid, #works-grid, #portfolio-grid');
+            pGrids.forEach(pGrid => {
+                pGrid.innerHTML = projects.map(p => `
+                    <div class="project-card scroll-reveal visible" data-category="${p.category || 'Websites'}">
+                        <div class="project-card-header">
+                            <span class="project-badge">${p.category ? p.category.toUpperCase() : 'PROJECT'}</span>
+                            <i class="fa-solid fa-file-contract text-blue" style="font-size:1.4rem;"></i>
                         </div>
-                        <p class="testimonial-text">"${t.testimonial_text}"</p>
-                        <div class="testimonial-user">
-                            ${t.avatar_url ? `<img src="${t.avatar_url}" alt="${t.client_name}" class="client-avatar">` : `<div class="client-avatar-placeholder">${t.client_name ? t.client_name.charAt(0) : 'A'}</div>`}
-                            <div>
-                                <h5 class="user-name">${t.client_name}</h5>
-                                <span class="user-role">${t.client_role || ''} ${t.company ? 'at ' + t.company : ''}</span>
-                            </div>
+                        <div class="project-body">
+                            <h3 class="project-title">${p.title}</h3>
+                            <div class="project-domain"><i class="fa-solid fa-globe"></i> ${p.project_link ? p.project_link.replace('https://','').replace('http://','').replace(/\/$/,'') : 'trilokinfotech.com'}</div>
+                            <p class="project-desc">${p.description || ''}</p>
+                            ${p.project_link ? `<a href="${p.project_link}" target="_blank" rel="noopener noreferrer" class="project-btn">View Project <i class="fa-solid fa-arrow-up-right-from-square"></i></a>` : ''}
                         </div>
                     </div>
                 `).join('');
+            });
+            initPortfolioFilters();
+        }
+    } catch(e) {}
+
+    // 7. Products Section
+    try {
+        const { data: products } = await sb.from('products').select('*').eq('status', 'active').order('display_order');
+        if (products && products.length > 0) {
+            const prod = products[0];
+            const pTitle = document.querySelector('.product-banner-card .product-subtitle');
+            if (pTitle && prod.name) pTitle.textContent = prod.name;
+            const pDesc = document.querySelector('.product-banner-card .product-desc');
+            if (pDesc && prod.description) pDesc.textContent = prod.description;
+        }
+    } catch(e) {}
+
+    // 8. Industries Section
+    try {
+        const { data: industries } = await sb.from('industries').select('*').eq('status', 'active').order('display_order');
+        if (industries && industries.length > 0) {
+            const iGrid = document.querySelector('.industries-grid');
+            if (iGrid) {
+                iGrid.innerHTML = industries.map(ind => `
+                    <div class="industry-card scroll-reveal visible">
+                        <i class="${ind.icon_class || 'fa-solid fa-industry'}"></i>
+                        <h4>${ind.title}</h4>
+                    </div>
+                `).join('');
             }
         }
     } catch(e) {}
 
-    // 6. Sync FAQs
+    // 9. Careers Section
     try {
-        const { data: faqs } = await sb.from('faqs').select('*').order('display_order');
+        const { data: careers } = await sb.from('careers').select('*').eq('status', 'active').order('display_order');
+        if (careers && careers.length > 0) {
+            const cGrid = document.querySelector('#careers .services-grid');
+            if (cGrid) {
+                cGrid.innerHTML = careers.map(c => `
+                    <div class="service-card scroll-reveal visible">
+                        <span class="project-badge" style="width:max-content; margin-bottom:12px;">${c.employment_type || 'Full Time'}</span>
+                        <h3 class="service-title">${c.job_title}</h3>
+                        <p class="service-desc"><i class="fa-solid fa-location-dot text-blue"></i> ${c.location || 'Hyderabad'}<br>${c.description || ''}</p>
+                        <button class="btn btn-primary open-modal-btn" data-subject="Career Application: ${c.job_title}">Apply Now</button>
+                    </div>
+                `).join('');
+            }
+        }
+    } catch(e) {}
+
+    // 10. Testimonials
+    try {
+        const { data: testimonials } = await sb.from('testimonials').select('*').eq('status', 'active').order('created_at', { ascending: false });
+        if (testimonials && testimonials.length > 0 && typeof window.updateTestimonialsCarousel === 'function') {
+            window.updateTestimonialsCarousel(testimonials);
+        }
+    } catch(e) {}
+
+    // 11. FAQs
+    try {
+        const { data: faqs } = await sb.from('faqs').select('*').eq('status', 'active').order('display_order');
         if (faqs && faqs.length > 0) {
             const faqWrap = document.querySelector('.faq-accordion');
             if (faqWrap) {

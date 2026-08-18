@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Our Works | Trilok Infotech Private Limited</title>
+    <title>View Our Work | Trilok Infotech Private Limited</title>
     <meta name="description" content="Explore live client websites and enterprise digital applications built and powered by Trilok Infotech Private Limited.">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -20,7 +20,7 @@
 <body class="works-page">
 
     <!-- TOP NAVIGATION BAR -->
-    <header class="navbar" id="navbar">
+    <header class="navbar navbar-dark" id="navbar" style="background:#070B19;">
         <div class="container nav-container">
             <a href="index.html#home" class="logo-brand">
                 <div class="logo-box">
@@ -37,7 +37,7 @@
                 <a href="index.html#home" class="nav-link">Home</a>
                 <a href="index.html#about" class="nav-link">About Us</a>
                 <a href="index.html#services" class="nav-link">Services</a>
-                <a href="our-works.html" class="nav-link active">View Our Works</a>
+                <a href="our-works.html" class="nav-link active">View Our Work</a>
                 <a href="index.html#products" class="nav-link">Products</a>
                 <a href="index.html#industries" class="nav-link">Industries</a>
                 <a href="index.html#careers" class="nav-link">Careers</a>
@@ -56,7 +56,8 @@
         </div>
     </header>
 
-    <!-- MOBILE DRAWER NAV -->
+    <!-- MOBILE DRAWER & OVERLAY -->
+    <div class="drawer-overlay" id="drawer-overlay"></div>
     <div class="mobile-drawer" id="mobile-drawer">
         <div class="drawer-header">
             <a href="index.html#home" class="logo-brand">
@@ -74,360 +75,384 @@
             <a href="index.html#home" class="drawer-link">Home</a>
             <a href="index.html#about" class="drawer-link">About Us</a>
             <a href="index.html#services" class="drawer-link">Services</a>
-            <a href="our-works.html" class="drawer-link active">View Our Works</a>
+            <a href="our-works.html" class="drawer-link active">View Our Work</a>
             <a href="index.html#products" class="drawer-link">Products</a>
             <a href="index.html#industries" class="drawer-link">Industries</a>
             <a href="index.html#careers" class="drawer-link">Careers</a>
             <a href="index.html#contact" class="drawer-link">Contact</a>
         </div>
         <div class="drawer-footer">
-            <button class="btn btn-primary open-modal-btn full-width" data-subject="Mobile Direct Inquiry">
+            <button class="btn btn-primary btn-full open-modal-btn" data-subject="Mobile Portfolio Inquiry">
                 Get in Touch <i class="fa-solid fa-arrow-right"></i>
             </button>
         </div>
     </div>
 
     <!-- MAIN CONTENT -->
-    <main>
+    <main style="padding-top:100px;">
         <!-- HERO SECTION -->
-        <section class="works-hero-section">
-            <div class="container text-center">
-                <div class="hero-tag-badge scroll-reveal">
-                    PROVEN RESULTS • 20+ LIVE CLIENT PROJECTS • HIGH PERFORMANCE
-                </div>
-                <h1 class="works-hero-title scroll-reveal" data-delay="100">
-                    View Our <span class="text-blue-gradient">Works & Portfolio</span>
+        <section class="section" style="background:#070B19; color:#FFFFFF; text-align:center; padding:70px 0;">
+            <div class="container">
+                <span class="product-badge-pill" style="margin-bottom:16px;">PROVEN RESULTS • 20+ LIVE CLIENT PROJECTS</span>
+                <h1 style="font-size:clamp(2.2rem, 4.5vw, 3.5rem); font-weight:800; margin-bottom:16px;">
+                    View Our <span class="text-gradient-blue">Works & Portfolio</span>
                 </h1>
-                <p class="works-hero-desc scroll-reveal" data-delay="200">
+                <p style="font-size:1.1rem; color:rgba(255,255,255,0.85); max-width:700px; margin:0 auto 36px auto;">
                     Discover digital platforms, e-commerce applications, corporate websites, and enterprise web solutions engineered and powered by <strong>Trilok Infotech Private Limited</strong>.
                 </p>
 
-                <!-- SEARCH & CATEGORY FILTER BAR -->
-                <div class="works-filter-wrapper scroll-reveal" data-delay="300">
-                    <div class="works-search-box">
-                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                        <input type="text" id="works-search-input" placeholder="Search project name or website link..." autocomplete="off">
-                    </div>
-
-                    <div class="works-category-pills">
-                        <button class="cat-pill active" data-filter="all">All Projects (20)</button>
-                        <button class="cat-pill" data-filter="Healthcare & Pharma">Healthcare & Pharma</button>
-                        <button class="cat-pill" data-filter="Legal & Corporate">Legal & Corporate</button>
-                        <button class="cat-pill" data-filter="E-Commerce & Food">E-Commerce & Food</button>
-                        <button class="cat-pill" data-filter="Services & Industrial">Services & Industrial</button>
-                        <button class="cat-pill" data-filter="Media & Entertainment">Media & Entertainment</button>
-                    </div>
+                <!-- Filter Bar -->
+                <div class="portfolio-filter-bar">
+                    <button class="filter-btn active" data-filter="all">All Projects (20)</button>
+                    <button class="filter-btn" data-filter="Healthcare & Pharma">Healthcare & Pharma</button>
+                    <button class="filter-btn" data-filter="Legal & Corporate">Legal & Corporate</button>
+                    <button class="filter-btn" data-filter="E-Commerce & Food">E-Commerce & Food</button>
+                    <button class="filter-btn" data-filter="Services & Industrial">Services & Industrial</button>
+                    <button class="filter-btn" data-filter="Media & Entertainment">Media & Entertainment</button>
                 </div>
             </div>
         </section>
 
         <!-- WORKS GRID SECTION -->
-        <section class="works-grid-section">
+        <section class="section portfolio-section">
             <div class="container">
-                <div class="works-grid" id="works-grid">
+                <div class="portfolio-grid" id="works-grid">
 
                     <!-- PROJECT 1: eSaleAgreement -->
-                    <div class="work-card scroll-reveal" data-category="Legal & Corporate" data-name="esaleagreement legal registration document">
-                        <div class="work-card-top">
-                            <div class="work-card-icon"><i class="fa-solid fa-file-contract"></i></div>
-                            <span class="work-card-badge">Legal & Corporate</span>
+                    <div class="project-card" data-category="Legal & Corporate">
+                        <div class="project-card-header">
+                            <span class="project-badge">FLAGSHIP PRODUCT</span>
+                            <i class="fa-solid fa-file-contract text-blue" style="font-size:1.4rem;"></i>
                         </div>
-                        <h3 class="work-card-title">eSaleAgreement</h3>
-                        <p class="work-card-domain"><i class="fa-solid fa-globe"></i> esaleagreement.com</p>
-                        <p class="work-card-desc">Flagship digital sale agreement registration and legal documentation platform simplifying property transactions.</p>
-                        <a href="https://esaleagreement.com/" target="_blank" rel="noopener noreferrer" class="work-card-btn">
-                            Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </a>
+                        <div class="project-body">
+                            <h3 class="project-title">eSaleAgreement</h3>
+                            <div class="project-domain"><i class="fa-solid fa-globe"></i> esaleagreement.com</div>
+                            <p class="project-desc">Flagship digital sale agreement registration and legal documentation platform simplifying property transactions.</p>
+                            <a href="https://esaleagreement.com/" target="_blank" rel="noopener noreferrer" class="project-btn">
+                                Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
+                        </div>
                     </div>
 
                     <!-- PROJECT 2: Rockers Entertainers -->
-                    <div class="work-card scroll-reveal" data-category="Media & Entertainment" data-name="rockers entertainers event media music dj">
-                        <div class="work-card-top">
-                            <div class="work-card-icon"><i class="fa-solid fa-masks-theater"></i></div>
-                            <span class="work-card-badge">Media & Entertainment</span>
+                    <div class="project-card" data-category="Media & Entertainment">
+                        <div class="project-card-header">
+                            <span class="project-badge">MEDIA & ENTERTAINMENT</span>
+                            <i class="fa-solid fa-masks-theater text-blue" style="font-size:1.4rem;"></i>
                         </div>
-                        <h3 class="work-card-title">Rockers Entertainers</h3>
-                        <p class="work-card-domain"><i class="fa-solid fa-globe"></i> rockersentertainers.com</p>
-                        <p class="work-card-desc">Premier event management, live concerts, stage shows, and entertainment booking portal.</p>
-                        <a href="https://www.rockersentertainers.com/" target="_blank" rel="noopener noreferrer" class="work-card-btn">
-                            Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </a>
+                        <div class="project-body">
+                            <h3 class="project-title">Rockers Entertainers</h3>
+                            <div class="project-domain"><i class="fa-solid fa-globe"></i> rockersentertainers.com</div>
+                            <p class="project-desc">Premier event management, live concerts, stage shows, and entertainment booking portal.</p>
+                            <a href="https://www.rockersentertainers.com/" target="_blank" rel="noopener noreferrer" class="project-btn">
+                                Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
+                        </div>
                     </div>
 
                     <!-- PROJECT 3: Zenesix Pharmaceuticals -->
-                    <div class="work-card scroll-reveal" data-category="Healthcare & Pharma" data-name="zenesix pharmaceuticals healthcare medicine distributor">
-                        <div class="work-card-top">
-                            <div class="work-card-icon"><i class="fa-solid fa-capsules"></i></div>
-                            <span class="work-card-badge">Healthcare & Pharma</span>
+                    <div class="project-card" data-category="Healthcare & Pharma">
+                        <div class="project-card-header">
+                            <span class="project-badge">HEALTHCARE & PHARMA</span>
+                            <i class="fa-solid fa-capsules text-blue" style="font-size:1.4rem;"></i>
                         </div>
-                        <h3 class="work-card-title">Zenesix Pharmaceuticals</h3>
-                        <p class="work-card-domain"><i class="fa-solid fa-globe"></i> zenesixpharmaceuticals.com</p>
-                        <p class="work-card-desc">Global pharmaceutical product formulation, manufacturing catalog, and distribution corporate site.</p>
-                        <a href="https://www.zenesixpharmaceuticals.com/" target="_blank" rel="noopener noreferrer" class="work-card-btn">
-                            Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </a>
+                        <div class="project-body">
+                            <h3 class="project-title">Zenesix Pharmaceuticals</h3>
+                            <div class="project-domain"><i class="fa-solid fa-globe"></i> zenesixpharmaceuticals.com</div>
+                            <p class="project-desc">Global pharmaceutical product formulation, manufacturing catalog, and distribution corporate site.</p>
+                            <a href="https://www.zenesixpharmaceuticals.com/" target="_blank" rel="noopener noreferrer" class="project-btn">
+                                Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
+                        </div>
                     </div>
 
                     <!-- PROJECT 4: Shees Steel Doors -->
-                    <div class="work-card scroll-reveal" data-category="Services & Industrial" data-name="shees steel doors manufacturing security building">
-                        <div class="work-card-top">
-                            <div class="work-card-icon"><i class="fa-solid fa-door-closed"></i></div>
-                            <span class="work-card-badge">Services & Industrial</span>
+                    <div class="project-card" data-category="Services & Industrial">
+                        <div class="project-card-header">
+                            <span class="project-badge">SERVICES & INDUSTRIAL</span>
+                            <i class="fa-solid fa-door-closed text-blue" style="font-size:1.4rem;"></i>
                         </div>
-                        <h3 class="work-card-title">Shees Steel Doors</h3>
-                        <p class="work-card-domain"><i class="fa-solid fa-globe"></i> sheessteeldoors.com</p>
-                        <p class="work-card-desc">Modern security steel doors manufacturer presenting product catalogs and custom architectural door options.</p>
-                        <a href="https://www.sheessteeldoors.com/" target="_blank" rel="noopener noreferrer" class="work-card-btn">
-                            Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </a>
+                        <div class="project-body">
+                            <h3 class="project-title">Shees Steel Doors</h3>
+                            <div class="project-domain"><i class="fa-solid fa-globe"></i> sheessteeldoors.com</div>
+                            <p class="project-desc">Modern security steel doors manufacturer presenting product catalogs and custom architectural door options.</p>
+                            <a href="https://www.sheessteeldoors.com/" target="_blank" rel="noopener noreferrer" class="project-btn">
+                                Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
+                        </div>
                     </div>
 
                     <!-- PROJECT 5: Sri Kala Vedika -->
-                    <div class="work-card scroll-reveal" data-category="Media & Entertainment" data-name="sri kala vedika cultural organization arts event">
-                        <div class="work-card-top">
-                            <div class="work-card-icon"><i class="fa-solid fa-icons"></i></div>
-                            <span class="work-card-badge">Media & Entertainment</span>
+                    <div class="project-card" data-category="Media & Entertainment">
+                        <div class="project-card-header">
+                            <span class="project-badge">MEDIA & ENTERTAINMENT</span>
+                            <i class="fa-solid fa-icons text-blue" style="font-size:1.4rem;"></i>
                         </div>
-                        <h3 class="work-card-title">Sri Kala Vedika</h3>
-                        <p class="work-card-domain"><i class="fa-solid fa-globe"></i> srikalavedika.com</p>
-                        <p class="work-card-desc">Cultural and literary organization celebrating Indian arts, stage programs, awards, and community events.</p>
-                        <a href="https://www.srikalavedika.com/" target="_blank" rel="noopener noreferrer" class="work-card-btn">
-                            Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </a>
+                        <div class="project-body">
+                            <h3 class="project-title">Sri Kala Vedika</h3>
+                            <div class="project-domain"><i class="fa-solid fa-globe"></i> srikalavedika.com</div>
+                            <p class="project-desc">Cultural and literary organization celebrating Indian arts, stage programs, awards, and community events.</p>
+                            <a href="https://www.srikalavedika.com/" target="_blank" rel="noopener noreferrer" class="project-btn">
+                                Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
+                        </div>
                     </div>
 
                     <!-- PROJECT 6: VC Project Studio -->
-                    <div class="work-card scroll-reveal" data-category="Legal & Corporate" data-name="vc project studio architectural design 3d interior">
-                        <div class="work-card-top">
-                            <div class="work-card-icon"><i class="fa-solid fa-compass-drafting"></i></div>
-                            <span class="work-card-badge">Legal & Corporate</span>
+                    <div class="project-card" data-category="Legal & Corporate">
+                        <div class="project-card-header">
+                            <span class="project-badge">LEGAL & CORPORATE</span>
+                            <i class="fa-solid fa-compass-drafting text-blue" style="font-size:1.4rem;"></i>
                         </div>
-                        <h3 class="work-card-title">VC Project Studio</h3>
-                        <p class="work-card-domain"><i class="fa-solid fa-globe"></i> vcprojectstudio.com</p>
-                        <p class="work-card-desc">Architectural design studio showcasing luxury interior designs, 3D renderings, and construction blueprints.</p>
-                        <a href="https://www.vcprojectstudio.com/" target="_blank" rel="noopener noreferrer" class="work-card-btn">
-                            Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </a>
+                        <div class="project-body">
+                            <h3 class="project-title">VC Project Studio</h3>
+                            <div class="project-domain"><i class="fa-solid fa-globe"></i> vcprojectstudio.com</div>
+                            <p class="project-desc">Architectural design studio showcasing luxury interior designs, 3D renderings, and construction blueprints.</p>
+                            <a href="https://www.vcprojectstudio.com/" target="_blank" rel="noopener noreferrer" class="project-btn">
+                                Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
+                        </div>
                     </div>
 
                     <!-- PROJECT 7: UNS India -->
-                    <div class="work-card scroll-reveal" data-category="Services & Industrial" data-name="uns india network security infrastructure cables">
-                        <div class="work-card-top">
-                            <div class="work-card-icon"><i class="fa-solid fa-network-wired"></i></div>
-                            <span class="work-card-badge">Services & Industrial</span>
+                    <div class="project-card" data-category="Services & Industrial">
+                        <div class="project-card-header">
+                            <span class="project-badge">SERVICES & INDUSTRIAL</span>
+                            <i class="fa-solid fa-network-wired text-blue" style="font-size:1.4rem;"></i>
                         </div>
-                        <h3 class="work-card-title">UNS India</h3>
-                        <p class="work-card-domain"><i class="fa-solid fa-globe"></i> unsindia.com</p>
-                        <p class="work-card-desc">IT network infrastructure, enterprise cabling, surveillance security, and data hardware solutions.</p>
-                        <a href="https://www.unsindia.com/" target="_blank" rel="noopener noreferrer" class="work-card-btn">
-                            Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </a>
+                        <div class="project-body">
+                            <h3 class="project-title">UNS India</h3>
+                            <div class="project-domain"><i class="fa-solid fa-globe"></i> unsindia.com</div>
+                            <p class="project-desc">IT network infrastructure, enterprise cabling, surveillance security, and data hardware solutions.</p>
+                            <a href="https://www.unsindia.com/" target="_blank" rel="noopener noreferrer" class="project-btn">
+                                Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
+                        </div>
                     </div>
 
                     <!-- PROJECT 8: Digital Ads World -->
-                    <div class="work-card scroll-reveal" data-category="Media & Entertainment" data-name="digital ads world marketing seo advertising agency">
-                        <div class="work-card-top">
-                            <div class="work-card-icon"><i class="fa-solid fa-rectangle-ad"></i></div>
-                            <span class="work-card-badge">Media & Entertainment</span>
+                    <div class="project-card" data-category="Media & Entertainment">
+                        <div class="project-card-header">
+                            <span class="project-badge">MEDIA & ENTERTAINMENT</span>
+                            <i class="fa-solid fa-rectangle-ad text-blue" style="font-size:1.4rem;"></i>
                         </div>
-                        <h3 class="work-card-title">Digital Ads World</h3>
-                        <p class="work-card-domain"><i class="fa-solid fa-globe"></i> digitaladsworld.com</p>
-                        <p class="work-card-desc">Full-suite digital advertising agency delivering performance marketing, branding, and Google Ads management.</p>
-                        <a href="https://www.digitaladsworld.com/" target="_blank" rel="noopener noreferrer" class="work-card-btn">
-                            Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </a>
+                        <div class="project-body">
+                            <h3 class="project-title">Digital Ads World</h3>
+                            <div class="project-domain"><i class="fa-solid fa-globe"></i> digitaladsworld.com</div>
+                            <p class="project-desc">Full-suite digital advertising agency delivering performance marketing, branding, and Google Ads management.</p>
+                            <a href="https://www.digitaladsworld.com/" target="_blank" rel="noopener noreferrer" class="project-btn">
+                                Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
+                        </div>
                     </div>
 
                     <!-- PROJECT 9: NVKM Group -->
-                    <div class="work-card scroll-reveal" data-category="Legal & Corporate" data-name="nvkm group corporate conglomerate real estate investments">
-                        <div class="work-card-top">
-                            <div class="work-card-icon"><i class="fa-solid fa-building"></i></div>
-                            <span class="work-card-badge">Legal & Corporate</span>
+                    <div class="project-card" data-category="Legal & Corporate">
+                        <div class="project-card-header">
+                            <span class="project-badge">LEGAL & CORPORATE</span>
+                            <i class="fa-solid fa-building text-blue" style="font-size:1.4rem;"></i>
                         </div>
-                        <h3 class="work-card-title">NVKM Group</h3>
-                        <p class="work-card-domain"><i class="fa-solid fa-globe"></i> nvkmgroup.com</p>
-                        <p class="work-card-desc">Diversified corporate group overseeing real estate development, infrastructure projects, and commercial ventures.</p>
-                        <a href="https://nvkmgroup.com/" target="_blank" rel="noopener noreferrer" class="work-card-btn">
-                            Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </a>
+                        <div class="project-body">
+                            <h3 class="project-title">NVKM Group</h3>
+                            <div class="project-domain"><i class="fa-solid fa-globe"></i> nvkmgroup.com</div>
+                            <p class="project-desc">Diversified corporate group overseeing real estate development, infrastructure projects, and commercial ventures.</p>
+                            <a href="https://nvkmgroup.com/" target="_blank" rel="noopener noreferrer" class="project-btn">
+                                Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
+                        </div>
                     </div>
 
                     <!-- PROJECT 10: Alma's Indian Cuisine -->
-                    <div class="work-card scroll-reveal" data-category="E-Commerce & Food" data-name="almas indian cuisine restaurant food menu Canada">
-                        <div class="work-card-top">
-                            <div class="work-card-icon"><i class="fa-solid fa-utensils"></i></div>
-                            <span class="work-card-badge">E-Commerce & Food</span>
+                    <div class="project-card" data-category="E-Commerce & Food">
+                        <div class="project-card-header">
+                            <span class="project-badge">E-COMMERCE & FOOD</span>
+                            <i class="fa-solid fa-utensils text-blue" style="font-size:1.4rem;"></i>
                         </div>
-                        <h3 class="work-card-title">Alma's Indian Cuisine</h3>
-                        <p class="work-card-domain"><i class="fa-solid fa-globe"></i> almasindiancuisine.ca</p>
-                        <p class="work-card-desc">Authentic Indian restaurant in Canada highlighting online dining menu, table reservations, and catering services.</p>
-                        <a href="https://almasindiancuisine.ca/" target="_blank" rel="noopener noreferrer" class="work-card-btn">
-                            Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </a>
+                        <div class="project-body">
+                            <h3 class="project-title">Alma's Indian Cuisine</h3>
+                            <div class="project-domain"><i class="fa-solid fa-globe"></i> almasindiancuisine.ca</div>
+                            <p class="project-desc">Authentic Indian restaurant in Canada highlighting online dining menu, table reservations, and catering services.</p>
+                            <a href="https://almasindiancuisine.ca/" target="_blank" rel="noopener noreferrer" class="project-btn">
+                                Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
+                        </div>
                     </div>
 
                     <!-- PROJECT 11: Social Voice News -->
-                    <div class="work-card scroll-reveal" data-category="Media & Entertainment" data-name="social voice news portal media press journalism">
-                        <div class="work-card-top">
-                            <div class="work-card-icon"><i class="fa-solid fa-newspaper"></i></div>
-                            <span class="work-card-badge">Media & Entertainment</span>
+                    <div class="project-card" data-category="Media & Entertainment">
+                        <div class="project-card-header">
+                            <span class="project-badge">MEDIA & ENTERTAINMENT</span>
+                            <i class="fa-solid fa-newspaper text-blue" style="font-size:1.4rem;"></i>
                         </div>
-                        <h3 class="work-card-title">Social Voice News</h3>
-                        <p class="work-card-domain"><i class="fa-solid fa-globe"></i> socialvoicenews.com</p>
-                        <p class="work-card-desc">Real-time digital news network publishing latest updates, politics, social issues, and community stories.</p>
-                        <a href="https://socialvoicenews.com/" target="_blank" rel="noopener noreferrer" class="work-card-btn">
-                            Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </a>
+                        <div class="project-body">
+                            <h3 class="project-title">Social Voice News</h3>
+                            <div class="project-domain"><i class="fa-solid fa-globe"></i> socialvoicenews.com</div>
+                            <p class="project-desc">Real-time digital news network publishing latest updates, politics, social issues, and community stories.</p>
+                            <a href="https://socialvoicenews.com/" target="_blank" rel="noopener noreferrer" class="project-btn">
+                                Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
+                        </div>
                     </div>
 
                     <!-- PROJECT 12: Pharma Jobs Daily -->
-                    <div class="work-card scroll-reveal" data-category="Healthcare & Pharma" data-name="pharma jobs daily recruitment portal career medical">
-                        <div class="work-card-top">
-                            <div class="work-card-icon"><i class="fa-solid fa-user-doctor"></i></div>
-                            <span class="work-card-badge">Healthcare & Pharma</span>
+                    <div class="project-card" data-category="Healthcare & Pharma">
+                        <div class="project-card-header">
+                            <span class="project-badge">HEALTHCARE & PHARMA</span>
+                            <i class="fa-solid fa-user-doctor text-blue" style="font-size:1.4rem;"></i>
                         </div>
-                        <h3 class="work-card-title">Pharma Jobs Daily</h3>
-                        <p class="work-card-domain"><i class="fa-solid fa-globe"></i> pharmajobsdaily.com</p>
-                        <p class="work-card-desc">Niche job recruitment portal connecting pharmaceutical professionals, researchers, and healthcare recruiters.</p>
-                        <a href="https://www.pharmajobsdaily.com/" target="_blank" rel="noopener noreferrer" class="work-card-btn">
-                            Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </a>
+                        <div class="project-body">
+                            <h3 class="project-title">Pharma Jobs Daily</h3>
+                            <div class="project-domain"><i class="fa-solid fa-globe"></i> pharmajobsdaily.com</div>
+                            <p class="project-desc">Niche job recruitment portal connecting pharmaceutical professionals, researchers, and healthcare recruiters.</p>
+                            <a href="https://www.pharmajobsdaily.com/" target="_blank" rel="noopener noreferrer" class="project-btn">
+                                Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
+                        </div>
                     </div>
 
                     <!-- PROJECT 13: Ultra Deep Clean Experts -->
-                    <div class="work-card scroll-reveal" data-category="Services & Industrial" data-name="ultra deep clean experts home office sanitization maintenance">
-                        <div class="work-card-top">
-                            <div class="work-card-icon"><i class="fa-solid fa-broom"></i></div>
-                            <span class="work-card-badge">Services & Industrial</span>
+                    <div class="project-card" data-category="Services & Industrial">
+                        <div class="project-card-header">
+                            <span class="project-badge">SERVICES & INDUSTRIAL</span>
+                            <i class="fa-solid fa-broom text-blue" style="font-size:1.4rem;"></i>
                         </div>
-                        <h3 class="work-card-title">Ultra Deep Clean Experts</h3>
-                        <p class="work-card-domain"><i class="fa-solid fa-globe"></i> ultradeepcleanexperts.com</p>
-                        <p class="work-card-desc">Specialized residential and commercial deep cleaning, disinfection, and facility hygiene care services.</p>
-                        <a href="https://ultradeepcleanexperts.com/" target="_blank" rel="noopener noreferrer" class="work-card-btn">
-                            Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </a>
+                        <div class="project-body">
+                            <h3 class="project-title">Ultra Deep Clean Experts</h3>
+                            <div class="project-domain"><i class="fa-solid fa-globe"></i> ultradeepcleanexperts.com</div>
+                            <p class="project-desc">Specialized residential and commercial deep cleaning, disinfection, and facility hygiene care services.</p>
+                            <a href="https://ultradeepcleanexperts.com/" target="_blank" rel="noopener noreferrer" class="project-btn">
+                                Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
+                        </div>
                     </div>
 
                     <!-- PROJECT 14: Patient Care At Home Services -->
-                    <div class="work-card scroll-reveal" data-category="Healthcare & Pharma" data-name="patient care at home services nursing elderly health">
-                        <div class="work-card-top">
-                            <div class="work-card-icon"><i class="fa-solid fa-heart-pulse"></i></div>
-                            <span class="work-card-badge">Healthcare & Pharma</span>
+                    <div class="project-card" data-category="Healthcare & Pharma">
+                        <div class="project-card-header">
+                            <span class="project-badge">HEALTHCARE & PHARMA</span>
+                            <i class="fa-solid fa-heart-pulse text-blue" style="font-size:1.4rem;"></i>
                         </div>
-                        <h3 class="work-card-title">Patient Care At Home Services</h3>
-                        <p class="work-card-domain"><i class="fa-solid fa-globe"></i> patientcareathomeservices.com</p>
-                        <p class="work-card-desc">Compassionate home healthcare portal offering 24/7 nursing, post-surgery assistance, and senior patient care.</p>
-                        <a href="https://www.patientcareathomeservices.com/" target="_blank" rel="noopener noreferrer" class="work-card-btn">
-                            Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </a>
+                        <div class="project-body">
+                            <h3 class="project-title">Patient Care At Home Services</h3>
+                            <div class="project-domain"><i class="fa-solid fa-globe"></i> patientcareathomeservices.com</div>
+                            <p class="project-desc">Compassionate home healthcare portal offering 24/7 nursing, post-surgery assistance, and senior patient care.</p>
+                            <a href="https://www.patientcareathomeservices.com/" target="_blank" rel="noopener noreferrer" class="project-btn">
+                                Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
+                        </div>
                     </div>
 
                     <!-- PROJECT 15: Druva Safety Nets -->
-                    <div class="work-card scroll-reveal" data-category="Services & Industrial" data-name="druva safety nets balcony bird netting industrial">
-                        <div class="work-card-top">
-                            <div class="work-card-icon"><i class="fa-solid fa-shield-halved"></i></div>
-                            <span class="work-card-badge">Services & Industrial</span>
+                    <div class="project-card" data-category="Services & Industrial">
+                        <div class="project-card-header">
+                            <span class="project-badge">SERVICES & INDUSTRIAL</span>
+                            <i class="fa-solid fa-shield-halved text-blue" style="font-size:1.4rem;"></i>
                         </div>
-                        <h3 class="work-card-title">Druva Safety Nets</h3>
-                        <p class="work-card-domain"><i class="fa-solid fa-globe"></i> druvasafetynets.com</p>
-                        <p class="work-card-desc">Top-rated balcony safety netting, anti-bird nets, and industrial child safety installation provider.</p>
-                        <a href="https://druvasafetynets.com/" target="_blank" rel="noopener noreferrer" class="work-card-btn">
-                            Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </a>
+                        <div class="project-body">
+                            <h3 class="project-title">Druva Safety Nets</h3>
+                            <div class="project-domain"><i class="fa-solid fa-globe"></i> druvasafetynets.com</div>
+                            <p class="project-desc">Top-rated balcony safety netting, anti-bird nets, and industrial child safety installation provider.</p>
+                            <a href="https://druvasafetynets.com/" target="_blank" rel="noopener noreferrer" class="project-btn">
+                                Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
+                        </div>
                     </div>
 
                     <!-- PROJECT 16: Pets Home Services -->
-                    <div class="work-card scroll-reveal" data-category="Services & Industrial" data-name="pets home services grooming veterinary pet care">
-                        <div class="work-card-top">
-                            <div class="work-card-icon"><i class="fa-solid fa-paw"></i></div>
-                            <span class="work-card-badge">Services & Industrial</span>
+                    <div class="project-card" data-category="Services & Industrial">
+                        <div class="project-card-header">
+                            <span class="project-badge">SERVICES & INDUSTRIAL</span>
+                            <i class="fa-solid fa-paw text-blue" style="font-size:1.4rem;"></i>
                         </div>
-                        <h3 class="work-card-title">Pets Home Services</h3>
-                        <p class="work-card-domain"><i class="fa-solid fa-globe"></i> petshomeservices.com</p>
-                        <p class="work-card-desc">On-demand doorstep pet grooming, vet visits, boarding support, and dog training booking site.</p>
-                        <a href="https://www.petshomeservices.com/" target="_blank" rel="noopener noreferrer" class="work-card-btn">
-                            Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </a>
+                        <div class="project-body">
+                            <h3 class="project-title">Pets Home Services</h3>
+                            <div class="project-domain"><i class="fa-solid fa-globe"></i> petshomeservices.com</div>
+                            <p class="project-desc">On-demand doorstep pet grooming, vet visits, boarding support, and dog training booking site.</p>
+                            <a href="https://www.petshomeservices.com/" target="_blank" rel="noopener noreferrer" class="project-btn">
+                                Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
+                        </div>
                     </div>
 
                     <!-- PROJECT 17: IT Bees Global -->
-                    <div class="work-card scroll-reveal" data-category="Legal & Corporate" data-name="it bees global software development web engineering cloud">
-                        <div class="work-card-top">
-                            <div class="work-card-icon"><i class="fa-solid fa-laptop-code"></i></div>
-                            <span class="work-card-badge">Legal & Corporate</span>
+                    <div class="project-card" data-category="Legal & Corporate">
+                        <div class="project-card-header">
+                            <span class="project-badge">LEGAL & CORPORATE</span>
+                            <i class="fa-solid fa-laptop-code text-blue" style="font-size:1.4rem;"></i>
                         </div>
-                        <h3 class="work-card-title">IT Bees Global</h3>
-                        <p class="work-card-domain"><i class="fa-solid fa-globe"></i> itbeesglobal.com</p>
-                        <p class="work-card-desc">Global technology agency specializing in enterprise web applications, mobile apps, and custom SaaS products.</p>
-                        <a href="https://itbeesglobal.com/" target="_blank" rel="noopener noreferrer" class="work-card-btn">
-                            Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </a>
+                        <div class="project-body">
+                            <h3 class="project-title">IT Bees Global</h3>
+                            <div class="project-domain"><i class="fa-solid fa-globe"></i> itbeesglobal.com</div>
+                            <p class="project-desc">Global technology agency specializing in enterprise web applications, mobile apps, and custom SaaS products.</p>
+                            <a href="https://itbeesglobal.com/" target="_blank" rel="noopener noreferrer" class="project-btn">
+                                Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
+                        </div>
                     </div>
 
                     <!-- PROJECT 18: SV Industrial Water Tech -->
-                    <div class="work-card scroll-reveal" data-category="Services & Industrial" data-name="sv industrial water tech treatment plant RO engineering">
-                        <div class="work-card-top">
-                            <div class="work-card-icon"><i class="fa-solid fa-droplet"></i></div>
-                            <span class="work-card-badge">Services & Industrial</span>
+                    <div class="project-card" data-category="Services & Industrial">
+                        <div class="project-card-header">
+                            <span class="project-badge">SERVICES & INDUSTRIAL</span>
+                            <i class="fa-solid fa-droplet text-blue" style="font-size:1.4rem;"></i>
                         </div>
-                        <h3 class="work-card-title">SV Industrial Water Tech</h3>
-                        <p class="work-card-domain"><i class="fa-solid fa-globe"></i> svindustrialwatertech.com</p>
-                        <p class="work-card-desc">Industrial water purification technology, commercial RO systems, and effluent treatment plant manufacturer.</p>
-                        <a href="https://svindustrialwatertech.com/" target="_blank" rel="noopener noreferrer" class="work-card-btn">
-                            Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </a>
+                        <div class="project-body">
+                            <h3 class="project-title">SV Industrial Water Tech</h3>
+                            <div class="project-domain"><i class="fa-solid fa-globe"></i> svindustrialwatertech.com</div>
+                            <p class="project-desc">Industrial water purification technology, commercial RO systems, and effluent treatment plant manufacturer.</p>
+                            <a href="https://svindustrialwatertech.com/" target="_blank" rel="noopener noreferrer" class="project-btn">
+                                Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
+                        </div>
                     </div>
 
                     <!-- PROJECT 19: Snakzee -->
-                    <div class="work-card scroll-reveal" data-category="E-Commerce & Food" data-name="snakzee snacks food ecommerce online order sweets">
-                        <div class="work-card-top">
-                            <div class="work-card-icon"><i class="fa-solid fa-cookie-bite"></i></div>
-                            <span class="work-card-badge">E-Commerce & Food</span>
+                    <div class="project-card" data-category="E-Commerce & Food">
+                        <div class="project-card-header">
+                            <span class="project-badge">E-COMMERCE & FOOD</span>
+                            <i class="fa-solid fa-cookie-bite text-blue" style="font-size:1.4rem;"></i>
                         </div>
-                        <h3 class="work-card-title">Snakzee</h3>
-                        <p class="work-card-domain"><i class="fa-solid fa-globe"></i> snakzee.com</p>
-                        <p class="work-card-desc">Direct-to-consumer e-commerce brand offering traditional Indian savories, crispy snacks, and gourmet treats.</p>
-                        <a href="https://snakzee.com/" target="_blank" rel="noopener noreferrer" class="work-card-btn">
-                            Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </a>
+                        <div class="project-body">
+                            <h3 class="project-title">Snakzee</h3>
+                            <div class="project-domain"><i class="fa-solid fa-globe"></i> snakzee.com</div>
+                            <p class="project-desc">Direct-to-consumer e-commerce brand offering traditional Indian savories, crispy snacks, and gourmet treats.</p>
+                            <a href="https://snakzee.com/" target="_blank" rel="noopener noreferrer" class="project-btn">
+                                Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
+                        </div>
                     </div>
 
                     <!-- PROJECT 20: Prime Air Lab -->
-                    <div class="work-card scroll-reveal" data-category="Healthcare & Pharma" data-name="prime air lab testing environmental hvac quality cleanroom">
-                        <div class="work-card-top">
-                            <div class="work-card-icon"><i class="fa-solid fa-wind"></i></div>
-                            <span class="work-card-badge">Healthcare & Pharma</span>
+                    <div class="project-card" data-category="Healthcare & Pharma">
+                        <div class="project-card-header">
+                            <span class="project-badge">HEALTHCARE & PHARMA</span>
+                            <i class="fa-solid fa-wind text-blue" style="font-size:1.4rem;"></i>
                         </div>
-                        <h3 class="work-card-title">Prime Air Lab</h3>
-                        <p class="work-card-domain"><i class="fa-solid fa-globe"></i> primeairlab.com</p>
-                        <p class="work-card-desc">Environmental air testing laboratory offering cleanroom audits, HVAC airflow testing, and micro-particle analysis.</p>
-                        <a href="https://www.primeairlab.com/" target="_blank" rel="noopener noreferrer" class="work-card-btn">
-                            Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        </a>
+                        <div class="project-body">
+                            <h3 class="project-title">Prime Air Lab</h3>
+                            <div class="project-domain"><i class="fa-solid fa-globe"></i> primeairlab.com</div>
+                            <p class="project-desc">Environmental air testing laboratory offering cleanroom audits, HVAC airflow testing, and micro-particle analysis.</p>
+                            <a href="https://www.primeairlab.com/" target="_blank" rel="noopener noreferrer" class="project-btn">
+                                Visit Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            </a>
+                        </div>
                     </div>
 
-                </div>
-
-                <!-- NO RESULTS FOUND MSG -->
-                <div class="no-results-msg" id="no-results" style="display: none;">
-                    <i class="fa-solid fa-folder-open"></i>
-                    <h3>No Projects Found</h3>
-                    <p>No client projects match your search query. Try clearing the filter or search keyword.</p>
                 </div>
             </div>
         </section>
 
-        <!-- CTA SECTION -->
-        <section class="works-cta-section text-center">
+        <!-- CTA BANNER -->
+        <section class="section" style="background:#FFFFFF;">
             <div class="container">
-                <div class="works-cta-box scroll-reveal">
-                    <h2>Want to Build Your Next <span class="text-blue-gradient">High-Performing Website?</span></h2>
-                    <p>Partner with Trilok Infotech for fast, secure, and visually stunning digital solutions tailored to your business growth.</p>
-                    <div class="works-cta-btns">
+                <div class="cta-banner">
+                    <h2>Want to Build Your Next<br>High-Performing Website?</h2>
+                    <p>Partner with Trilok Infotech for fast, secure, and visually stunning digital solutions.</p>
+                    <div class="cta-buttons">
                         <button class="btn btn-primary open-modal-btn" data-subject="New Website Project Inquiry">
-                            Get A Free Quote <i class="fa-solid fa-paper-plane"></i>
+                            Get Free Quote <i class="fa-solid fa-arrow-right"></i>
                         </button>
-                        <a href="https://wa.me/918639833447" target="_blank" class="btn btn-whatsapp-v2">
+                        <a href="https://wa.me/918639833447" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp">
                             <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
                         </a>
                     </div>
@@ -436,96 +461,65 @@
         </section>
     </main>
 
-    <!-- SITE FOOTER -->
-    <footer class="site-footer-v2">
+    <!-- FOOTER -->
+    <footer class="site-footer">
         <div class="container">
-            <div class="footer-grid-v2">
-                <!-- Col 1: Brand Info -->
-                <div class="footer-col-v2 brand-col-v2">
+            <div class="footer-grid">
+                <div class="footer-brand">
                     <a href="index.html#home" class="logo-brand">
                         <div class="logo-box">
                             <img src="trilok-logo-icon.png" alt="Trilok Infotech Logo" class="logo-img">
                         </div>
                         <div class="logo-text">
-                            <span class="brand-title text-white">TRILOK</span>
+                            <span class="brand-title">TRILOK</span>
                             <span class="brand-sub">INFOTECH</span>
                         </div>
                     </a>
+                    <p class="footer-brand-desc">Building Digital Solutions.<br>Driving Growth.</p>
                 </div>
 
-                <!-- Col 2: Quick Links -->
-                <div class="footer-col-v2">
+                <div class="footer-col">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="index.html#services">Website Development</a></li>
+                        <li><a href="index.html#services">Mobile App Development</a></li>
+                        <li><a href="index.html#services">Software Development</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Products</h4>
+                    <ul>
+                        <li><a href="https://esaleagreement.com/" target="_blank">eSaleAgreement Platform</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
                     <h4>Quick Links</h4>
                     <ul>
                         <li><a href="index.html#home">Home</a></li>
-                        <li><a href="index.html#about">About Us</a></li>
-                        <li><a href="index.html#services">Services</a></li>
-                        <li><a href="our-works.html">View Our Works</a></li>
-                        <li><a href="index.html#products">Products</a></li>
-                        <li><a href="index.html#careers">Careers</a></li>
+                        <li><a href="our-works.html">View Our Work</a></li>
                         <li><a href="index.html#contact">Contact</a></li>
                     </ul>
                 </div>
-
-                <!-- Col 3: Our Services -->
-                <div class="footer-col-v2">
-                    <h4>Our Services</h4>
-                    <ul>
-                        <li><a href="index.html#services">Software Development</a></li>
-                        <li><a href="index.html#services">Network Solutions</a></li>
-                        <li><a href="index.html#services">Cybersecurity</a></li>
-                        <li><a href="index.html#services">Cloud Solutions</a></li>
-                    </ul>
-                </div>
-
-                <!-- Col 4: Solutions -->
-                <div class="footer-col-v2">
-                    <h4>Solutions</h4>
-                    <ul>
-                        <li><a href="index.html#services">Cloud Solutions</a></li>
-                        <li><a href="index.html#services">Enterprise Systems</a></li>
-                        <li><a href="index.html#services">Digital Trust</a></li>
-                    </ul>
-                </div>
-
-                <!-- Col 5: Resources -->
-                <div class="footer-col-v2">
-                    <h4>Resources</h4>
-                    <ul>
-                        <li><a href="#">Blogs</a></li>
-                        <li><a href="#">Case Studies</a></li>
-                        <li><a href="#">Documentation</a></li>
-                    </ul>
-                </div>
-
-                <!-- Col 6: Newsletter -->
-                <div class="footer-col-v2 newsletter-col-v2">
-                    <h4>Newsletter</h4>
-                    <p>Subscribe to our newsletter</p>
-                    <form class="footer-newsletter-form-v2" onsubmit="event.preventDefault(); alert('Thank you for subscribing to Trilok Infotech newsletter!');">
-                        <input type="email" placeholder="Enter your email" required>
-                        <button type="submit" aria-label="Subscribe"><i class="fa-solid fa-paper-plane"></i></button>
-                    </form>
-                </div>
             </div>
 
-            <div class="footer-bottom-v2">
-                <p>&copy; 2025 Trilok Infotech Private Limited. All Rights Reserved.</p>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Trilok Infotech Private Limited. All Rights Reserved.</p>
             </div>
         </div>
     </footer>
 
-    <!-- CUSTOMER DETAILS / GET IN TOUCH MODAL FORM -->
+    <!-- INQUIRY MODAL -->
     <div class="modal-backdrop" id="contact-modal">
         <div class="modal-content">
-            <button class="modal-close" id="modal-close"><i class="fa-solid fa-xmark"></i></button>
+            <button class="modal-close" id="modal-close" aria-label="Close modal"><i class="fa-solid fa-xmark"></i></button>
             <div class="modal-header">
-                <span class="sub-heading">GET IN TOUCH</span>
-                <h3 id="modal-title">Fill Customer Details</h3>
-                <p>Submit your inquiry and connect directly with our expert team via WhatsApp (+91 8639833447).</p>
+                <h3>Get In Touch</h3>
+                <p>Submit your details to connect directly with our expert team (+91 8639833447).</p>
             </div>
             
-            <form id="customer-inquiry-form" class="modal-form">
+            <form id="customer-inquiry-form">
                 <input type="hidden" id="form-subject" value="Portfolio Inquiry">
                 
                 <div class="form-group">
@@ -535,7 +529,7 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="cust-phone">Phone / WhatsApp Number <span class="req">*</span></label>
+                        <label for="cust-phone">Phone / WhatsApp <span class="req">*</span></label>
                         <input type="tel" id="cust-phone" class="form-input" placeholder="e.g. 9876543210" required>
                     </div>
                     <div class="form-group">
@@ -545,28 +539,11 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="cust-service">Service Interested In</label>
-                    <select id="cust-service" class="form-input">
-                        <option value="Website Development">Website Development</option>
-                        <option value="Software Development">Software Development</option>
-                        <option value="Cybersecurity Services">Cybersecurity Services</option>
-                        <option value="eSaleAgreement Platform">eSaleAgreement Platform</option>
-                        <option value="Cloud Solutions">Cloud Solutions</option>
-                        <option value="Other Business Inquiry">Other Business Inquiry</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="cust-company">Company / Location</label>
-                    <input type="text" id="cust-company" class="form-input" placeholder="e.g. Acme Corp / Hyderabad">
-                </div>
-
-                <div class="form-group">
                     <label for="cust-message">Requirement Details <span class="req">*</span></label>
-                    <textarea id="cust-message" class="form-input textarea" rows="3" placeholder="Tell us briefly about your project or service requirement..." required></textarea>
+                    <textarea id="cust-message" class="form-input" rows="3" placeholder="Tell us briefly about your project..." required></textarea>
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-block">
+                <button type="submit" class="btn btn-primary btn-full">
                     Submit <i class="fa-solid fa-paper-plane"></i>
                 </button>
             </form>
@@ -575,6 +552,5 @@
 
     <!-- JAVASCRIPT -->
     <script src="app.js"></script>
-    <script>if(window.location.hash==='#admin'){window.location.href='admin.html';}</script>
 </body>
 </html>

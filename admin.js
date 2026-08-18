@@ -85,38 +85,19 @@ function initUIListeners() {
     document.body.style.overflow = '';
   };
 
-  if (toggleBtn) {
-    toggleBtn.addEventListener('click', window.toggleAdminSidebar);
-    toggleBtn.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      window.toggleAdminSidebar(e);
-    }, { passive: false });
-  }
-  if (closeBtn) {
-    closeBtn.addEventListener('click', window.closeAdminSidebar);
-    closeBtn.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      window.closeAdminSidebar();
-    }, { passive: false });
-  }
-  if (overlay) {
-    overlay.addEventListener('click', window.closeAdminSidebar);
-    overlay.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      window.closeAdminSidebar();
-    }, { passive: false });
-  }
+  if (toggleBtn) toggleBtn.addEventListener('click', window.toggleAdminSidebar);
+  if (closeBtn) closeBtn.addEventListener('click', window.closeAdminSidebar);
+  if (overlay) overlay.addEventListener('click', window.closeAdminSidebar);
 
-  // Sidebar navigation click & touch handlers
+  // Sidebar navigation click handlers
   document.querySelectorAll('.sidebar-nav .nav-item').forEach(item => {
-    const handleNavSelect = (e) => {
+    item.addEventListener('click', () => {
       const page = item.getAttribute('data-page');
       if (page) {
         navigateTo(page);
         window.closeAdminSidebar();
       }
-    };
-    item.addEventListener('click', handleNavSelect);
+    });
   });
 }
 

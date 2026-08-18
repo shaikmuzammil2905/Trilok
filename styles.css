@@ -279,6 +279,13 @@ button {
     transition: transform var(--transition-fast);
 }
 
+.logo-card-bg {
+    background: #FFFFFF;
+    padding: 6px 14px;
+    border-radius: 10px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+}
+
 .logo-box {
     width: 44px;
     height: 44px;

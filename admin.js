@@ -132,7 +132,55 @@ async function showAdminLayout() {
   document.getElementById('login-page').style.display = 'none';
   document.getElementById('admin-layout').style.display = 'flex';
   await loadAdminProfile();
+  await seedInitialDataIfEmpty();
   navigateTo('dashboard');
+}
+
+async function seedInitialDataIfEmpty() {
+  try {
+    const { data: existingSvc } = await sb.from('services').select('id');
+    if (!existingSvc || existingSvc.length === 0) {
+      await sb.from('services').insert([
+        { title: 'Custom Software Development', category: 'Software', short_desc: 'Tailored enterprise software & web platforms.', description: 'End-to-end custom web and enterprise software development using modern cloud architectures.', icon_class: 'fa-solid fa-laptop-code', status: 'active', display_order: 1 },
+        { title: 'Mobile App Development', category: 'Mobile', short_desc: 'High-performance iOS & Android applications.', description: 'Native and cross-platform mobile applications engineered for high performance and scaling.', icon_class: 'fa-solid fa-mobile-screen-button', status: 'active', display_order: 2 },
+        { title: 'Cloud Architecture & DevOps', category: 'Cloud', short_desc: 'Scalable AWS/Azure infrastructure & CI/CD.', description: 'Scalable cloud infrastructure design, CI/CD pipeline automation, and server management.', icon_class: 'fa-solid fa-cloud', status: 'active', display_order: 3 },
+        { title: 'AI & Machine Learning Solutions', category: 'AI', short_desc: 'Automation, predictive analytics & chatbots.', description: 'Artificial Intelligence solutions including predictive modeling, NLP chatbots, and workflow automation.', icon_class: 'fa-solid fa-brain', status: 'active', display_order: 4 },
+        { title: 'Cybersecurity & Data Privacy', category: 'Security', short_desc: 'Security audits & compliance protocols.', description: 'Comprehensive cybersecurity audits, threat prevention, vulnerability testing, and data privacy.', icon_class: 'fa-solid fa-shield-halved', status: 'active', display_order: 5 },
+        { title: 'UI/UX Design & Digital Products', category: 'Design', short_desc: 'Intuitive user interface & experience design.', description: 'User-centered intuitive design systems, wireframing, and interactive digital product design.', icon_class: 'fa-solid fa-palette', status: 'active', display_order: 6 }
+      ]);
+    }
+  } catch(e) {}
+
+  try {
+    const { data: existingFeat } = await sb.from('features').select('id');
+    if (!existingFeat || existingFeat.length === 0) {
+      await sb.from('features').insert([
+        { title: 'eSaleAgreement Digital Platform', subtitle: 'PropTech Solution', badge_tag: 'Featured Product', description: 'Automated real estate & legal agreement digital workflows.', icon_class: 'fa-solid fa-file-signature', status: 'active', display_order: 1 },
+        { title: 'Enterprise ERP Suite', subtitle: 'SaaS Business Platform', badge_tag: 'Enterprise', description: 'Unified enterprise resource management, inventory, and analytics system.', icon_class: 'fa-solid fa-building-columns', status: 'active', display_order: 2 },
+        { title: 'Smart Analytics & BI Engine', subtitle: 'Real-time Intelligence', badge_tag: 'Analytics', description: 'Interactive dashboard analytics and automated business executive reporting.', icon_class: 'fa-solid fa-chart-pie', status: 'active', display_order: 3 }
+      ]);
+    }
+  } catch(e) {}
+
+  try {
+    const { data: existingTest } = await sb.from('testimonials').select('id');
+    if (!existingTest || existingTest.length === 0) {
+      await sb.from('testimonials').insert([
+        { client_name: 'Rajesh Kumar', client_role: 'Chief Technology Officer', company: 'Apex Solutions', rating: 5, testimonial_text: 'Trilok Infotech transformed our legacy enterprise systems into a high-speed cloud platform. Flawless execution!', status: 'published' },
+        { client_name: 'Ananya Sharma', client_role: 'Head of Digital Product', company: 'FinTech India', rating: 5, testimonial_text: 'Highly professional mobile application developers! Delivered our iOS and Android app ahead of deadline.', status: 'published' }
+      ]);
+    }
+  } catch(e) {}
+
+  try {
+    const { data: existingFaq } = await sb.from('faqs').select('id');
+    if (!existingFaq || existingFaq.length === 0) {
+      await sb.from('faqs').insert([
+        { question: 'What core technologies and services does Trilok Infotech offer?', answer: 'We specialize in Custom Web & Software Engineering, Mobile App Development, Cloud Architecture, AI Automation, and Cybersecurity.', status: 'active', display_order: 1 },
+        { question: 'How can I request a consultation or project estimate?', answer: 'You can submit your requirements via our website contact form or contact us directly at info@trilokinfotech.com.', status: 'active', display_order: 2 }
+      ]);
+    }
+  } catch(e) {}
 }
 
 // ============================================================

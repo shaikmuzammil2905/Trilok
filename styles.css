@@ -649,7 +649,7 @@ button {
 }
 
 /* --------------------------------------------------------------------------
-   7. SCREEN 03 — FLAGSHIP PRODUCT (LARGE ATTRACTIVE DUAL INTERACTIVE MOCKUPS)
+   7. SCREEN 03 — FLAGSHIP PRODUCT (ENLARGED CLEAN SINGLE MOBILE PHONE SHOWCASE)
    -------------------------------------------------------------------------- */
 .product-section {
     background: var(--primary-navy);
@@ -793,22 +793,21 @@ button {
 .store-text small { font-size: 0.65rem; opacity: 0.8; }
 .store-text strong { font-size: 0.85rem; font-weight: 700; }
 
-/* Large Attractive Dual Interactive Mobile Phones Showcase */
+/* Large Clean Single Mobile Phone Showcase Container */
 .product-mockup-wrapper {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 560px;
+    padding: 20px 0;
 }
 
-.phones-container-large {
+.single-phone-container-lg {
     position: relative;
     width: 100%;
-    max-width: 500px;
-    height: 540px;
-    perspective: 1200px;
-    cursor: pointer;
+    max-width: 360px;
+    display: flex;
+    justify-content: center;
 }
 
 .phones-glow-aura {
@@ -820,78 +819,30 @@ button {
     pointer-events: none;
 }
 
-.mobile-mockup-lg {
-    position: absolute;
-    width: 295px;
+.single-mobile-mockup-lg {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 350px;
     background: #070B19;
-    border-radius: 38px;
+    border-radius: 40px;
     border: 7px solid #070B19;
-    box-shadow: 0 30px 65px rgba(0, 0, 0, 0.65);
+    box-shadow: 0 30px 70px rgba(0, 242, 254, 0.4);
     overflow: hidden;
-    transition: all 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: var(--transition);
+}
+
+.single-mobile-mockup-lg:hover {
+    transform: translateY(-10px) scale(1.03);
+    box-shadow: 0 40px 85px rgba(0, 242, 254, 0.55);
 }
 
 .phone-screen-img {
     width: 100%;
     height: auto;
     display: block;
-    border-radius: 30px;
+    border-radius: 32px;
     object-fit: cover;
-}
-
-/* Front Phone Position (image copy 34.png) */
-.phone-front-hd {
-    left: 15px;
-    top: 15px;
-    z-index: 3;
-}
-
-/* Back Phone Position (image copy 35.png) */
-.phone-back-hd {
-    right: 15px;
-    top: 65px;
-    z-index: 2;
-    filter: brightness(0.85);
-    transform: scale(0.94);
-}
-
-.mobile-mockup-lg:hover {
-    transform: scale(1.03) translateY(-6px);
-    box-shadow: 0 35px 75px rgba(0, 242, 254, 0.4);
-}
-
-/* Interactive Swapped active class when clicked */
-.phone-back-hd.active-front {
-    z-index: 4 !important;
-    transform: scale(1.08) translate(-45px, -45px) !important;
-    filter: brightness(1) !important;
-    box-shadow: 0 40px 85px rgba(0, 242, 254, 0.55) !important;
-}
-
-.phone-front-hd.active-back {
-    z-index: 2 !important;
-    transform: scale(0.9) translate(40px, 40px) !important;
-    filter: brightness(0.78) !important;
-}
-
-.click-hint-badge {
-    position: absolute;
-    bottom: -15px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(11, 94, 215, 0.9);
-    border: 1px solid rgba(0, 242, 254, 0.6);
-    color: #FFFFFF;
-    font-size: 0.8rem;
-    font-weight: 800;
-    padding: 6px 16px;
-    border-radius: var(--radius-pill);
-    backdrop-filter: blur(10px);
-    z-index: 6;
-    white-space: nowrap;
-    pointer-events: none;
-    box-shadow: 0 6px 20px rgba(0, 242, 254, 0.4);
-    letter-spacing: 0.3px;
 }
 
 /* --------------------------------------------------------------------------
@@ -1644,25 +1595,6 @@ button {
 
     .product-features-grid {
         grid-template-columns: 1fr;
-    }
-
-    .phones-container-large {
-        height: auto;
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        align-items: center;
-    }
-
-    .mobile-mockup-lg {
-        position: relative;
-        left: auto !important;
-        right: auto !important;
-        top: auto !important;
-        width: 100%;
-        max-width: 290px;
-        transform: none !important;
-        filter: none !important;
     }
 
     .footer-grid {

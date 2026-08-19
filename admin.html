@@ -794,8 +794,21 @@
         <div class="form-group"><label>Category</label><input type="text" class="form-control" id="project-category" placeholder="Websites, Apps, Legal..."></div>
         <div class="form-group"><label>Project Link</label><input type="url" class="form-control" id="project-link" placeholder="https://example.com"></div>
       </div>
-      <div class="form-group"><label>Display Order</label><input type="number" class="form-control" id="project-order" value="0"></div>
-      <div class="form-group"><label>Status</label><select class="form-control" id="project-status"><option value="active">Active</option><option value="inactive">Inactive</option></select></div>
+      <div class="form-group">
+        <label>Project Image / Thumbnail</label>
+        <div class="upload-area" style="padding:14px;margin-bottom:8px">
+          <input type="file" accept="image/*" onchange="uploadImageCloudinary(event, 'project-image-url', 'project-image-preview')">
+          <div class="upload-icon" style="font-size:24px;margin-bottom:4px"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+          <div class="upload-text">Click or drag image to upload</div>
+          <div class="upload-sub">Recommended: 800×600px JPG/PNG/WebP</div>
+        </div>
+        <input type="url" class="form-control" id="project-image-url" placeholder="Image URL (e.g. https://... or uploaded image)" oninput="showImagePreview('project-image-url', 'project-image-preview', this.value)">
+        <div class="upload-preview" id="project-image-preview" style="display:none;margin-top:8px"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Display Order</label><input type="number" class="form-control" id="project-order" value="0"></div>
+        <div class="form-group"><label>Status</label><select class="form-control" id="project-status"><option value="active">Active</option><option value="inactive">Inactive</option></select></div>
+      </div>
     </div>
     <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal('project-modal')">Cancel</button><button class="btn btn-primary" onclick="saveProject()">Save Project</button></div>
   </div>

@@ -220,9 +220,18 @@ function initStatsCounters() {
 /* ==========================================================================
    6. PORTFOLIO TAB FILTERING
    ========================================================================== */
+function formatUrl(url) {
+    if (!url) return '';
+    url = url.trim();
+    if (!url) return '';
+    if (!/^https?:\/\//i.test(url)) {
+        return 'https://' + url;
+    }
+    return url;
+}
+
 function initPortfolioFilters() {
     const filterBtns = document.querySelectorAll('.filter-btn');
-    const projectCards = document.querySelectorAll('.project-card');
 
     if (filterBtns.length === 0) return;
 
@@ -231,12 +240,26 @@ function initPortfolioFilters() {
             filterBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
-            const filter = btn.getAttribute('data-filter') || 'all';
+            const filter = (btn.getAttribute('data-filter') || 'all').toLowerCase();
 
             document.querySelectorAll('.project-card').forEach(card => {
-                const category = card.getAttribute('data-category') || '';
+                const category = (card.getAttribute('data-category') || '').toLowerCase();
                 
-                if (filter === 'all' || category.toLowerCase().includes(filter.toLowerCase())) {
+                let matches = false;
+                if (filter === 'all') {
+                    matches = true;
+                } else if (filter === 'websites' || filter === 'website') {
+                    // Match websites or any category that is web-related (or not strictly mobile-only app)
+                    matches = category.includes('website') || category.includes('web') || category.includes('corporate') || category.includes('pharma') || category.includes('industrial') || category.includes('food') || category.includes('commerce') || category.includes('media') || category.includes('legal') || category.includes('services') || !category.includes('mobile-only');
+                } else if (filter === 'apps' || filter === 'app') {
+                    matches = category.includes('app') || category.includes('mobile') || category.includes('flagship') || category.includes('legal') || category.includes('digital');
+                } else if (filter === 'software') {
+                    matches = category.includes('software') || category.includes('platform') || category.includes('saas') || category.includes('legal') || category.includes('corporate');
+                } else {
+                    matches = category.includes(filter);
+                }
+
+                if (matches) {
                     card.style.display = 'flex';
                     card.style.opacity = '1';
                 } else {
@@ -560,20 +583,26 @@ async function initLiveCmsSync() {
         if (projects && projects.length > 0) {
             const pGrids = document.querySelectorAll('.portfolio-grid, #works-grid, #portfolio-grid');
             pGrids.forEach(pGrid => {
-                pGrid.innerHTML = projects.map(p => `
-                    <div class="project-card scroll-reveal visible" data-category="${p.category || 'Websites'}">
-                        <div class="project-card-header">
-                            <span class="project-badge">${p.category ? p.category.toUpperCase() : 'PROJECT'}</span>
-                            <i class="fa-solid fa-file-contract text-blue" style="font-size:1.4rem;"></i>
+                pGrid.innerHTML = projects.map(p => {
+                    const formattedLink = formatUrl(p.project_link);
+                    const domainDisplay = p.project_link ? p.project_link.replace(/^https?:\/\//i, '').replace(/\/$/, '') : 'trilokinfotech.com';
+                    const imageMarkup = p.image_url ? `<div class="project-img-wrap" style="margin-bottom:16px;border-radius:12px;overflow:hidden;height:160px;"><img src="${p.image_url}" alt="${p.title}" style="width:100%;height:100%;object-fit:cover;"></div>` : '';
+                    return `
+                        <div class="project-card scroll-reveal visible" data-category="${p.category || 'Websites'}" onclick="if(event.target.tagName !== 'A' && '${formattedLink}') window.open('${formattedLink}', '_blank')" style="cursor:pointer;">
+                            ${imageMarkup}
+                            <div class="project-card-header">
+                                <span class="project-badge">${p.category ? p.category.toUpperCase() : 'PROJECT'}</span>
+                                <i class="fa-solid fa-globe text-blue" style="font-size:1.4rem;"></i>
+                            </div>
+                            <div class="project-body">
+                                <h3 class="project-title">${p.title}</h3>
+                                <div class="project-domain"><i class="fa-solid fa-globe"></i> ${domainDisplay}</div>
+                                <p class="project-desc">${p.description || ''}</p>
+                                ${formattedLink ? `<a href="${formattedLink}" target="_blank" rel="noopener noreferrer" class="project-btn" onclick="event.stopPropagation()">View Project <i class="fa-solid fa-arrow-up-right-from-square"></i></a>` : ''}
+                            </div>
                         </div>
-                        <div class="project-body">
-                            <h3 class="project-title">${p.title}</h3>
-                            <div class="project-domain"><i class="fa-solid fa-globe"></i> ${p.project_link ? p.project_link.replace('https://','').replace('http://','').replace(/\/$/,'') : 'trilokinfotech.com'}</div>
-                            <p class="project-desc">${p.description || ''}</p>
-                            ${p.project_link ? `<a href="${p.project_link}" target="_blank" rel="noopener noreferrer" class="project-btn">View Project <i class="fa-solid fa-arrow-up-right-from-square"></i></a>` : ''}
-                        </div>
-                    </div>
-                `).join('');
+                    `;
+                }).join('');
             });
             initPortfolioFilters();
         }

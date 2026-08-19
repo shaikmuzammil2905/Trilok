@@ -1080,6 +1080,7 @@ button {
     transition: var(--transition);
     display: flex;
     flex-direction: column;
+    cursor: pointer;
 }
 
 .project-card:hover {

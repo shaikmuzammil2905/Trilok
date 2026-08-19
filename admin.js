@@ -207,7 +207,7 @@ async function executeLogout() {
     currentUser = null;
     showLoginPage();
     showToast('Signed out successfully', 'info');
-  });
+  }, 'Logout', 'btn-danger', 'fa-solid fa-right-from-bracket');
 }
 
 // ============================================================
@@ -718,6 +718,9 @@ function openProjectModal(id = null) {
   document.getElementById('project-desc').value = '';
   document.getElementById('project-category').value = 'Websites';
   document.getElementById('project-link').value = '';
+  document.getElementById('project-image-url').value = '';
+  const prev = document.getElementById('project-image-preview');
+  if (prev) { prev.style.display = 'none'; prev.innerHTML = ''; }
   document.getElementById('project-order').value = '0';
   document.getElementById('project-status').value = 'active';
   document.getElementById('project-modal-title').textContent = id ? 'Edit Project' : 'Add Project';
@@ -733,11 +736,21 @@ async function editProject(id) {
       document.getElementById('project-desc').value = data.description || '';
       document.getElementById('project-category').value = data.category || 'Websites';
       document.getElementById('project-link').value = data.project_link || '';
+      document.getElementById('project-image-url').value = data.image_url || '';
+      if (data.image_url) {
+        showImagePreview('project-image-url', 'project-image-preview', data.image_url);
+      } else {
+        const prev = document.getElementById('project-image-preview');
+        if (prev) { prev.style.display = 'none'; prev.innerHTML = ''; }
+      }
       document.getElementById('project-order').value = data.display_order || 0;
       document.getElementById('project-status').value = data.status || 'active';
+      document.getElementById('project-modal-title').textContent = 'Edit Project';
       openModal('project-modal');
     }
-  } catch(e) {}
+  } catch(e) {
+    showToast('Error fetching project details: ' + e.message, 'error');
+  }
 }
 
 async function saveProject() {
@@ -750,16 +763,19 @@ async function saveProject() {
     description: document.getElementById('project-desc')?.value || '',
     category: document.getElementById('project-category')?.value || 'Websites',
     project_link: document.getElementById('project-link')?.value || '',
+    image_url: document.getElementById('project-image-url')?.value || '',
     display_order: parseInt(document.getElementById('project-order')?.value || '0', 10),
     status: document.getElementById('project-status')?.value || 'active'
   };
 
   try {
     if (id) {
-      await sb.from('projects').update(payload).eq('id', id);
+      const { error } = await sb.from('projects').update(payload).eq('id', id);
+      if (error) throw error;
       showToast('Project updated successfully', 'success');
     } else {
-      await sb.from('projects').insert([payload]);
+      const { error } = await sb.from('projects').insert([payload]);
+      if (error) throw error;
       showToast('New project added successfully', 'success');
     }
     closeModal('project-modal');
@@ -1588,10 +1604,13 @@ async function uploadImageCloudinary(e, targetInputId, previewBoxId) {
 
 function showImagePreview(inputId, previewId, url) {
   const box = document.getElementById(previewId);
-  const img = box ? box.querySelector('img') : null;
-  if (box && img && url) {
-    img.src = url;
+  if (!box) return;
+  if (url && url.trim()) {
+    box.innerHTML = `<div style="position:relative;display:inline-block;"><img src="${escapeHtml(url)}" style="max-height:120px;border-radius:8px;object-fit:cover;border:1px solid var(--border-color)"><button type="button" onclick="removeImage('${inputId}', '${previewId}')" style="position:absolute;top:-6px;right:-6px;background:#ef4444;color:#fff;border:none;border-radius:50%;width:22px;height:22px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-xmark"></i></button></div>`;
     box.style.display = 'block';
+  } else {
+    box.style.display = 'none';
+    box.innerHTML = '';
   }
 }
 
@@ -1599,7 +1618,7 @@ function removeImage(inputId, previewId) {
   const input = document.getElementById(inputId);
   const box = document.getElementById(previewId);
   if (input) input.value = '';
-  if (box) box.style.display = 'none';
+  if (box) { box.style.display = 'none'; box.innerHTML = ''; }
 }
 
 // ============================================================
@@ -1615,13 +1634,26 @@ function closeModal(id) {
   if (modal) modal.classList.remove('open');
 }
 
-function showConfirm(title, message, onConfirm) {
+function showConfirm(title, message, onConfirm, confirmBtnText = 'Delete Item', btnClass = 'btn-danger', iconClass = 'fa-solid fa-trash') {
   document.getElementById('confirm-title').textContent = title;
   document.getElementById('confirm-msg').textContent = message;
   currentConfirmCallback = onConfirm;
 
+  const iconEl = document.querySelector('#confirm-modal .confirm-icon');
+  if (iconEl) {
+    if (confirmBtnText === 'Logout') {
+      iconEl.innerHTML = `<i class="fa-solid fa-right-from-bracket"></i>`;
+      iconEl.style.color = '#ef4444';
+    } else {
+      iconEl.innerHTML = `<i class="fa-solid fa-trash-can"></i>`;
+      iconEl.style.color = '#ef4444';
+    }
+  }
+
   const btn = document.getElementById('confirm-action-btn');
   if (btn) {
+    btn.className = `btn ${btnClass}`;
+    btn.innerHTML = `<i class="${iconClass}"></i> ${confirmBtnText}`;
     btn.onclick = async () => {
       closeModal('confirm-modal');
       if (currentConfirmCallback) await currentConfirmCallback();

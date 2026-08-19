@@ -33,6 +33,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   await checkAuthState();
 });
 
+window.addEventListener('pageshow', async () => {
+  await checkAuthState();
+});
+
+window.addEventListener('popstate', async () => {
+  await checkAuthState();
+});
+
+
 function initUIListeners() {
   // Password eye toggle
   const eye = document.getElementById('pwd-eye');
@@ -259,6 +268,8 @@ function navigateTo(pageId, pushHistory = true) {
       gallery: 'Gallery & Media Library',
       contacts: 'Contact Requests & Leads',
       settings: 'Website Settings',
+      whatsapp: 'WhatsApp Popup Settings',
+      password: 'Change Password',
       seo: 'SEO Settings',
       profile: 'Admin Profile'
     };
@@ -310,6 +321,7 @@ async function loadAllCmsData() {
     loadGallery(),
     loadContacts(),
     loadWebsiteSettings(),
+    loadWhatsAppSettings(),
     loadSeoSettings()
   ]);
 }
@@ -1788,3 +1800,253 @@ function escapeHtml(str) {
   if (!str) return '';
   return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
+
+// ============================================================
+// WHATSAPP POPUP SETTINGS CONTROLLER
+// ============================================================
+async function loadWhatsAppSettings() {
+  if (!sb) return;
+  try {
+    const { data, error } = await sb.from('whatsapp_popup_settings').select('*').limit(1).single();
+    if (error && error.code !== 'PGRST116') {
+      console.error('Error loading WhatsApp settings:', error);
+      return;
+    }
+    if (data) {
+      const enabledCb = document.getElementById('wa-enabled');
+      const numberInput = document.getElementById('wa-number');
+      const messageInput = document.getElementById('wa-message');
+      const btnTextInput = document.getElementById('wa-button-text');
+      const delayInput = document.getElementById('wa-delay');
+      const posSelect = document.getElementById('wa-position');
+
+      if (enabledCb) enabledCb.checked = data.enabled !== false;
+      if (numberInput) numberInput.value = data.whatsapp_number || '+918639833447';
+      if (messageInput) messageInput.value = data.popup_message || 'Chat with Us on WhatsApp';
+      if (btnTextInput) btnTextInput.value = data.button_text || 'Chat on WhatsApp';
+      if (delayInput) delayInput.value = data.delay_seconds !== undefined ? data.delay_seconds : 3;
+      if (posSelect) posSelect.value = data.position || 'bottom-right';
+
+      updateWhatsAppPreview();
+    }
+  } catch (err) {
+    console.error('Failed to load WhatsApp settings:', err);
+  }
+}
+
+function updateWhatsAppPreview() {
+  const enabledCb = document.getElementById('wa-enabled');
+  const enabledLabel = document.getElementById('wa-enabled-label');
+  const messageInput = document.getElementById('wa-message');
+  const previewContainer = document.getElementById('wa-preview-container');
+  const previewDisabledMsg = document.getElementById('wa-preview-disabled-msg');
+  const previewMsgText = document.getElementById('wa-preview-msg-text');
+  const posSelect = document.getElementById('wa-position');
+
+  const isEnabled = enabledCb ? enabledCb.checked : true;
+  if (enabledLabel) {
+    enabledLabel.textContent = isEnabled ? 'Enabled (Visible on Website)' : 'Disabled (Hidden on Website)';
+  }
+
+  if (!isEnabled) {
+    if (previewContainer) previewContainer.style.display = 'none';
+    if (previewDisabledMsg) previewDisabledMsg.style.display = 'block';
+  } else {
+    if (previewContainer) previewContainer.style.display = 'flex';
+    if (previewDisabledMsg) previewDisabledMsg.style.display = 'none';
+    if (previewMsgText && messageInput) {
+      previewMsgText.textContent = messageInput.value.trim() || 'Chat with Us on WhatsApp';
+    }
+    if (previewContainer && posSelect) {
+      if (posSelect.value === 'bottom-left') {
+        previewContainer.style.flexDirection = 'row-reverse';
+      } else {
+        previewContainer.style.flexDirection = 'row';
+      }
+    }
+  }
+}
+
+async function saveWhatsAppSettings() {
+  if (!sb) {
+    showToast('Supabase client is not connected.', 'error');
+    return;
+  }
+
+  const saveBtn = document.getElementById('btn-save-wa');
+  if (saveBtn) { saveBtn.disabled = true; saveBtn.classList.add('loading'); }
+
+  const enabled = document.getElementById('wa-enabled')?.checked ?? true;
+  const whatsapp_number = document.getElementById('wa-number')?.value.trim() || '+918639833447';
+  const popup_message = document.getElementById('wa-message')?.value.trim() || 'Chat with Us on WhatsApp';
+  const button_text = document.getElementById('wa-button-text')?.value.trim() || 'Chat on WhatsApp';
+  const delay_seconds = parseInt(document.getElementById('wa-delay')?.value, 10) || 0;
+  const position = document.getElementById('wa-position')?.value || 'bottom-right';
+
+  try {
+    const { data: existing } = await sb.from('whatsapp_popup_settings').select('id').limit(1).single();
+
+    let error = null;
+    if (existing && existing.id) {
+      const { error: err } = await sb.from('whatsapp_popup_settings')
+        .update({ enabled, whatsapp_number, popup_message, button_text, delay_seconds, position, updated_at: new Date().toISOString() })
+        .eq('id', existing.id);
+      error = err;
+    } else {
+      const { error: err } = await sb.from('whatsapp_popup_settings')
+        .insert([{ enabled, whatsapp_number, popup_message, button_text, delay_seconds, position }]);
+      error = err;
+    }
+
+    if (error) {
+      console.error('Error saving WhatsApp settings:', error);
+      showToast(error.message || 'Failed to save WhatsApp settings.', 'error');
+    } else {
+      showToast('WhatsApp Popup settings saved successfully!', 'success');
+      await logActivity('UPDATE', 'whatsapp_popup_settings', 'WhatsApp Settings', `Enabled: ${enabled}, Position: ${position}`);
+    }
+  } catch (err) {
+    console.error('Failed to save WhatsApp settings:', err);
+    showToast('An error occurred while saving settings.', 'error');
+  } finally {
+    if (saveBtn) { saveBtn.disabled = false; saveBtn.classList.remove('loading'); }
+  }
+}
+
+// ============================================================
+// PASSWORD CHANGE CONTROLLER & SECURITY
+// ============================================================
+function toggleCustomPasswordVisibility(inputId, iconEl) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  const isPassword = input.type === 'password';
+  input.type = isPassword ? 'text' : 'password';
+  if (iconEl) {
+    iconEl.className = isPassword ? 'fa-solid fa-eye-slash eye-toggle' : 'fa-solid fa-eye eye-toggle';
+  }
+}
+
+function checkPasswordRequirements() {
+  const pwd = document.getElementById('pwd-new')?.value || '';
+  
+  const minLen = pwd.length >= 8;
+  const hasUpper = /[A-Z]/.test(pwd);
+  const hasLower = /[a-z]/.test(pwd);
+  const hasNum = /[0-9]/.test(pwd);
+
+  const updateRuleUI = (id, isValid) => {
+    const el = document.getElementById(id);
+    if (el) {
+      const icon = el.querySelector('i');
+      if (isValid) {
+        el.style.color = '#10b981';
+        if (icon) icon.className = 'fa-solid fa-circle-check';
+      } else {
+        el.style.color = 'var(--text-muted, #94a3b8)';
+        if (icon) icon.className = 'fa-solid fa-circle-xmark';
+      }
+    }
+  };
+
+  updateRuleUI('rule-minlen', minLen);
+  updateRuleUI('rule-uppercase', hasUpper);
+  updateRuleUI('rule-lowercase', hasLower);
+  updateRuleUI('rule-number', hasNum);
+
+  return minLen && hasUpper && hasLower && hasNum;
+}
+
+async function executePasswordChange(e) {
+  if (e) e.preventDefault();
+
+  const currentPassword = document.getElementById('pwd-current')?.value || '';
+  const secretCode = document.getElementById('pwd-secret')?.value || '';
+  const newPassword = document.getElementById('pwd-new')?.value || '';
+  const confirmPassword = document.getElementById('pwd-confirm')?.value || '';
+
+  const errBox = document.getElementById('change-pwd-error');
+  const errMsg = document.getElementById('change-pwd-error-msg');
+  const submitBtn = document.getElementById('btn-change-pwd-submit');
+
+  const showError = (msg) => {
+    if (errMsg) errMsg.textContent = msg;
+    if (errBox) errBox.classList.add('show');
+  };
+
+  if (errBox) errBox.classList.remove('show');
+
+  if (!currentPassword || !secretCode || !newPassword || !confirmPassword) {
+    showError('Please fill in all required fields.');
+    return;
+  }
+
+  if (newPassword !== confirmPassword) {
+    showError('New passwords do not match.');
+    return;
+  }
+
+  if (!checkPasswordRequirements()) {
+    showError('Password must meet the required security rules.');
+    return;
+  }
+
+  if (!sb || !sb.auth) {
+    showError('Supabase client authentication unavailable.');
+    return;
+  }
+
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session || !session.access_token) {
+    showError('Current session is invalid or expired. Please sign in again.');
+    showLoginPage();
+    return;
+  }
+
+  if (submitBtn) {
+    submitBtn.classList.add('loading');
+    submitBtn.disabled = true;
+  }
+
+  try {
+    const response = await fetch('/api/change-password', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${session.access_token}`
+      },
+      body: JSON.stringify({
+        currentPassword,
+        secretCode,
+        newPassword
+      })
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      showError(result.error || 'Failed to update password.');
+    } else {
+      showToast('Password changed successfully! Signing out...', 'success');
+      
+      await sb.auth.signOut();
+      currentUser = null;
+      
+      const form = document.getElementById('change-pwd-form');
+      if (form) form.reset();
+      
+      setTimeout(() => {
+        showLoginPage();
+        showToast('Please log in with your new password.', 'info');
+      }, 1500);
+    }
+  } catch (err) {
+    console.error('Password change error:', err);
+    showError(err.message || 'Server network error occurred.');
+  } finally {
+    if (submitBtn) {
+      submitBtn.classList.remove('loading');
+      submitBtn.disabled = false;
+    }
+  }
+}
+

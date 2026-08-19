@@ -21,11 +21,66 @@ const MIME_TYPES = {
   '.ttf': 'font/ttf'
 };
 
+// Load .env variables into process.env if present locally
+try {
+  const envPath = path.join(__dirname, '.env');
+  if (fs.existsSync(envPath)) {
+    const envContent = fs.readFileSync(envPath, 'utf8');
+    envContent.split(/\r?\n/).forEach(line => {
+      const trimmed = line.trim();
+      if (trimmed && !trimmed.startsWith('#')) {
+        const eqIdx = trimmed.indexOf('=');
+        if (eqIdx > 0) {
+          const key = trimmed.substring(0, eqIdx).trim();
+          const val = trimmed.substring(eqIdx + 1).trim();
+          if (!process.env[key]) {
+            process.env[key] = val;
+          }
+        }
+      }
+    });
+  }
+} catch(e) {}
+
+const changePasswordHandler = require('./api/change-password.js');
+
+
 const server = http.createServer((req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
 
+  if (req.method === 'OPTIONS') {
+    res.writeHead(204);
+    res.end();
+    return;
+  }
+
   let urlPath = decodeURIComponent(req.url.split('?')[0]);
+
+  if (urlPath === '/api/change-password') {
+    let body = '';
+    req.on('data', chunk => { body += chunk.toString(); });
+    req.on('end', () => {
+      try {
+        req.body = body ? JSON.parse(body) : {};
+      } catch (e) {
+        req.body = {};
+      }
+      res.status = function(code) {
+        this.statusCode = code;
+        return this;
+      };
+      res.json = function(data) {
+        this.writeHead(this.statusCode || 200, { 'Content-Type': 'application/json' });
+        this.end(JSON.stringify(data));
+      };
+      changePasswordHandler(req, res);
+    });
+    return;
+  }
+
   if (urlPath === '/') urlPath = '/index.html';
   if (urlPath === '/admin') urlPath = '/admin.html';
   if (urlPath === '/our-works') urlPath = '/our-works.html';
@@ -52,3 +107,4 @@ server.listen(PORT, () => {
   console.log(`🚀 Node HTTP Server running at http://localhost:${PORT}/`);
   console.log(`🔑 Admin Panel: http://localhost:${PORT}/admin.html`);
 });
+

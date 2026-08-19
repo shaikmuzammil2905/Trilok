@@ -184,6 +184,18 @@ CREATE TABLE IF NOT EXISTS website_settings (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+CREATE TABLE IF NOT EXISTS whatsapp_popup_settings (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  enabled BOOLEAN DEFAULT true,
+  whatsapp_number TEXT DEFAULT '+918639833447',
+  popup_message TEXT DEFAULT 'Chat with Us on WhatsApp',
+  button_text TEXT DEFAULT 'Chat on WhatsApp',
+  delay_seconds INTEGER DEFAULT 3,
+  position TEXT DEFAULT 'bottom-right' CHECK (position IN ('bottom-right', 'bottom-left')),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 CREATE TABLE IF NOT EXISTS seo_settings (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   meta_title TEXT DEFAULT 'Trilok Infotech Private Limited | Digital Solutions & eSaleAgreement',
@@ -217,6 +229,23 @@ CREATE TABLE IF NOT EXISTS activity_logs (
   details TEXT DEFAULT '',
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- ============================================================
+-- HELPER AUTHORIZATION FUNCTION FOR STRICT ADMIN RLS
+-- ============================================================
+CREATE OR REPLACE FUNCTION is_admin()
+RETURNS BOOLEAN
+LANGUAGE sql
+SECURITY DEFINER
+STABLE
+AS $$
+  SELECT EXISTS (
+    SELECT 1 FROM admin_profiles
+    WHERE id = auth.uid() AND role = 'admin'
+  ) OR (
+    auth.jwt() ->> 'email' = 'admin@trilokinfotech.com'
+  );
+$$;
 
 -- ============================================================
 -- 2. ALTER EXISTING TABLES TO ADD ALL MISSING COLUMNS (SAFE)
@@ -256,6 +285,7 @@ ALTER TABLE faqs ENABLE ROW LEVEL SECURITY;
 ALTER TABLE gallery ENABLE ROW LEVEL SECURITY;
 ALTER TABLE contact_requests ENABLE ROW LEVEL SECURITY;
 ALTER TABLE website_settings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE whatsapp_popup_settings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE seo_settings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE admin_profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE activity_logs ENABLE ROW LEVEL SECURITY;
@@ -294,6 +324,9 @@ CREATE POLICY "Public read gallery" ON gallery FOR SELECT USING (true);
 DROP POLICY IF EXISTS "Public read website_settings" ON website_settings;
 CREATE POLICY "Public read website_settings" ON website_settings FOR SELECT USING (true);
 
+DROP POLICY IF EXISTS "Public read whatsapp_popup_settings" ON whatsapp_popup_settings;
+CREATE POLICY "Public read whatsapp_popup_settings" ON whatsapp_popup_settings FOR SELECT USING (true);
+
 DROP POLICY IF EXISTS "Public read seo_settings" ON seo_settings;
 CREATE POLICY "Public read seo_settings" ON seo_settings FOR SELECT USING (true);
 
@@ -301,42 +334,45 @@ CREATE POLICY "Public read seo_settings" ON seo_settings FOR SELECT USING (true)
 DROP POLICY IF EXISTS "Public insert contact_requests" ON contact_requests;
 CREATE POLICY "Public insert contact_requests" ON contact_requests FOR INSERT WITH CHECK (true);
 
--- AUTHENTICATED ADMIN FULL ACCESS
+-- AUTHENTICATED ADMIN FULL ACCESS (STRICT ADMIN ROLE AUTHORIZATION)
 DROP POLICY IF EXISTS "Admin full access hero_settings" ON hero_settings;
-CREATE POLICY "Admin full access hero_settings" ON hero_settings FOR ALL USING (auth.role() = 'authenticated');
+CREATE POLICY "Admin full access hero_settings" ON hero_settings FOR ALL USING (is_admin()) WITH CHECK (is_admin());
 
 DROP POLICY IF EXISTS "Admin full access about_settings" ON about_settings;
-CREATE POLICY "Admin full access about_settings" ON about_settings FOR ALL USING (auth.role() = 'authenticated');
+CREATE POLICY "Admin full access about_settings" ON about_settings FOR ALL USING (is_admin()) WITH CHECK (is_admin());
 
 DROP POLICY IF EXISTS "Admin full access services" ON services;
-CREATE POLICY "Admin full access services" ON services FOR ALL USING (auth.role() = 'authenticated');
+CREATE POLICY "Admin full access services" ON services FOR ALL USING (is_admin()) WITH CHECK (is_admin());
 
 DROP POLICY IF EXISTS "Admin full access projects" ON projects;
-CREATE POLICY "Admin full access projects" ON projects FOR ALL USING (auth.role() = 'authenticated');
+CREATE POLICY "Admin full access projects" ON projects FOR ALL USING (is_admin()) WITH CHECK (is_admin());
 
 DROP POLICY IF EXISTS "Admin full access products" ON products;
-CREATE POLICY "Admin full access products" ON products FOR ALL USING (auth.role() = 'authenticated');
+CREATE POLICY "Admin full access products" ON products FOR ALL USING (is_admin()) WITH CHECK (is_admin());
 
 DROP POLICY IF EXISTS "Admin full access industries" ON industries;
-CREATE POLICY "Admin full access industries" ON industries FOR ALL USING (auth.role() = 'authenticated');
+CREATE POLICY "Admin full access industries" ON industries FOR ALL USING (is_admin()) WITH CHECK (is_admin());
 
 DROP POLICY IF EXISTS "Admin full access careers" ON careers;
-CREATE POLICY "Admin full access careers" ON careers FOR ALL USING (auth.role() = 'authenticated');
+CREATE POLICY "Admin full access careers" ON careers FOR ALL USING (is_admin()) WITH CHECK (is_admin());
 
 DROP POLICY IF EXISTS "Admin full access testimonials" ON testimonials;
-CREATE POLICY "Admin full access testimonials" ON testimonials FOR ALL USING (auth.role() = 'authenticated');
+CREATE POLICY "Admin full access testimonials" ON testimonials FOR ALL USING (is_admin()) WITH CHECK (is_admin());
 
 DROP POLICY IF EXISTS "Admin full access faqs" ON faqs;
-CREATE POLICY "Admin full access faqs" ON faqs FOR ALL USING (auth.role() = 'authenticated');
+CREATE POLICY "Admin full access faqs" ON faqs FOR ALL USING (is_admin()) WITH CHECK (is_admin());
 
 DROP POLICY IF EXISTS "Admin full access gallery" ON gallery;
-CREATE POLICY "Admin full access gallery" ON gallery FOR ALL USING (auth.role() = 'authenticated');
+CREATE POLICY "Admin full access gallery" ON gallery FOR ALL USING (is_admin()) WITH CHECK (is_admin());
 
 DROP POLICY IF EXISTS "Admin full access contact_requests" ON contact_requests;
-CREATE POLICY "Admin full access contact_requests" ON contact_requests FOR ALL USING (auth.role() = 'authenticated');
+CREATE POLICY "Admin full access contact_requests" ON contact_requests FOR ALL USING (is_admin()) WITH CHECK (is_admin());
 
 DROP POLICY IF EXISTS "Admin full access website_settings" ON website_settings;
-CREATE POLICY "Admin full access website_settings" ON website_settings FOR ALL USING (auth.role() = 'authenticated');
+CREATE POLICY "Admin full access website_settings" ON website_settings FOR ALL USING (is_admin()) WITH CHECK (is_admin());
+
+DROP POLICY IF EXISTS "Admin full access whatsapp_popup_settings" ON whatsapp_popup_settings;
+CREATE POLICY "Admin full access whatsapp_popup_settings" ON whatsapp_popup_settings FOR ALL USING (is_admin()) WITH CHECK (is_admin());
 
 DROP POLICY IF EXISTS "Admin full access seo_settings" ON seo_settings;
 CREATE POLICY "Admin full access seo_settings" ON seo_settings FOR ALL USING (auth.role() = 'authenticated');
@@ -422,3 +458,8 @@ ON CONFLICT DO NOTHING;
 INSERT INTO seo_settings (meta_title, meta_description, keywords)
 VALUES ('Trilok Infotech Private Limited | Digital Solutions & eSaleAgreement', 'Trilok Infotech Private Limited delivers website development, mobile apps, custom software, digital marketing, and India flagship eSaleAgreement platform.', 'software development, cybersecurity, digital transformation, eSaleAgreement, cloud solutions')
 ON CONFLICT DO NOTHING;
+
+INSERT INTO whatsapp_popup_settings (enabled, whatsapp_number, popup_message, button_text, delay_seconds, position)
+VALUES (true, '+918639833447', 'Chat with Us on WhatsApp', 'Chat on WhatsApp', 3, 'bottom-right')
+ON CONFLICT DO NOTHING;
+

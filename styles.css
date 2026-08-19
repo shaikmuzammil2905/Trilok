@@ -1781,6 +1781,13 @@ button {
     gap: 12px;
 }
 
+.whatsapp-float-container.pos-left {
+    right: auto;
+    left: 28px;
+    flex-direction: row-reverse;
+}
+
+
 .whatsapp-float-btn {
     width: 60px;
     height: 60px;

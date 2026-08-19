@@ -135,6 +135,12 @@
       <div class="nav-item" data-page="settings">
         <i class="fa-solid fa-sliders"></i><span>Website Settings</span>
       </div>
+      <div class="nav-item" data-page="whatsapp">
+        <i class="fa-brands fa-whatsapp" style="color:#25D366;"></i><span>WhatsApp Popup</span>
+      </div>
+      <div class="nav-item" data-page="password">
+        <i class="fa-solid fa-key text-warning" style="color:#f59e0b;"></i><span>Change Password</span>
+      </div>
       <div class="nav-item" data-page="seo">
         <i class="fa-solid fa-magnifying-glass-chart"></i><span>SEO Settings</span>
       </div>
@@ -755,6 +761,193 @@
             <div class="form-group"><label>New Password</label><input type="password" class="form-control" id="new-password" placeholder="At least 6 characters"></div>
             <div class="form-group"><label>Confirm New Password</label><input type="password" class="form-control" id="confirm-password" placeholder="Confirm password"></div>
             <button class="btn btn-primary" onclick="changePassword()"><i class="fa-solid fa-key"></i> Update Password</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 17. WHATSAPP POPUP SETTINGS -->
+      <section class="page-section" id="page-whatsapp">
+        <div class="page-header">
+          <div class="page-header-left">
+            <button class="btn btn-outline btn-sm back-nav-btn" onclick="navigateBackAdmin()" aria-label="Go back to previous page" style="margin-bottom:10px; display:inline-flex; align-items:center; gap:6px;"><i class="fa-solid fa-arrow-left"></i> Back</button>
+            <h1>WhatsApp Popup Settings</h1>
+            <p>Control the floating WhatsApp widget, message, delay, and position live on the public website</p>
+          </div>
+          <div class="page-header-actions">
+            <button class="btn btn-primary" onclick="saveWhatsAppSettings()"><i class="fa-solid fa-save"></i> Save WhatsApp Settings</button>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><div class="card-title"><i class="fa-brands fa-whatsapp" style="color:#25D366;"></i> WhatsApp Configuration</div></div>
+            
+            <div class="form-group">
+              <label>WhatsApp Popup Status</label>
+              <div class="toggle-wrap">
+                <label class="toggle-switch">
+                  <input type="checkbox" id="wa-enabled" checked onchange="updateWhatsAppPreview()">
+                  <span class="toggle-slider"></span>
+                </label>
+                <span class="toggle-label" id="wa-enabled-label">Enabled (Visible on Website)</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="wa-number">WhatsApp Phone Number *</label>
+              <input type="text" class="form-control" id="wa-number" placeholder="+918639833447" oninput="updateWhatsAppPreview()">
+              <small class="form-text" style="color:var(--text-muted);font-size:12px;margin-top:4px;display:block;">Include country code e.g. +91 8639833447</small>
+            </div>
+
+            <div class="form-group">
+              <label for="wa-message">Popup Tooltip Message</label>
+              <input type="text" class="form-control" id="wa-message" placeholder="Chat with Us on WhatsApp" oninput="updateWhatsAppPreview()">
+            </div>
+
+            <div class="form-group">
+              <label for="wa-button-text">Button Text</label>
+              <input type="text" class="form-control" id="wa-button-text" placeholder="Chat on WhatsApp" oninput="updateWhatsAppPreview()">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="wa-delay">Popup Delay (Seconds)</label>
+                <input type="number" class="form-control" id="wa-delay" min="0" max="60" value="3" oninput="updateWhatsAppPreview()">
+              </div>
+
+              <div class="form-group">
+                <label for="wa-position">Screen Position</label>
+                <select class="form-control" id="wa-position" onchange="updateWhatsAppPreview()">
+                  <option value="bottom-right">Bottom Right</option>
+                  <option value="bottom-left">Bottom Left</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="margin-top:16px;">
+              <button class="btn btn-primary" onclick="saveWhatsAppSettings()" id="btn-save-wa">
+                <i class="fa-solid fa-save"></i> Save Changes
+              </button>
+            </div>
+          </div>
+
+          <!-- LIVE PREVIEW CARD -->
+          <div class="card">
+            <div class="card-header"><div class="card-title"><i class="fa-solid fa-eye" style="color:#0ea5e9;"></i> Widget Live Preview</div></div>
+            <div style="background:#0a0f1e;border-radius:12px;padding:40px 20px;min-height:300px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px dashed rgba(255,255,255,0.15);">
+              
+              <div id="wa-preview-disabled-msg" style="display:none;text-align:center;color:var(--text-muted,#94a3b8);">
+                <i class="fa-solid fa-eye-slash" style="font-size:36px;margin-bottom:12px;opacity:0.5;"></i>
+                <p style="font-size:14px;margin:0;">WhatsApp Popup is currently <strong>DISABLED</strong>.<br>It will not appear on the website.</p>
+              </div>
+
+              <div id="wa-preview-container" style="display:flex;align-items:center;gap:12px;transition:all 0.3s ease;">
+                <div id="wa-preview-tooltip" style="background:#0F172A;color:#FFF;font-size:13px;font-weight:600;padding:8px 14px;border-radius:20px;border:1px solid rgba(255,255,255,0.15);display:flex;align-items:center;gap:6px;box-shadow:0 4px 16px rgba(0,0,0,0.4);">
+                  <span style="width:8px;height:8px;background:#25D366;border-radius:50%;display:inline-block;box-shadow:0 0 8px #25D366;"></span>
+                  <span id="wa-preview-msg-text">Chat with Us on WhatsApp</span>
+                </div>
+
+                <div id="wa-preview-btn" style="width:56px;height:56px;background:linear-gradient(135deg,#25D366 0%,#128C7E 100%);color:#FFF;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;box-shadow:0 8px 24px rgba(37,211,102,0.45);">
+                  <i class="fa-brands fa-whatsapp"></i>
+                </div>
+              </div>
+
+            </div>
+            <div style="padding-top:12px;font-size:12px;color:var(--text-muted,#94a3b8);text-align:center;">
+              <i class="fa-solid fa-circle-info"></i> Changes update on the public website immediately after saving.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 18. CHANGE PASSWORD SYSTEM -->
+      <section class="page-section" id="page-password">
+        <div class="page-header">
+          <div class="page-header-left">
+            <button class="btn btn-outline btn-sm back-nav-btn" onclick="navigateBackAdmin()" aria-label="Go back to previous page" style="margin-bottom:10px; display:inline-flex; align-items:center; gap:6px;"><i class="fa-solid fa-arrow-left"></i> Back</button>
+            <h1>Change Password</h1>
+            <p>Securely change your Admin authentication password</p>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header"><div class="card-title"><i class="fa-solid fa-lock" style="color:#f59e0b;"></i> Password Update Form</div></div>
+            
+            <form id="change-pwd-form" onsubmit="executePasswordChange(event); return false;">
+              <div class="form-group">
+                <label for="pwd-current">Current Password *</label>
+                <div class="login-input-wrap">
+                  <i class="fa-solid fa-lock"></i>
+                  <input type="password" id="pwd-current" class="form-control" placeholder="Enter current password" required autocomplete="current-password">
+                  <i class="fa-solid fa-eye eye-toggle" onclick="toggleCustomPasswordVisibility('pwd-current', this)" title="Toggle visibility"></i>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="pwd-secret">Secret Security Code *</label>
+                <div class="login-input-wrap">
+                  <i class="fa-solid fa-shield-halved"></i>
+                  <input type="password" id="pwd-secret" class="form-control" placeholder="Enter secret security code" required autocomplete="off">
+                  <i class="fa-solid fa-eye eye-toggle" onclick="toggleCustomPasswordVisibility('pwd-secret', this)" title="Toggle visibility"></i>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="pwd-new">New Password *</label>
+                <div class="login-input-wrap">
+                  <i class="fa-solid fa-key"></i>
+                  <input type="password" id="pwd-new" class="form-control" placeholder="Enter new password" required autocomplete="new-password" oninput="checkPasswordRequirements()">
+                  <i class="fa-solid fa-eye eye-toggle" onclick="toggleCustomPasswordVisibility('pwd-new', this)" title="Toggle visibility"></i>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="pwd-confirm">Confirm New Password *</label>
+                <div class="login-input-wrap">
+                  <i class="fa-solid fa-check-double"></i>
+                  <input type="password" id="pwd-confirm" class="form-control" placeholder="Confirm new password" required autocomplete="new-password">
+                  <i class="fa-solid fa-eye eye-toggle" onclick="toggleCustomPasswordVisibility('pwd-confirm', this)" title="Toggle visibility"></i>
+                </div>
+              </div>
+
+              <div class="login-error" id="change-pwd-error" style="margin-bottom:16px;">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <span id="change-pwd-error-msg">Current password is incorrect.</span>
+              </div>
+
+              <button type="submit" class="btn btn-primary" id="btn-change-pwd-submit" style="width:100%;">
+                <span class="btn-text"><i class="fa-solid fa-shield-check"></i> Update Password & Re-authenticate</span>
+                <span class="btn-spinner"></span>
+              </button>
+            </form>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><div class="card-title"><i class="fa-solid fa-list-check" style="color:#3b82f6;"></i> Security Guidelines & Rules</div></div>
+            <div style="padding:10px 0;">
+              <p style="font-size:13px;color:var(--text-muted,#94a3b8);margin-bottom:16px;">Your new password must satisfy the following security rules:</p>
+              
+              <ul class="pwd-rules-list" style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px;">
+                <li id="rule-minlen" style="font-size:13px;color:var(--text-muted,#94a3b8);display:flex;align-items:center;gap:10px;">
+                  <i class="fa-solid fa-circle-xmark" style="color:#ef4444;"></i> At least 8 characters long
+                </li>
+                <li id="rule-uppercase" style="font-size:13px;color:var(--text-muted,#94a3b8);display:flex;align-items:center;gap:10px;">
+                  <i class="fa-solid fa-circle-xmark" style="color:#ef4444;"></i> At least one uppercase letter (A-Z)
+                </li>
+                <li id="rule-lowercase" style="font-size:13px;color:var(--text-muted,#94a3b8);display:flex;align-items:center;gap:10px;">
+                  <i class="fa-solid fa-circle-xmark" style="color:#ef4444;"></i> At least one lowercase letter (a-z)
+                </li>
+                <li id="rule-number" style="font-size:13px;color:var(--text-muted,#94a3b8);display:flex;align-items:center;gap:10px;">
+                  <i class="fa-solid fa-circle-xmark" style="color:#ef4444;"></i> At least one numeric digit (0-9)
+                </li>
+              </ul>
+
+              <div style="margin-top:24px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.25);padding:14px;border-radius:8px;font-size:12px;color:#fca5a5;">
+                <i class="fa-solid fa-triangle-exclamation" style="margin-right:6px;"></i>
+                <strong>Notice:</strong> Changing your password will invalidate your existing sessions. You will be required to log in again using your new password.
+              </div>
+            </div>
           </div>
         </div>
       </section>

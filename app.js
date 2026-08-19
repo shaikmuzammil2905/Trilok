@@ -448,28 +448,65 @@ function getCleanPhone(phoneStr) {
     return clean;
 }
 
-function initFloatingWhatsAppWidget(phoneNum = '918639833447') {
+function initFloatingWhatsAppWidget(opts = {}) {
+    const {
+        phoneNum = '918639833447',
+        enabled = true,
+        message = 'Chat with Us on WhatsApp',
+        buttonText = 'Chat on WhatsApp',
+        delaySeconds = 3,
+        position = 'bottom-right'
+    } = typeof opts === 'object' ? opts : { phoneNum: opts };
+
     let widget = document.getElementById('whatsapp-float-widget');
+    
+    if (enabled === false) {
+        if (widget) widget.remove();
+        return;
+    }
+
     const cleanPhone = getCleanPhone(phoneNum);
     const targetUrl = `https://wa.me/${cleanPhone}`;
+    const posClass = position === 'bottom-left' ? 'pos-left' : '';
 
     if (!widget) {
         widget = document.createElement('div');
-        widget.className = 'whatsapp-float-container';
+        widget.className = `whatsapp-float-container ${posClass}`;
         widget.id = 'whatsapp-float-widget';
 
         widget.innerHTML = `
-            <div class="whatsapp-float-tooltip">
-                <span class="online-dot"></span> Chat with Us on WhatsApp
+            <div class="whatsapp-float-tooltip" id="wa-float-tooltip">
+                <span class="online-dot"></span> <span id="wa-float-msg-text">${message}</span>
             </div>
-            <a href="${targetUrl}" target="_blank" rel="noopener noreferrer" class="whatsapp-float-btn" id="wa-float-link" aria-label="Chat on WhatsApp">
+            <a href="${targetUrl}" target="_blank" rel="noopener noreferrer" class="whatsapp-float-btn" id="wa-float-link" aria-label="${buttonText}">
                 <i class="fa-brands fa-whatsapp"></i>
             </a>
         `;
-        document.body.appendChild(widget);
+
+        if (delaySeconds > 0) {
+            widget.style.opacity = '0';
+            widget.style.pointerEvents = 'none';
+            widget.style.transition = 'opacity 0.4s ease';
+            document.body.appendChild(widget);
+            setTimeout(() => {
+                const w = document.getElementById('whatsapp-float-widget');
+                if (w) {
+                    w.style.opacity = '1';
+                    w.style.pointerEvents = 'auto';
+                }
+            }, delaySeconds * 1000);
+        } else {
+            document.body.appendChild(widget);
+        }
     } else {
+        widget.className = `whatsapp-float-container ${posClass}`;
         const link = document.getElementById('wa-float-link');
-        if (link) link.href = targetUrl;
+        if (link) {
+            link.href = targetUrl;
+            link.setAttribute('aria-label', buttonText || 'Chat on WhatsApp');
+        }
+        const msgText = document.getElementById('wa-float-msg-text');
+        if (msgText) msgText.textContent = message || 'Chat with Us on WhatsApp';
     }
 }
 
@@ -487,6 +524,30 @@ async function initLiveCmsSync() {
     } else {
         return;
     }
+
+    // 0. Live WhatsApp Popup Settings Sync
+    try {
+        const { data: wa } = await sb.from('whatsapp_popup_settings').select('*').limit(1).single();
+        if (wa) {
+            if (wa.enabled === false) {
+                initFloatingWhatsAppWidget({ enabled: false });
+            } else {
+                const rawNum = wa.whatsapp_number || '+918639833447';
+                const cleanNum = getCleanPhone(rawNum);
+                initFloatingWhatsAppWidget({
+                    phoneNum: cleanNum,
+                    enabled: wa.enabled !== false,
+                    message: wa.popup_message || 'Chat with Us on WhatsApp',
+                    buttonText: wa.button_text || 'Chat on WhatsApp',
+                    delaySeconds: wa.delay_seconds !== undefined ? wa.delay_seconds : 3,
+                    position: wa.position || 'bottom-right'
+                });
+                document.querySelectorAll('a.btn-whatsapp, a[href*="wa.me"]').forEach(btn => {
+                    btn.href = `https://wa.me/${cleanNum}`;
+                });
+            }
+        }
+    } catch(e) {}
 
     // 1. Website Settings & SEO
     try {
@@ -517,7 +578,6 @@ async function initLiveCmsSync() {
             if (ws.whatsapp_number || ws.contact_number) {
                 const rawNum = ws.whatsapp_number || ws.contact_number;
                 const cleanNum = getCleanPhone(rawNum);
-                initFloatingWhatsAppWidget(cleanNum);
                 document.querySelectorAll('a.btn-whatsapp, a[href*="wa.me"]').forEach(btn => {
                     btn.href = `https://wa.me/${cleanNum}`;
                 });

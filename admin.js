@@ -1361,6 +1361,17 @@ async function loadContacts() {
   const badge = document.getElementById('unread-badge');
   if (!tbody) return;
 
+  // Load website contact details into inputs
+  try {
+    const { data: ws } = await sb.from('website_settings').select('*').limit(1).single();
+    if (ws) {
+      setV('contact-sec-phone', ws.contact_number || '');
+      setV('contact-sec-email', ws.email_address || '');
+      setV('contact-sec-address', ws.business_address || '');
+      setV('contact-sec-whatsapp', ws.whatsapp_number || '');
+    }
+  } catch(e) {}
+
   try {
     const { data } = await sb.from('contact_requests').select('*').order('created_at', { ascending: false });
     const unreadCount = data ? data.filter(c => !c.is_read).length : 0;
@@ -1371,7 +1382,7 @@ async function loadContacts() {
     }
 
     if (!data || data.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="8" class="text-center" style="padding:24px">No contact inquiries received yet.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="8" class="text-center" style="padding:24px">No contact inquiries received yet. Click "Add New Lead" above to create one.</td></tr>`;
       return;
     }
 
@@ -1387,12 +1398,96 @@ async function loadContacts() {
         <td>
           <div class="table-actions">
             <button class="action-btn edit" onclick="viewContactDetails('${item.id}')" title="View Full Request"><i class="fa-solid fa-eye"></i></button>
+            <button class="action-btn toggle" onclick="editContactLead('${item.id}')" title="Edit Lead"><i class="fa-solid fa-pen"></i></button>
             <button class="action-btn delete" onclick="confirmDeleteContact('${item.id}')" title="Delete"><i class="fa-solid fa-trash"></i></button>
           </div>
         </td>
       </tr>
     `).join('');
   } catch(e) {}
+}
+
+async function saveContactSectionDetails() {
+  if (!sb) return;
+  const payload = {
+    contact_number: document.getElementById('contact-sec-phone')?.value || '',
+    email_address: document.getElementById('contact-sec-email')?.value || '',
+    business_address: document.getElementById('contact-sec-address')?.value || '',
+    whatsapp_number: document.getElementById('contact-sec-whatsapp')?.value || ''
+  };
+
+  try {
+    const { data } = await sb.from('website_settings').select('id').limit(1).single();
+    if (data && data.id) {
+      await sb.from('website_settings').update(payload).eq('id', data.id);
+    } else {
+      await sb.from('website_settings').insert([payload]);
+    }
+    showToast('Contact section details updated successfully!', 'success');
+  } catch(e) {
+    showToast('Error saving contact details: ' + e.message, 'error');
+  }
+}
+
+function openContactModal(id = null) {
+  document.getElementById('contact-edit-id').value = id || '';
+  document.getElementById('contact-name').value = '';
+  document.getElementById('contact-email').value = '';
+  document.getElementById('contact-phone').value = '';
+  document.getElementById('contact-subject').value = '';
+  document.getElementById('contact-message').value = '';
+  document.getElementById('contact-status').value = 'unread';
+  document.getElementById('contact-modal-title').textContent = id ? 'Edit Contact Lead' : 'Add New Contact Lead';
+  openModal('contact-modal');
+}
+
+async function editContactLead(id) {
+  try {
+    const { data } = await sb.from('contact_requests').select('*').eq('id', id).single();
+    if (data) {
+      document.getElementById('contact-edit-id').value = data.id;
+      document.getElementById('contact-name').value = data.name || '';
+      document.getElementById('contact-email').value = data.email || '';
+      document.getElementById('contact-phone').value = data.phone || '';
+      document.getElementById('contact-subject').value = data.subject || '';
+      document.getElementById('contact-message').value = data.message || '';
+      document.getElementById('contact-status').value = data.is_read ? 'read' : 'unread';
+      document.getElementById('contact-modal-title').textContent = 'Edit Contact Lead';
+      openModal('contact-modal');
+    }
+  } catch(e) {
+    showToast('Error loading lead: ' + e.message, 'error');
+  }
+}
+
+async function saveContactLead() {
+  const id = document.getElementById('contact-edit-id')?.value;
+  const name = document.getElementById('contact-name')?.value.trim();
+  if (!name) { showToast('Customer Name is required', 'error'); return; }
+
+  const payload = {
+    name,
+    email: document.getElementById('contact-email')?.value || '',
+    phone: document.getElementById('contact-phone')?.value || '',
+    subject: document.getElementById('contact-subject')?.value || '',
+    message: document.getElementById('contact-message')?.value || '',
+    is_read: document.getElementById('contact-status')?.value === 'read'
+  };
+
+  try {
+    if (id) {
+      await sb.from('contact_requests').update(payload).eq('id', id);
+      showToast('Contact lead updated successfully', 'success');
+    } else {
+      await sb.from('contact_requests').insert([payload]);
+      showToast('New contact lead added successfully', 'success');
+    }
+    closeModal('contact-modal');
+    await loadContacts();
+    await loadDashboardStats();
+  } catch(e) {
+    showToast('Error saving contact lead: ' + e.message, 'error');
+  }
 }
 
 async function viewContactDetails(id) {

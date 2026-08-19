@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initTestimonialCarousel();
     initModalSystem();
     initServiceModals();
+    initFloatingWhatsAppWidget();
     initLiveCmsSync();
 });
 
@@ -437,6 +438,42 @@ function initServiceModals() {
 }
 
 /* ==========================================================================
+   10. FLOATING WHATSAPP BUTTON & POPUP WIDGET
+   ========================================================================== */
+function getCleanPhone(phoneStr) {
+    if (!phoneStr) return '918639833447';
+    let clean = phoneStr.replace(/\D/g, '');
+    if (!clean) return '918639833447';
+    if (clean.length === 10) clean = '91' + clean;
+    return clean;
+}
+
+function initFloatingWhatsAppWidget(phoneNum = '918639833447') {
+    let widget = document.getElementById('whatsapp-float-widget');
+    const cleanPhone = getCleanPhone(phoneNum);
+    const targetUrl = `https://wa.me/${cleanPhone}`;
+
+    if (!widget) {
+        widget = document.createElement('div');
+        widget.className = 'whatsapp-float-container';
+        widget.id = 'whatsapp-float-widget';
+
+        widget.innerHTML = `
+            <div class="whatsapp-float-tooltip">
+                <span class="online-dot"></span> Chat with Us on WhatsApp
+            </div>
+            <a href="${targetUrl}" target="_blank" rel="noopener noreferrer" class="whatsapp-float-btn" id="wa-float-link" aria-label="Chat on WhatsApp">
+                <i class="fa-brands fa-whatsapp"></i>
+            </a>
+        `;
+        document.body.appendChild(widget);
+    } else {
+        const link = document.getElementById('wa-float-link');
+        if (link) link.href = targetUrl;
+    }
+}
+
+/* ==========================================================================
    LIVE SUPABASE CMS SYNC — SINGLE SOURCE OF TRUTH FOR MAIN WEBSITE
    ========================================================================== */
 async function initLiveCmsSync() {
@@ -475,6 +512,14 @@ async function initLiveCmsSync() {
             if (ws.logo_url) {
                 document.querySelectorAll('.logo-header-img, .logo-footer-img').forEach(img => {
                     img.src = ws.logo_url;
+                });
+            }
+            if (ws.whatsapp_number || ws.contact_number) {
+                const rawNum = ws.whatsapp_number || ws.contact_number;
+                const cleanNum = getCleanPhone(rawNum);
+                initFloatingWhatsAppWidget(cleanNum);
+                document.querySelectorAll('a.btn-whatsapp, a[href*="wa.me"]').forEach(btn => {
+                    btn.href = `https://wa.me/${cleanNum}`;
                 });
             }
             if (ws.footer_content) {

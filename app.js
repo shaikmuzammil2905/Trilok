@@ -178,63 +178,42 @@ function initMobileDrawer() {
 }
 
 /* ==========================================================================
-   4.5 SMOOTH ANCHOR & DEEP-LINK NAVIGATION ENGINE
+   4.5 ANCHOR & DEEP-LINK NAVIGATION ENGINE (CLEAN NATIVE SMOOTH SCROLL)
    ========================================================================== */
 function initSmoothAnchorNavigation() {
+    // Active link highlighting & drawer state cleanup on anchor click
     document.querySelectorAll('a[href*="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            const href = this.getAttribute('href');
-            if (!href) return;
-
-            const pagePath = window.location.pathname.replace(/\/$/, '');
-            const isIndexPage = pagePath === '' || pagePath.endsWith('index.html') || pagePath === '/';
-
+        anchor.addEventListener('click', function () {
+            const href = this.getAttribute('href') || '';
             let hash = '';
             if (href.startsWith('#')) {
                 hash = href;
             } else if (href.includes('index.html#')) {
-                if (isIndexPage) {
-                    hash = '#' + href.split('#')[1];
-                }
+                hash = '#' + href.split('#')[1];
             }
 
             if (hash && hash !== '#') {
-                const targetEl = document.querySelector(hash);
-                if (targetEl) {
-                    e.preventDefault();
+                const drawer = document.getElementById('mobile-drawer');
+                const overlay = document.getElementById('drawer-overlay');
+                if (drawer) drawer.classList.remove('open');
+                if (overlay) overlay.classList.remove('open');
+                document.body.style.overflow = '';
 
-                    const drawer = document.getElementById('mobile-drawer');
-                    const overlay = document.getElementById('drawer-overlay');
-                    if (drawer) drawer.classList.remove('open');
-                    if (overlay) overlay.classList.remove('open');
-                    document.body.style.overflow = '';
-
-                    if (history.pushState) {
-                        history.pushState(null, null, hash);
-                    } else {
-                        location.hash = hash;
-                    }
-
-                    document.querySelectorAll('.nav-link, .drawer-link').forEach(link => {
-                        const linkHref = link.getAttribute('href') || '';
-                        link.classList.toggle('active', linkHref.endsWith(hash) || linkHref === hash);
-                    });
-
-                    setTimeout(() => {
-                        targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }, 50);
-                }
+                document.querySelectorAll('.nav-link, .drawer-link').forEach(link => {
+                    const linkHref = link.getAttribute('href') || '';
+                    link.classList.toggle('active', linkHref.endsWith(hash) || linkHref === hash);
+                });
             }
         });
     });
 
+    // Handle direct deep-links on page load (e.g. index.html#services)
     if (window.location.hash) {
-        const initialHash = window.location.hash;
-        const targetEl = document.querySelector(initialHash);
+        const targetEl = document.querySelector(window.location.hash);
         if (targetEl) {
             setTimeout(() => {
                 targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 350);
+            }, 250);
         }
     }
 }

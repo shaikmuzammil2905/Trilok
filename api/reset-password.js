@@ -79,7 +79,7 @@ module.exports = async function handler(req, res) {
       });
     }
 
-    // 3. Attempt Admin Auth update if Service Key available, or perform user auth recovery
+    // 3. Update password via Supabase Auth Admin API
     if (SERVICE_ROLE_KEY) {
       const listRes = await supabaseFetch('/auth/v1/admin/users', 'GET', {
         'Authorization': `Bearer ${SERVICE_ROLE_KEY}`
@@ -101,16 +101,21 @@ module.exports = async function handler(req, res) {
         if (updateRes.status === 200) {
           return (res.status ? res.status(200) : res).json({
             success: true,
-            message: 'Password reset successfully using Secret Code authorization. You can now log in with your new password.'
+            message: 'Password reset successfully. Please log in with your new password.'
           });
+        } else {
+          const errMsg = (updateRes.data && (updateRes.data.msg || updateRes.data.error_description || updateRes.data.message)) || 'Supabase Auth password update failed.';
+          return (res.status ? res.status(400) : res).json({ success: false, error: errMsg });
         }
+      } else {
+        return (res.status ? res.status(404) : res).json({ success: false, error: 'Admin account email not found in Supabase Auth.' });
       }
     }
 
-    return (res.status ? res.status(200) : res).json({
-      success: true,
-      verifiedSecret: true,
-      message: 'Secret Code verified successfully. Password reset authorized.'
+    // If SERVICE_ROLE_KEY is not configured on server:
+    return (res.status ? res.status(500) : res).json({
+      success: false,
+      error: 'SUPABASE_SERVICE_ROLE_KEY is required on the server to execute admin password resets.'
     });
 
   } catch (err) {

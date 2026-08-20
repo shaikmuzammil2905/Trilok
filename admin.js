@@ -220,7 +220,7 @@ async function executeLogout() {
 }
 
 /* ============================================================
-   FORGOT PASSWORD & SECRET CODE RECOVERY CONTROLLERS
+   FORGOT PASSWORD & SECURITY CODE RECOVERY CONTROLLERS
    ============================================================ */
 window.openForgotPasswordView = function() {
   const mainCard = document.getElementById('main-login-card');
@@ -228,13 +228,8 @@ window.openForgotPasswordView = function() {
   if (mainCard) mainCard.style.display = 'none';
   if (forgotCard) forgotCard.style.display = 'block';
 
-  const step1 = document.getElementById('forgot-step-1');
-  const step2 = document.getElementById('forgot-step-2');
   const errBox = document.getElementById('forgot-error');
   const successBox = document.getElementById('forgot-success');
-
-  if (step1) step1.style.display = 'block';
-  if (step2) step2.style.display = 'none';
   if (errBox) errBox.style.display = 'none';
   if (successBox) successBox.style.display = 'none';
 
@@ -247,34 +242,6 @@ window.closeForgotPasswordView = function() {
   const forgotCard = document.getElementById('forgot-password-card');
   if (forgotCard) forgotCard.style.display = 'none';
   if (mainCard) mainCard.style.display = 'block';
-};
-
-window.verifySecretCodeStep = function() {
-  const secretInput = document.getElementById('forgot-secret-input');
-  const errBox = document.getElementById('forgot-error');
-  const errMsg = document.getElementById('forgot-error-msg');
-  const step1 = document.getElementById('forgot-step-1');
-  const step2 = document.getElementById('forgot-step-2');
-
-  const val = secretInput ? secretInput.value.trim() : '';
-  const expectedSecret = '62255622204';
-
-  if (!val) {
-    if (errMsg) errMsg.textContent = 'Please enter the secret security code.';
-    if (errBox) errBox.style.display = 'flex';
-    return;
-  }
-
-  if (val !== expectedSecret) {
-    if (errMsg) errMsg.textContent = 'Invalid secret code. Please check and enter the correct secret code (62255622204).';
-    if (errBox) errBox.style.display = 'flex';
-    return;
-  }
-
-  if (errBox) errBox.style.display = 'none';
-  if (step1) step1.style.display = 'none';
-  if (step2) step2.style.display = 'block';
-  showToast('Secret Security Code verified!', 'success');
 };
 
 window.executeAdminPasswordReset = async function(e) {
@@ -295,8 +262,8 @@ window.executeAdminPasswordReset = async function(e) {
   const newPassword = newPwdInput ? newPwdInput.value : '';
   const confirmPassword = confirmPwdInput ? confirmPwdInput.value : '';
 
-  if (!email || !newPassword || !confirmPassword) {
-    if (errMsg) errMsg.textContent = 'Please fill out all required fields.';
+  if (!email || !secretCode || !newPassword || !confirmPassword) {
+    if (errMsg) errMsg.textContent = 'Please fill out all required fields (Email, Security Code, New Password, Confirm Password).';
     if (errBox) errBox.style.display = 'flex';
     return;
   }
@@ -328,26 +295,29 @@ window.executeAdminPasswordReset = async function(e) {
     if (response.ok && result.success) {
       if (sb && sb.auth) {
         try {
-          await sb.auth.updateUser({ password: newPassword });
+          await sb.auth.signOut();
         } catch(e) {}
       }
 
-      if (successMsg) successMsg.textContent = 'Password updated successfully! Your old password will no longer work. Please sign in with your new password.';
+      if (successMsg) successMsg.textContent = 'Password updated successfully. Please login with your new password.';
       if (successBox) successBox.style.display = 'flex';
 
-      showToast('Password updated! Log in with your new password.', 'success');
+      showToast('Password updated successfully. Please login with your new password.', 'success');
 
       const loginEmailInput = document.getElementById('login-email');
       const loginPwdInput = document.getElementById('login-password');
       if (loginEmailInput) loginEmailInput.value = email;
       if (loginPwdInput) loginPwdInput.value = '';
 
+      const form = document.getElementById('reset-pwd-form');
+      if (form) form.reset();
+
       setTimeout(() => {
         window.closeForgotPasswordView();
       }, 2500);
 
     } else {
-      if (errMsg) errMsg.textContent = result.error || 'Failed to update password. Please check inputs and secret code.';
+      if (errMsg) errMsg.textContent = result.error || 'Failed to update password. Please verify your security code and email.';
       if (errBox) errBox.style.display = 'flex';
     }
   } catch (err) {

@@ -309,7 +309,22 @@
         // DYNAMIC CONTENT ENGINE FOR DETAIL PAGE
         document.addEventListener('DOMContentLoaded', () => {
             const params = new URLSearchParams(window.location.search);
-            const title = params.get('title') || 'Enterprise IT Solutions';
+            const sectionParam = params.get('section');
+            let title = params.get('title');
+
+            if (!title && sectionParam) {
+                const sectionMap = {
+                    'services': 'Services',
+                    'products': 'Products',
+                    'industries': 'Industries',
+                    'about': 'About Us',
+                    'careers': 'Careers',
+                    'contact': 'Contact Us'
+                };
+                title = sectionMap[sectionParam.toLowerCase()] || sectionParam;
+            }
+            
+            if (!title) title = 'Enterprise IT Solutions';
 
             const titleEl = document.getElementById('detail-title');
             const categoryEl = document.getElementById('detail-category');
@@ -320,6 +335,19 @@
             document.title = `${title} | Trilok Infotech`;
 
             const database = {
+                'Services': {
+                    icon: 'fa-solid fa-gears',
+                    category: 'OUR CORE IT & DIGITAL SERVICES',
+                    summary: 'Trilok Infotech Private Limited offers end-to-end digital engineering and strategic technology services to accelerate business growth, streamline operations, and drive transformation.',
+                    cards: [
+                        { icon: 'fa-solid fa-globe', title: 'Website Development', desc: 'High-performance corporate websites, scalable e-commerce portals, and progressive web apps built with modern frameworks.' },
+                        { icon: 'fa-solid fa-mobile-screen-button', title: 'Mobile App Development', desc: 'Native iOS & Android apps alongside cross-platform Flutter solutions engineered for high performance and offline capability.' },
+                        { icon: 'fa-solid fa-code', title: 'Custom Software', desc: 'Bespoke web applications, ERP/CRM modules, automated dashboards, and cloud database architectures tailored to enterprise workflows.' },
+                        { icon: 'fa-solid fa-bullhorn', title: 'Digital Marketing & SEO', desc: 'Data-driven search engine optimization, performance advertising, lead generation, and social media brand positioning.' },
+                        { icon: 'fa-solid fa-cloud', title: 'Cloud & IT Infrastructure', desc: 'Cloud migration (AWS/Azure/GCP), managed server hosting, DevOps CI/CD pipelines, and round-the-clock technical support.' },
+                        { icon: 'fa-solid fa-shield-halved', title: 'Cybersecurity & VAPT', desc: 'Vulnerability assessment, penetration testing, threat detection, and compliance auditing to safeguard digital assets.' }
+                    ]
+                },
                 'Software Development': {
                     icon: 'fa-solid fa-code',
                     category: 'CUSTOM SOFTWARE & SAAS PLATFORMS',
@@ -340,6 +368,16 @@
                         { icon: 'fa-solid fa-certificate', title: 'ISO 27001 & SOC2 Compliance', desc: 'Guiding organizations through regulatory compliance, data privacy laws, and security governance.' }
                     ]
                 },
+                'Products': {
+                    icon: 'fa-solid fa-box-open',
+                    category: 'FLAGSHIP ENTERPRISE PRODUCTS',
+                    summary: 'Explore our suite of proprietary digital products built to solve complex regulatory, operational, and documentation challenges.',
+                    cards: [
+                        { icon: 'fa-solid fa-file-contract', title: 'eSaleAgreement', desc: 'India\'s trusted digital agreement platform featuring Aadhaar eKYC, eSign, OTP verification, and tamper-proof audit trails.' },
+                        { icon: 'fa-solid fa-chart-line', title: 'Enterprise CRM Suite', desc: 'Centralized customer relationship management with automated lead tracking, pipeline visualization, and AI analytics.' },
+                        { icon: 'fa-solid fa-lock-keyhole', title: 'Secure Vault Storage', desc: 'Bank-grade encrypted document storage and access authorization for enterprise legal and financial documents.' }
+                    ]
+                },
                 'eSaleAgreement Platform': {
                     icon: 'fa-solid fa-file-contract',
                     category: 'FLAGSHIP DIGITAL AGREEMENT PLATFORM',
@@ -350,34 +388,45 @@
                         { icon: 'fa-solid fa-cloud-arrow-up', title: 'Encrypted Cloud Storage', desc: 'Bank-grade 256-bit AES encrypted cloud repository for instant contract retrieval.' }
                     ]
                 },
-                'Enterprise-grade Security': {
-                    icon: 'fa-solid fa-shield-halved',
-                    category: 'CORE CAPABILITY',
-                    summary: 'Zero-trust architecture embedded into every software layer to ensure complete data integrity, access authorization, and protection against cyber attacks.',
+                'Industries': {
+                    icon: 'fa-solid fa-industry',
+                    category: 'VERTICAL INDUSTRY SOLUTIONS',
+                    summary: 'Deep sector expertise delivering specialized software engineering and compliance solutions across diverse industry verticals.',
                     cards: [
-                        { icon: 'fa-solid fa-key', title: 'Zero-Trust Architecture', desc: 'Strict identity verification for every user and device attempting access.' },
-                        { icon: 'fa-solid fa-database', title: 'AES 256-bit Encryption', desc: 'Data encrypted both at rest and in transit across all database and storage nodes.' },
-                        { icon: 'fa-solid fa-user-check', title: 'Role-Based Access Control', desc: 'Granular permissions and identity management for enterprise workforce security.' }
+                        { icon: 'fa-solid fa-landmark', title: 'Banking & Fintech', desc: 'High-frequency payment processing gateways, automated KYC, and core banking REST API integrations.' },
+                        { icon: 'fa-solid fa-notes-medical', title: 'Healthcare & Tech', desc: 'HIPAA-compliant EHR systems, telemedicine applications, and AI diagnostics for hospitals and diagnostic clinics.' },
+                        { icon: 'fa-solid fa-cart-shopping', title: 'Retail & E-Commerce', desc: 'Omnichannel e-commerce platforms, automated inventory synchronization, and secure payment processing.' },
+                        { icon: 'fa-solid fa-truck-fast', title: 'Logistics & Supply Chain', desc: 'Real-time GPS fleet tracking, automated dispatch management, and warehouse inventory control systems.' }
                     ]
                 },
-                'Healthcare': {
-                    icon: 'fa-solid fa-notes-medical',
-                    category: 'INDUSTRY SOLUTION',
-                    summary: 'HIPAA-compliant healthcare platforms, electronic health record (EHR) systems, telemedicine apps, and AI diagnostics for hospitals and clinics.',
+                'About Us': {
+                    icon: 'fa-solid fa-building',
+                    category: 'CORPORATE OVERVIEW',
+                    summary: 'Trilok Infotech Private Limited is a premier technology consulting and digital software engineering firm committed to technical excellence and client success.',
                     cards: [
-                        { icon: 'fa-solid fa-hospital-user', title: 'Telemedicine Platforms', desc: 'Secure video consultations, digital prescription management, and online appointment booking.' },
-                        { icon: 'fa-solid fa-file-medical', title: 'EHR & Health Analytics', desc: 'Interoperable health record storage with automated AI patient diagnostics.' },
-                        { icon: 'fa-solid fa-shield-cat', title: 'HIPAA Security Compliance', desc: 'Strict patient data confidentiality, encryption, and audit tracking.' }
+                        { icon: 'fa-solid fa-bullseye', title: 'Our Core Mission', desc: 'Empowering businesses worldwide with enterprise-grade digital software solutions that drive efficiency and sustainable growth.' },
+                        { icon: 'fa-solid fa-shield-check', title: 'Uncompromising Quality', desc: 'Strict software testing methodologies, modern microservices architecture, and zero-trust security standards.' },
+                        { icon: 'fa-solid fa-users', title: 'Expert Team', desc: 'Dedicated software architects, full-stack engineers, cloud specialists, and cybersecurity experts.' }
                     ]
                 },
-                'Finance': {
-                    icon: 'fa-solid fa-landmark',
-                    category: 'INDUSTRY SOLUTION',
-                    summary: 'High-frequency fintech applications, payment gateway integrations, fraud detection systems, and automated KYC processing.',
+                'Careers': {
+                    icon: 'fa-solid fa-user-graduate',
+                    category: 'JOIN OUR ENGINEERING TEAM',
+                    summary: 'Build your career with Trilok Infotech Private Limited. We foster innovation, continuous learning, and technical mastery.',
                     cards: [
-                        { icon: 'fa-solid fa-credit-card', title: 'Payment Processing', desc: 'Seamless integration with international and domestic payment gateways.' },
-                        { icon: 'fa-solid fa-robot', title: 'AI Fraud Detection', desc: 'Machine learning algorithms detecting anomalous transaction behavior in real time.' },
-                        { icon: 'fa-solid fa-building-columns', title: 'Core Banking APIs', desc: 'Secure open-banking REST APIs connecting financial services smoothly.' }
+                        { icon: 'fa-solid fa-laptop-code', title: 'Full Stack Engineer', desc: 'Develop modern web and cloud applications utilizing React, Node.js, and cloud microservices.' },
+                        { icon: 'fa-solid fa-mobile-screen', title: 'Mobile Developer (Flutter)', desc: 'Craft high-performance Android & iOS mobile experiences with clean architecture.' },
+                        { icon: 'fa-solid fa-user-shield', title: 'Cybersecurity Specialist', desc: 'Conduct VAPT audits, threat vulnerability monitoring, and cloud security compliance.' }
+                    ]
+                },
+                'Contact Us': {
+                    icon: 'fa-solid fa-address-book',
+                    category: 'GET IN TOUCH',
+                    summary: 'Connect with our technology leadership to discuss your software project, request technical consultation, or schedule a platform demo.',
+                    cards: [
+                        { icon: 'fa-brands fa-whatsapp', title: 'Direct WhatsApp', desc: 'Quick response via official WhatsApp business line (+91 8639833447).' },
+                        { icon: 'fa-solid fa-envelope', title: 'Email Support', desc: 'Reach out directly to our engineering team at support@trilokinfotech.com.' },
+                        { icon: 'fa-solid fa-location-dot', title: 'Headquarters', desc: 'Visit our technology center in Hyderabad, Telangana, India.' }
                     ]
                 }
             };

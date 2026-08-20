@@ -642,13 +642,24 @@ async function initLiveCmsSync() {
         }
     } catch(e) {}
 
-    // 5. Services Section
+    // 5. Services Section (De-duplicated & Single-card verified)
     try {
         const { data: services } = await sb.from('services').select('*').eq('status', 'active').order('display_order');
         if (services && services.length > 0) {
             const sGrid = document.querySelector('.services-grid');
             if (sGrid) {
-                sGrid.innerHTML = services.map(s => `
+                // Deduplicate services by title to ensure single-instance clean layout
+                const uniqueServices = [];
+                const seenTitles = new Set();
+                services.forEach(s => {
+                    const normTitle = (s.title || '').trim().toLowerCase();
+                    if (normTitle && !seenTitles.has(normTitle)) {
+                        seenTitles.add(normTitle);
+                        uniqueServices.push(s);
+                    }
+                });
+
+                sGrid.innerHTML = uniqueServices.map(s => `
                     <div class="service-card scroll-reveal visible" data-service-id="${s.id}">
                         <div class="service-icon-box">
                             ${s.image_url ? `<img src="${s.image_url}" alt="${s.title}" style="width:36px;height:36px;object-fit:contain;">` : `<i class="${s.icon_class || 'fa-solid fa-laptop-code'}"></i>`}

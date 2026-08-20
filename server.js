@@ -43,6 +43,7 @@ try {
 } catch(e) {}
 
 const changePasswordHandler = require('./api/change-password.js');
+const resetPasswordHandler = require('./api/reset-password.js');
 
 
 const server = http.createServer((req, res) => {
@@ -59,7 +60,8 @@ const server = http.createServer((req, res) => {
 
   let urlPath = decodeURIComponent(req.url.split('?')[0]);
 
-  if (urlPath === '/api/change-password') {
+  if (urlPath === '/api/change-password' || urlPath === '/api/reset-password') {
+    const handlerToUse = (urlPath === '/api/reset-password') ? resetPasswordHandler : changePasswordHandler;
     let body = '';
     req.on('data', chunk => { body += chunk.toString(); });
     req.on('end', () => {
@@ -76,7 +78,7 @@ const server = http.createServer((req, res) => {
         this.writeHead(this.statusCode || 200, { 'Content-Type': 'application/json' });
         this.end(JSON.stringify(data));
       };
-      changePasswordHandler(req, res);
+      handlerToUse(req, res);
     });
     return;
   }
